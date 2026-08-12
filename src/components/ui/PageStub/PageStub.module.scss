@@ -1,0 +1,27 @@
+.stub {
+  @include container;
+}
+
+.title {
+  font-size: 32px;
+
+  @include up('md') {
+    font-size: 40px;
+  }
+}
+
+.note {
+  margin-top: 8px;
+  color: var(--color-text-muted);
+}
+
+.list {
+  margin-top: 24px;
+  padding-left: 20px;
+  max-width: 640px;
+  color: var(--color-text-muted);
+
+  li + li {
+    margin-top: 8px;
+  }
+}

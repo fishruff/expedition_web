@@ -1,0 +1,108 @@
+// Глобальные стили: reset, цветовая схема, типографика.
+// Всё остальное — в *.module.scss рядом с компонентом.
+
+:root {
+  // Палитра: тёмный «ночной лес» + травяной акцент и золото для CTA.
+  --color-bg: #0e1411;
+  --color-bg-elevated: #16201b;
+  --color-surface: #1d2a23;
+  --color-border: #2c3b32;
+
+  --color-text: #e8f0ea;
+  --color-text-muted: #9aaba0;
+
+  --color-accent: #5fbb63;
+  --color-accent-hover: #74d178;
+  --color-gold: #f0b232;
+  --color-danger: #d4564a;
+
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Inter', system-ui, sans-serif; // TODO: заменить на шрифт лого
+
+  --shadow-card: 0 8px 24px rgb(0 0 0 / 35%);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  @include focus-ring;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

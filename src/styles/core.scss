@@ -1,0 +1,4 @@
+// Точка входа для автоимпорта (см. vite.config.ts → additionalData).
+// Только @forward: сюда нельзя класть правила, иначе они попадут в каждый бандл.
+@forward 'variables';
+@forward 'mixins';

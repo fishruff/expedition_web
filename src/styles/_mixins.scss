@@ -1,0 +1,31 @@
+@use 'sass:map';
+@use 'variables' as *;
+
+// @include up('md') { ... } — мобильные стили пишем первыми, затем расширяем.
+@mixin up($name) {
+  $size: map.get($breakpoints, $name);
+
+  @if not $size {
+    @error 'Неизвестный брейкпоинт: #{$name}';
+  }
+
+  @media (min-width: $size) {
+    @content;
+  }
+}
+
+@mixin container {
+  width: 100%;
+  max-width: $container-width;
+  margin-inline: auto;
+  padding-inline: 16px;
+
+  @include up('md') {
+    padding-inline: 24px;
+  }
+}
+
+@mixin focus-ring {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
