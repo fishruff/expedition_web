@@ -1,0 +1,84 @@
+.spread {
+  display: grid;
+  grid-template-columns: 1fr;
+  height: 100%;
+  animation: flip-in $duration-flip $ease-book both;
+
+  @include up('md') {
+    grid-template-columns: 1fr 12px 1fr;
+  }
+}
+
+.leaf {
+  @include paper;
+  @include grain(0.04);
+
+  position: relative;
+  overflow-y: auto;
+  color: var(--color-ink);
+
+  // На мобиле второй лист просто продолжает первый, поэтому линия между ними.
+  & + & {
+    border-top: 1px solid rgb(92 75 51 / 25%);
+  }
+
+  @include up('md') {
+    & + & {
+      border-top: none;
+    }
+  }
+}
+
+.content {
+  padding: 28px 24px;
+
+  @include up('md') {
+    padding: 40px 32px;
+  }
+}
+
+// Корешок: тень от сгиба на обе страницы.
+.gutter {
+  display: none;
+
+  @include up('md') {
+    display: block;
+    background: linear-gradient(
+      90deg,
+      rgb(92 75 51 / 5%) 0%,
+      var(--color-paper-gutter) 35%,
+      rgb(46 36 24 / 45%) 50%,
+      var(--color-paper-gutter) 65%,
+      rgb(92 75 51 / 5%) 100%
+    );
+  }
+}
+
+// Новый разворот приходит поворотом — как перевёрнутый лист.
+@keyframes flip-in {
+  from {
+    opacity: 0;
+    transform: rotateY(-24deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: rotateY(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spread {
+    animation: fade-in $duration-fade ease both;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}
