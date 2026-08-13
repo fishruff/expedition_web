@@ -1,25 +1,21 @@
-// Глобальные стили: reset, цветовая схема, типографика.
-// Всё остальное — в *.module.scss рядом с компонентом.
+// Глобальные стили: палитра, reset, типографика, фон стола.
 
 :root {
-  // Палитра: тёмный «ночной лес» + травяной акцент и золото для CTA.
-  --color-bg: #0e1411;
-  --color-bg-elevated: #16201b;
-  --color-surface: #1d2a23;
-  --color-border: #2c3b32;
+  --color-wood: #2a1d14;
+  --color-leather: #5a3a22;
+  --color-leather-shadow: #3f2817;
+  --color-paper: #e8dcc0;
+  --color-paper-gutter: #d9c9a3;
+  --color-ink: #2e2418;
+  --color-ink-faded: #5c4b33;
+  --color-brass: #b8863b;
+  --color-wax: #8c2f22;
 
-  --color-text: #e8f0ea;
-  --color-text-muted: #9aaba0;
+  // Шрифты подключим файлами позже; пока работает системная антиква.
+  --font-hand: 'Segoe Script', 'Bradley Hand', cursive;
+  --font-body: Georgia, 'Times New Roman', serif;
 
-  --color-accent: #5fbb63;
-  --color-accent-hover: #74d178;
-  --color-gold: #f0b232;
-  --color-danger: #d4564a;
-
-  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Inter', system-ui, sans-serif; // TODO: заменить на шрифт лого
-
-  --shadow-card: 0 8px 24px rgb(0 0 0 / 35%);
+  --shadow-object: 0 10px 24px rgb(0 0 0 / 45%);
 
   color-scheme: dark;
 }
@@ -34,14 +30,10 @@
   margin: 0;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   min-height: 100dvh;
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  background-color: var(--color-wood);
+  color: var(--color-ink);
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.6;
@@ -50,27 +42,26 @@ body {
 
 img,
 picture,
-svg,
-video {
+svg {
   display: block;
   max-width: 100%;
 }
 
-button,
-input,
-select,
-textarea {
+button {
   font: inherit;
   color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 h1,
 h2,
-h3,
-h4 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  line-height: 1.2;
+h3 {
+  font-family: var(--font-hand);
+  font-weight: 400;
+  line-height: 1.15;
   text-wrap: balance;
 }
 
@@ -88,21 +79,15 @@ a {
 }
 
 #root {
-  display: flex;
-  flex-direction: column;
   min-height: 100dvh;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: $duration-fade !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: $duration-fade !important;
   }
 }

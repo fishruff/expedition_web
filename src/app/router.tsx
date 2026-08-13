@@ -1,25 +1,24 @@
-import { createBrowserRouter } from 'react-router'
-import { MainLayout } from '@/layouts/MainLayout/MainLayout'
+import { createBrowserRouter, type RouteObject } from 'react-router'
+import { DeskScene } from '@/scene/DeskScene/DeskScene'
 import { ROUTES } from '@/app/routes'
-import { HomePage } from '@/pages/Home/HomePage'
-import { RulesPage } from '@/pages/Rules/RulesPage'
-import { StartPage } from '@/pages/Start/StartPage'
-import { StorePage } from '@/pages/Store/StorePage'
-import { MapPage } from '@/pages/Map/MapPage'
-import { WikiPage } from '@/pages/Wiki/WikiPage'
-import { NotFoundPage } from '@/pages/NotFound/NotFoundPage'
 
-export const router = createBrowserRouter([
+// Временные заглушки: заменяются реальными разворотами в задачах 6–10.
+const stub = (title: string) => <h1>{title}</h1>
+
+export const routes: RouteObject[] = [
   {
-    element: <MainLayout />,
+    element: <DeskScene />,
     children: [
-      { path: ROUTES.home, element: <HomePage /> },
-      { path: ROUTES.start, element: <StartPage /> },
-      { path: ROUTES.rules, element: <RulesPage /> },
-      { path: ROUTES.store, element: <StorePage /> },
-      { path: ROUTES.map, element: <MapPage /> },
-      { path: ROUTES.wiki, element: <WikiPage /> },
-      { path: '*', element: <NotFoundPage /> },
+      { path: ROUTES.home, element: stub('Expedition') },
+      { path: ROUTES.log, element: stub('Судовой журнал') },
+      { path: ROUTES.crew, element: stub('Экипаж') },
+      { path: ROUTES.crewMember, element: stub('Участник') },
+      { path: ROUTES.news, element: stub('Новости экспедиции') },
+      { path: ROUTES.charter, element: stub('Устав экипажа') },
+      { path: ROUTES.map, element: stub('Карта') },
+      { path: '*', element: stub('Страница вырвана') },
     ],
   },
-])
+]
+
+export const router = createBrowserRouter(routes)

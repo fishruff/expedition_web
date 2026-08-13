@@ -1,6 +1,5 @@
 // Дизайн-токены проекта Expedition.
-// В компонентах используем CSS-переменные (см. global.scss), SCSS-переменные —
-// для брейкпоинтов и вычислений на этапе сборки.
+// Цвета — в CSS-переменных (global.scss), здесь только то, что нужно на этапе сборки.
 
 $breakpoints: (
   'sm': 480px,
@@ -9,10 +8,18 @@ $breakpoints: (
   'xl': 1280px,
 );
 
-$container-width: 1200px;
-$header-height: 72px;
+// Ширина раскрытого дневника и высота сцены.
+$diary-width: 960px;
+$diary-ratio: 0.72; // высота книги относительно ширины разворота
 
-// Радиусы намеренно мелкие: сайт про блочный, «пиксельный» мир.
 $radius-sm: 2px;
 $radius-md: 4px;
-$radius-lg: 8px;
+$radius-lg: 10px;
+
+// Длительности из спеки, чтобы не разъезжались по файлам.
+$duration-cover: 700ms;
+$duration-flip: 450ms;
+$duration-hover: 200ms;
+$duration-fade: 150ms;
+
+$ease-book: cubic-bezier(0.22, 0.61, 0.36, 1);

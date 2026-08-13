@@ -1,18 +1,21 @@
-// Единый источник правды по путям: роутер и навигация в шапке берут их отсюда.
+// Единый источник правды по путям: роутер, оглавление и ссылки берут их отсюда.
 export const ROUTES = {
   home: '/',
-  rules: '/rules',
-  start: '/start',
-  store: '/store',
+  log: '/log',
+  crew: '/crew',
+  crewMember: '/crew/:nick',
+  news: '/news',
+  charter: '/charter',
   map: '/map',
-  wiki: '/wiki',
 } as const
 
-export const NAV_ITEMS = [
-  { to: ROUTES.home, label: 'Главная' },
-  { to: ROUTES.start, label: 'Как начать' },
-  { to: ROUTES.rules, label: 'Правила' },
-  { to: ROUTES.store, label: 'Магазин' },
-  { to: ROUTES.map, label: 'Карта' },
-  { to: ROUTES.wiki, label: 'Вики' },
+export function crewMemberPath(nick: string): string {
+  return `${ROUTES.crew}/${encodeURIComponent(nick)}`
+}
+
+/** Записи дневника — то, что видно на развороте-оглавлении. */
+export const JOURNAL_ENTRIES = [
+  { to: ROUTES.crew, title: 'Экипаж', subtitle: 'Кто идёт в этой экспедиции' },
+  { to: ROUTES.news, title: 'Новости экспедиции', subtitle: 'Находки, открытия, события' },
+  { to: ROUTES.charter, title: 'Устав экипажа', subtitle: 'Правила, по которым живём' },
 ] as const
