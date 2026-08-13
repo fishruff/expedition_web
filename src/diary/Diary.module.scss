@@ -1,0 +1,64 @@
+.stage {
+  perspective: 2000px;
+  width: 100%;
+}
+
+.book {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  transform-style: preserve-3d;
+
+  @include up('lg') {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+.pages {
+  position: absolute;
+  inset: 0;
+  border-radius: $radius-md;
+  box-shadow: var(--shadow-object);
+  overflow: hidden;
+}
+
+// Лист обложки: то, что поворачивается. Сама обложка внутри просто заполняет его.
+.coverLeaf {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+}
+
+// Раскрытие: поворот вокруг левого края. Открытую обложку больше не кликаем.
+.book[data-intro='true'] .coverLeaf {
+  animation: open-cover $duration-cover $ease-book both;
+  pointer-events: none;
+}
+
+@keyframes open-cover {
+  from {
+    transform: rotateY(0deg);
+  }
+
+  to {
+    transform: rotateY(-160deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book[data-intro='true'] .coverLeaf {
+    animation: fade-out $duration-fade ease both;
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+}
