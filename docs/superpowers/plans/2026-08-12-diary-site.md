@@ -780,6 +780,10 @@ $ease-book: cubic-bezier(0.22, 0.61, 0.36, 1);
   --color-brass: #b8863b;
   --color-wax: #8c2f22;
 
+  // Оттенки сцены, а не токены дизайн-системы: сердцевина стола и пергамент карты.
+  --color-wood-deep: #3a291c;
+  --color-map: #c8b183;
+
   // Шрифты подключим файлами позже; пока работает системная антиква.
   --font-hand: 'Segoe Script', 'Bradley Hand', cursive;
   --font-body: Georgia, 'Times New Roman', serif;
@@ -1013,7 +1017,7 @@ export function DeskScene() {
       rgb(255 255 255 / 3%) 7px 8px,
       transparent 8px 26px
     ),
-    radial-gradient(ellipse at 50% 40%, #3a291c 0%, var(--color-wood) 70%);
+    radial-gradient(ellipse at 50% 40%, var(--color-wood-deep) 0%, var(--color-wood) 70%);
 
   // Виньетка: свет лампы падает на центр стола.
   &::after {
@@ -1032,7 +1036,7 @@ export function DeskScene() {
   border-radius: $radius-lg;
   opacity: 0.35;
   transform: rotate(-1.5deg);
-  background-color: #c8b183;
+  background-color: var(--color-map);
   background-image:
     linear-gradient(0deg, rgb(0 0 0 / 25%) 0%, transparent 12%),
     repeating-linear-gradient(0deg, rgb(90 60 30 / 12%) 0 1px, transparent 1px 64px),
