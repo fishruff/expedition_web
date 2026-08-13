@@ -12,25 +12,25 @@ describe('маршруты', () => {
   it('на каждом маршруте рендерится сцена стола', () => {
     renderAt('/crew')
 
-    expect(screen.getByTestId('desk-scene')).toBeTruthy()
+    expect(screen.getByTestId('desk')).toBeTruthy()
   })
 
-  it('открывает разворот экипажа', () => {
+  it('открывает раздел экипажа', () => {
     renderAt('/crew')
 
     expect(screen.getByRole('heading', { name: 'Экипаж' })).toBeTruthy()
   })
 
-  it('открывает разворот новостей', () => {
+  it('открывает летопись', () => {
     renderAt('/news')
 
-    expect(screen.getByRole('heading', { name: 'Новости экспедиции' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Летопись' })).toBeTruthy()
   })
 
   it('открывает устав', () => {
     renderAt('/charter')
 
-    expect(screen.getByRole('heading', { name: 'Устав экипажа' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Устав' })).toBeTruthy()
   })
 
   it('на неизвестном маршруте показывает вырванную страницу', () => {

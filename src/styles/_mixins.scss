@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:math';
 @use 'variables' as *;
 
 @mixin up($name) {
@@ -13,36 +14,39 @@
   }
 }
 
+/// Размер в единицах пиксельной сетки: px(3) — три точки исходника с учётом масштаба.
+@function px($n) {
+  @return calc(#{$n} * #{$u} * var(--s));
+}
+
+/// Растровая графика без сглаживания. Обязательна для любой пиксельной картинки.
+@mixin crisp {
+  image-rendering: pixelated;
+}
+
+/// Повторяющийся тайл. Заполняет любой размер, поэтому фону не нужен адаптив.
+@mixin tile($file, $size: $tile-size) {
+  @include crisp;
+
+  background-image: url('/assets/#{$file}');
+  background-repeat: repeat;
+  background-size: calc(#{$size} * var(--s));
+}
+
+/// Рамка из девяти слоёв: углы не искажаются, стороны повторяются,
+/// поэтому элемент растягивается под любое содержимое.
+@mixin nine-slice($file, $slice, $fill: false) {
+  border-style: solid;
+  border-width: calc(#{$slice} * var(--s));
+
+  @if $fill {
+    border-image: url('/assets/#{$file}') math.div($slice, 1px) fill repeat;
+  } @else {
+    border-image: url('/assets/#{$file}') math.div($slice, 1px) repeat;
+  }
+}
+
 @mixin focus-ring {
-  outline: 2px solid var(--color-brass);
-  outline-offset: 3px;
-}
-
-// Тонкий тканевый шум поверх любой поверхности. Работает как фон-подложка.
-@mixin grain($opacity: 0.05) {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='#{$opacity}'/%3E%3C/svg%3E");
-}
-
-// Лист старой бумаги: неровный тон плюс зерно.
-@mixin paper {
-  background-color: var(--color-paper);
-  background-image:
-    radial-gradient(ellipse at 20% 15%, rgb(255 255 255 / 35%) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 85%, rgb(140 110 70 / 18%) 0%, transparent 60%);
-}
-
-// Кожа обложки: мягкие блики по краям и потёртость в центре.
-@mixin leather {
-  background-color: var(--color-leather);
-  background-image:
-    linear-gradient(160deg, rgb(255 220 180 / 12%) 0%, transparent 35%),
-    radial-gradient(ellipse at 50% 50%, rgb(255 230 190 / 8%) 0%, transparent 70%),
-    linear-gradient(0deg, var(--color-leather-shadow) 0%, transparent 25%);
-}
-
-// Полностью убирает движение — используется в prefers-reduced-motion.
-@mixin motionless {
-  transition: none;
-  animation: none;
-  transform: none;
+  outline: calc(2px * var(--s)) solid var(--color-gold);
+  outline-offset: calc(1px * var(--s));
 }
