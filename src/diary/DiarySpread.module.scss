@@ -18,12 +18,12 @@
   color: var(--color-ink);
 
   // На мобиле второй лист просто продолжает первый, поэтому линия между ними.
-  & + & {
-    border-top: 1px solid rgb(92 75 51 / 25%);
+  &[data-leaf='right'] {
+    border-top: 1px solid color-mix(in srgb, var(--color-ink-faded) 25%, transparent);
   }
 
   @include up('md') {
-    & + & {
+    &[data-leaf='right'] {
       border-top: none;
     }
   }
@@ -45,11 +45,11 @@
     display: block;
     background: linear-gradient(
       90deg,
-      rgb(92 75 51 / 5%) 0%,
+      color-mix(in srgb, var(--color-ink-faded) 5%, transparent) 0%,
       var(--color-paper-gutter) 35%,
-      rgb(46 36 24 / 45%) 50%,
+      color-mix(in srgb, var(--color-ink) 45%, transparent) 50%,
       var(--color-paper-gutter) 65%,
-      rgb(92 75 51 / 5%) 100%
+      color-mix(in srgb, var(--color-ink-faded) 5%, transparent) 100%
     );
   }
 }

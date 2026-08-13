@@ -15,6 +15,7 @@
 Требования ниже действуют для каждой задачи и не повторяются в них отдельно.
 
 - **Цвета только из палитры спеки**, задаются CSS-переменными в `src/styles/global.scss`: стол `#2a1d14`, кожа `#5a3a22`, тень кожи `#3f2817`, бумага `#e8dcc0`, бумага у корешка `#d9c9a3`, чернила `#2e2418`, выцветшие чернила `#5c4b33`, латунь `#b8863b`, сургуч `#8c2f22`. Хардкодить hex в компонентах нельзя.
+- **Полупрозрачный оттенок токена — через `color-mix`**, а не выписыванием его RGB числами: `color-mix(in srgb, var(--color-ink-faded) 25%, transparent)`, но не `rgb(92 75 51 / 25%)`. Сырые `rgb(0 0 0 / …)` и `rgb(255 255 255 / …)` допустимы — это нейтральные тени и блики, у них нет токена в палитре.
 - **Графика — только CSS и SVG.** Растровых текстур нет. Единственные растровые файлы — арты участников в `public/crew/<nick>.png`, портрет 3:4, исходник от 600×800.
 - **Никаких обращений к сторонним CDN**: ни шрифтов, ни скриптов, ни картинок. Всё раздаётся со своего домена.
 - **Длительности анимаций**: раскрытие обложки 700 мс, смена разворота 450 мс, наведение на предмет 200 мс, fade при `prefers-reduced-motion` 150 мс.
@@ -1262,7 +1263,7 @@ export function DiaryCover({ onOpen }: DiaryCoverProps) {
   align-items: center;
   gap: 8px;
   padding: 24px 40px;
-  border: 2px solid rgb(232 220 192 / 35%);
+  border: 2px solid color-mix(in srgb, var(--color-paper) 35%, transparent);
   border-radius: $radius-sm;
   box-shadow: inset 0 1px 0 rgb(0 0 0 / 40%);
 }
@@ -1280,7 +1281,7 @@ export function DiaryCover({ onOpen }: DiaryCoverProps) {
 }
 
 .subtitle {
-  color: rgb(232 220 192 / 70%);
+  color: color-mix(in srgb, var(--color-paper) 70%, transparent);
   font-size: 14px;
   letter-spacing: 0.08em;
 }
@@ -1298,7 +1299,7 @@ export function DiaryCover({ onOpen }: DiaryCoverProps) {
 }
 
 .tagLabel {
-  color: rgb(232 220 192 / 60%);
+  color: color-mix(in srgb, var(--color-paper) 60%, transparent);
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1583,12 +1584,12 @@ export function DiarySpread({ left, right }: DiarySpreadProps) {
   color: var(--color-ink);
 
   // На мобиле второй лист просто продолжает первый, поэтому линия между ними.
-  & + & {
-    border-top: 1px solid rgb(92 75 51 / 25%);
-  }
+  // Целимся по атрибуту, а не через `& + &`: между листами в разметке стоит .gutter,
+  // и смежность соседей ломается, даже когда он display: none.
+  &[data-leaf='right'] {
+    border-top: 1px solid color-mix(in srgb, var(--color-ink-faded) 25%, transparent);
 
-  @include up('md') {
-    & + & {
+    @include up('md') {
       border-top: none;
     }
   }
@@ -1610,11 +1611,11 @@ export function DiarySpread({ left, right }: DiarySpreadProps) {
     display: block;
     background: linear-gradient(
       90deg,
-      rgb(92 75 51 / 5%) 0%,
+      color-mix(in srgb, var(--color-ink-faded) 5%, transparent) 0%,
       var(--color-paper-gutter) 35%,
-      rgb(46 36 24 / 45%) 50%,
+      color-mix(in srgb, var(--color-ink) 45%, transparent) 50%,
       var(--color-paper-gutter) 65%,
-      rgb(92 75 51 / 5%) 100%
+      color-mix(in srgb, var(--color-ink-faded) 5%, transparent) 100%
     );
   }
 }
@@ -1785,7 +1786,7 @@ export function TableOfContents() {
   gap: 6px 16px;
   margin-top: 28px;
   padding-top: 20px;
-  border-top: 1px solid rgb(92 75 51 / 30%);
+  border-top: 1px solid color-mix(in srgb, var(--color-ink-faded) 30%, transparent);
   font-size: 15px;
 
   dt {
@@ -1813,11 +1814,11 @@ export function TableOfContents() {
   display: flex;
   gap: 12px;
   padding: 12px 8px;
-  border-bottom: 1px dashed rgb(92 75 51 / 35%);
+  border-bottom: 1px dashed color-mix(in srgb, var(--color-ink-faded) 35%, transparent);
   transition: background-color $duration-hover ease, transform $duration-hover ease;
 
   &:hover {
-    background-color: rgb(184 134 59 / 14%);
+    background-color: color-mix(in srgb, var(--color-brass) 14%, transparent);
     transform: translateX(4px);
   }
 }
@@ -1992,7 +1993,7 @@ export function CrewCard({ member }: CrewCardProps) {
   aspect-ratio: 3 / 4;
   overflow: hidden;
   padding: 6px;
-  border: 1px solid rgb(92 75 51 / 45%);
+  border: 1px solid color-mix(in srgb, var(--color-ink-faded) 45%, transparent);
   background-color: rgb(255 255 255 / 25%);
   box-shadow: 0 4px 10px rgb(0 0 0 / 25%);
 
@@ -2263,7 +2264,7 @@ export function TornPage({ message = 'Такой записи в журнале 
     repeating-linear-gradient(
       -80deg,
       transparent 0 18px,
-      rgb(46 36 24 / 8%) 18px 20px
+      color-mix(in srgb, var(--color-ink) 8%, transparent) 18px 20px
     );
   mask-image: linear-gradient(90deg, transparent 0, #000 12%);
 }
@@ -2328,7 +2329,7 @@ export function CrewMemberSpread() {
   margin: 0 auto;
   padding: 10px 10px 44px;
   background-color: #f3ead2;
-  border: 1px solid rgb(92 75 51 / 35%);
+  border: 1px solid color-mix(in srgb, var(--color-ink-faded) 35%, transparent);
   box-shadow: 0 8px 18px rgb(0 0 0 / 30%);
   transform: rotate(-2deg);
 
@@ -2380,7 +2381,7 @@ export function CrewMemberSpread() {
 .joined {
   margin-top: 24px;
   padding-top: 16px;
-  border-top: 1px dashed rgb(92 75 51 / 35%);
+  border-top: 1px dashed color-mix(in srgb, var(--color-ink-faded) 35%, transparent);
   color: var(--color-ink-faded);
   font-size: 14px;
 }
@@ -2598,7 +2599,7 @@ export function NewsSpread() {
 .item + .item {
   margin-top: 28px;
   padding-top: 24px;
-  border-top: 1px dashed rgb(92 75 51 / 35%);
+  border-top: 1px dashed color-mix(in srgb, var(--color-ink-faded) 35%, transparent);
 }
 
 .date {
@@ -2860,7 +2861,7 @@ export function CharterSpread() {
   & + & {
     margin-top: 20px;
     padding-top: 18px;
-    border-top: 1px dashed rgb(92 75 51 / 30%);
+    border-top: 1px dashed color-mix(in srgb, var(--color-ink-faded) 30%, transparent);
   }
 }
 
@@ -2930,8 +2931,8 @@ export function MapSpread() {
   min-height: 200px;
   opacity: 0.4;
   background-image:
-    repeating-linear-gradient(0deg, rgb(92 75 51 / 30%) 0 1px, transparent 1px 40px),
-    repeating-linear-gradient(90deg, rgb(92 75 51 / 30%) 0 1px, transparent 1px 40px);
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--color-ink-faded) 30%, transparent) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--color-ink-faded) 30%, transparent) 0 1px, transparent 1px 40px);
 }
 ```
 
@@ -3350,7 +3351,7 @@ export function PocketWatch() {
 }
 
 .event {
-  color: rgb(232 220 192 / 55%);
+  color: color-mix(in srgb, var(--color-paper) 55%, transparent);
   font-size: 12px;
 }
 ```
