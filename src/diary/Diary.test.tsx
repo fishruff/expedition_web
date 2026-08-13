@@ -42,4 +42,13 @@ describe('Diary', () => {
 
     expect(screen.getByTestId('diary').dataset.intro).toBe('true')
   })
+
+  it('после клика по обложке кнопка «Открыть журнал» помечена inert и недоступна для табуляции', async () => {
+    renderAt('/')
+
+    const button = screen.getByRole('button', { name: /открыть журнал/i })
+    await userEvent.click(button)
+
+    expect(button.closest('[inert]')).not.toBeNull()
+  })
 })

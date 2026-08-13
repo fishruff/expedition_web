@@ -31,9 +31,11 @@ export function Diary() {
         {/*
           Обложка остаётся в разметке ещё и во время интро — иначе анимацию раскрытия
           никто не увидит: элемент размонтируется раньше, чем начнётся поворот.
+          Когда дневник уже открыт, обложка держится в DOM только ради анимации:
+          inert убирает её из tab-order и дерева доступности, оставляя видимой.
         */}
         {(!isOpen || intro) && (
-          <div className={styles.coverLeaf}>
+          <div className={styles.coverLeaf} inert={isOpen}>
             <DiaryCover onOpen={() => navigate(ROUTES.log, { state: { intro: true } })} />
           </div>
         )}
