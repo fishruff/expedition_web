@@ -5,10 +5,127 @@
   min-height: 100dvh;
 }
 
-.content {
+/* ---------- верхняя полоса ---------- */
+
+.header {
   display: flex;
-  flex: 1;
   align-items: center;
-  justify-content: center;
+  gap: px(8);
+  flex-wrap: wrap;
+  padding: px(4) px(6);
+  border-bottom: px(2) solid var(--color-panel-hi);
+  background-color: color-mix(in srgb, var(--color-panel-lo) 88%, transparent);
+}
+
+.logo {
+  font-size: px(8);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: px(2) px(2) 0 var(--color-panel-lo);
+}
+
+.nav {
+  display: flex;
+  gap: px(6);
+  margin-inline: auto;
+  flex-wrap: wrap;
+}
+
+.navLink {
+  padding-block: px(2);
+  border-bottom: px(2) solid transparent;
+  color: var(--color-text-dim);
+  font-size: px(5);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  &:hover {
+    color: var(--color-text);
+  }
+}
+
+.navLinkActive {
+  color: var(--color-gold);
+  border-bottom-color: var(--color-gold);
+}
+
+.online {
+  display: flex;
+  align-items: center;
+  gap: px(2);
+  padding: px(2) px(4);
+  border: px(2) solid var(--color-panel-hi);
+  background-color: var(--color-panel);
+  font-size: px(5);
+  letter-spacing: 0.1em;
+}
+
+.dot {
+  width: px(2);
+  height: px(2);
+  background-color: var(--color-green);
+}
+
+/* ---------- раскладка сцены ---------- */
+
+.stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: px(6);
+  flex: 1;
+  align-items: start;
   padding: px(6);
+
+  @include up('lg') {
+    grid-template-columns: px(160) 1fr px(160);
+    align-items: center;
+  }
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: px(6);
+  min-width: 0;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: px(12);
+  min-width: 0;
+  padding-block: px(8);
+}
+
+.props {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: px(24);
+  min-height: px(80);
+}
+
+/* ---------- список экипажа ---------- */
+
+.crew {
+  display: flex;
+  flex-direction: column;
+  gap: px(2);
+  padding: 0;
+  list-style: none;
+}
+
+.crewRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: px(3);
+  padding-bottom: px(2);
+  border-bottom: px(1) dotted var(--color-panel-hi);
+  font-size: px(5);
+}
+
+.crewRole {
+  color: var(--color-text-dim);
 }

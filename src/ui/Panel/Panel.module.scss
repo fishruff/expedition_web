@@ -1,0 +1,20 @@
+.panel {
+  @include nine-slice('frame-panel.png', $frame-panel-slice, $fill: true);
+
+  min-width: 0;
+}
+
+.title {
+  margin-bottom: px(6);
+  padding-bottom: px(3);
+  border-bottom: px(1) solid var(--color-panel-hi);
+  color: var(--color-text-dim);
+  font-size: px(5);
+  letter-spacing: 0.18em;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: px(4);
+}

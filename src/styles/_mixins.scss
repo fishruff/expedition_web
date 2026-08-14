@@ -25,7 +25,7 @@
 }
 
 /// Повторяющийся тайл. Заполняет любой размер, поэтому фону не нужен адаптив.
-@mixin tile($file, $size: $tile-size) {
+@mixin tile($file, $size) {
   @include crisp;
 
   background-image: url('/assets/#{$file}');

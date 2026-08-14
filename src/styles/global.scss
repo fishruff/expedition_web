@@ -55,13 +55,13 @@
 }
 
 body {
-  @include tile('wood-tile.png');
+  @include tile('wood-tile.png', $tile-wood);
 
   min-height: 100dvh;
   background-color: var(--color-wood);
   color: var(--color-text);
   font-family: 'Monocraft', ui-monospace, monospace;
-  font-size: px(4);
+  font-size: px(6);
   line-height: 1.5;
 
   // Сглаживание душит пиксельный шрифт.

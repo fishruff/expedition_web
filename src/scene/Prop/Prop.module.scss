@@ -1,0 +1,48 @@
+.prop {
+  position: relative;
+  display: block;
+  width: calc(var(--prop-w) * 1px * var(--s));
+  flex: none;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  transition: filter $duration-fast $steps-fast, transform $duration-fast $steps-fast;
+}
+
+.prop:hover .image,
+.prop:focus-visible .image {
+  filter: brightness(1.25);
+  transform: translateY(px(-2));
+}
+
+.prop[data-decorative='true'] {
+  cursor: default;
+}
+
+.label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: px(2);
+  color: var(--color-gold);
+  font-size: px(5);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.prop:hover .label,
+.prop:focus-visible .label {
+  opacity: 1;
+}
+
+// На узком экране предметы декоративны и только мешают — прячем.
+@media (max-width: 900px) {
+  .prop {
+    display: none;
+  }
+}
