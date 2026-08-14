@@ -69,6 +69,22 @@ body {
   text-rendering: geometricPrecision;
 }
 
+/*
+  Слой света: тёплое пятно от лампы слева сверху и затемнение к краям.
+  Он не повторяется вместе с тайлом, поэтому глаз перестаёт видеть решётку —
+  это главное средство против ощущения «одна фотка много раз».
+*/
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 110% 80% at 18% -10%, rgb(255 214 150 / 14%) 0%, transparent 55%),
+    radial-gradient(ellipse 120% 110% at 50% 45%, transparent 40%, rgb(8 5 3 / 55%) 100%);
+}
+
 img,
 svg {
   display: block;
