@@ -208,3 +208,61 @@ def median_cut(px, n):
                 cache[p] = min(palette, key=lambda k: sum((k[c] - p[c]) ** 2 for c in range(3)))
             row[i] = cache[p]
     return len(palette)
+
+
+def strip_bg(px, tol=40):
+    """Убирает фон заливкой от краёв: внутренние светлые области не трогает."""
+    h, w = len(px), len(px[0])
+    bg = px[0][0]
+    seen = [[False] * w for _ in range(h)]
+    stack = [(x, 0) for x in range(w)] + [(x, h - 1) for x in range(w)]
+    stack += [(0, y) for y in range(h)] + [(w - 1, y) for y in range(h)]
+    near = lambda p: sum((p[c] - bg[c]) ** 2 for c in range(3)) <= tol * tol * 3
+
+    removed = 0
+    while stack:
+        x, y = stack.pop()
+        if x < 0 or y < 0 or x >= w or y >= h or seen[y][x]:
+            continue
+        seen[y][x] = True
+        if not near(px[y][x]):
+            continue
+        px[y][x] = (0, 0, 0, 0)
+        removed += 1
+        stack += [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+    return removed
+
+
+def dehalo(px, bg, tol=90, passes=2):
+    """Снимает светлую кромку, оставшуюся от сглаживания на границе с фоном."""
+    removed = 0
+    for _ in range(passes):
+        h, w = len(px), len(px[0])
+        doomed = []
+        for y in range(h):
+            for x in range(w):
+                p = px[y][x]
+                if p[3] == 0:
+                    continue
+                touches = any(
+                    0 <= y + dy < h and 0 <= x + dx < w and px[y + dy][x + dx][3] == 0
+                    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))
+                )
+                if touches and sum((p[c] - bg[c]) ** 2 for c in range(3)) <= tol * tol * 3:
+                    doomed.append((x, y))
+        for x, y in doomed:
+            px[y][x] = (0, 0, 0, 0)
+        removed += len(doomed)
+    return removed
+
+
+def drop_color(px, target, tol=30):
+    """Убирает цвет фона там, куда заливка от краёв не добралась —
+    например внутри замкнутого кольца цепочки."""
+    removed = 0
+    for row in px:
+        for i, p in enumerate(row):
+            if p[3] and sum((p[c] - target[c]) ** 2 for c in range(3)) <= tol * tol * 3:
+                row[i] = (0, 0, 0, 0)
+                removed += 1
+    return removed
