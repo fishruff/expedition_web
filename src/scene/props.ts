@@ -1,37 +1,37 @@
 import { ROUTES } from '@/app/routes'
+import { ASSETS, type AssetName } from '@/shared/assets'
 
 export interface PropDef {
   id: string
-  /** Файл в public/assets. */
-  file: string
-  /** Родные размеры ассета в точках — по ним считается место на экране. */
-  width: number
-  height: number
-  /** Подпись, всплывающая при наведении. Она же текстовая альтернатива. */
+  /** Имя в реестре ассетов. Размеры и файл живут там, а не здесь. */
+  asset: AssetName
+  /** Подпись при наведении. Она же текстовая альтернатива картинки. */
   label: string
   /** Куда ведёт. Без маршрута предмет чисто декоративный. */
   to?: string
+  /** Ключ разблокировки. Пока он не пришёл из игры, предмет заперт. */
+  requires?: string
 }
 
-/**
- * Предметы на столе. Порядок в массиве — порядок слева направо.
- * Размеры совпадают с файлами: предмет никогда не тянется, только целый масштаб.
- */
+/** Ширина в точках берётся из реестра — дублировать её здесь нельзя. */
+export function propWidth(def: PropDef): number {
+  return ASSETS[def.asset].width
+}
+
+/** Предметы на столе. Порядок в массиве — порядок слева направо. */
 export const PROPS: PropDef[] = [
   {
     id: 'compass',
-    file: 'compass.png',
-    width: 82,
-    height: 65,
+    asset: 'compass',
     label: 'Карта мира',
     to: ROUTES.map,
+    requires: 'map',
   },
   {
     id: 'watch',
-    file: 'watch.png',
-    width: 96,
-    height: 80,
+    asset: 'watch',
     label: 'Хронометр',
     to: ROUTES.log,
+    requires: 'chronometer',
   },
 ]

@@ -21,6 +21,21 @@
   cursor: default;
 }
 
+// Запертый предмет виден, но обесцвечен и притемнён — понятно, что он есть,
+// но ещё не твой.
+.prop[data-locked='true'] {
+  cursor: default;
+
+  .image {
+    filter: grayscale(1) brightness(0.45);
+  }
+
+  .label {
+    opacity: 1;
+    color: var(--color-text-dim);
+  }
+}
+
 .label {
   position: absolute;
   top: 100%;

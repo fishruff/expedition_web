@@ -6,6 +6,9 @@ import { Panel } from '@/ui/Panel/Panel'
 import { Countdown } from '@/ui/Countdown/Countdown'
 import { NAV_ITEMS } from '@/app/routes'
 import { crew } from '@/content'
+import { useSnapshots } from '@/data/useSnapshots'
+import { isServerLive, isUnlocked, mergeCrew } from '@/data/merge'
+import { useNow } from '@/shared/lib/useNow'
 import { SITE } from '@/shared/config/site'
 import styles from './Desk.module.scss'
 
@@ -15,6 +18,12 @@ import styles from './Desk.module.scss'
  */
 export function Desk() {
   useScale()
+
+  const snapshots = useSnapshots()
+  const now = useNow(30_000)
+  const live = isServerLive(snapshots.status.updatedAt, snapshots.status.serverOnline, now)
+  const members = mergeCrew(crew, snapshots.crew)
+  const onlineCount = members.filter((m) => m.online).length
 
   return (
     <div className={styles.desk} data-testid="desk">
@@ -35,9 +44,9 @@ export function Desk() {
           ))}
         </nav>
 
-        {/* TODO: живой онлайн появится, когда будет реальный IP и пинг сервера. */}
-        <span className={styles.online}>
-          <i className={styles.dot} /> {crew.length} в экипаже
+        <span className={styles.online} data-live={String(live)}>
+          <i className={styles.dot} />
+          {live ? `${onlineCount} в сети` : 'сервер выключен'}
         </span>
       </header>
 
@@ -53,7 +62,11 @@ export function Desk() {
 
           <div className={styles.props}>
             {PROPS.map((def) => (
-              <Prop key={def.id} def={def} />
+              <Prop
+                key={def.id}
+                def={def}
+                locked={Boolean(def.requires) && !isUnlocked(snapshots.unlocks, def.requires!)}
+              />
             ))}
           </div>
         </main>
@@ -61,10 +74,10 @@ export function Desk() {
         <aside className={styles.side}>
           <Panel title="Экипаж">
             <ul className={styles.crew}>
-              {crew.map((member) => (
-                <li key={member.nick} className={styles.crewRow}>
+              {members.map((member) => (
+                <li key={member.nick} className={styles.crewRow} data-online={String(member.online)}>
                   <span>{member.nick}</span>
-                  <span className={styles.crewRole}>{member.title}</span>
+                  <span className={styles.crewRole}>{member.title || '—'}</span>
                 </li>
               ))}
             </ul>

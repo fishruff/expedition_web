@@ -2,20 +2,19 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { Prop } from '@/scene/Prop/Prop'
-import type { PropDef } from '@/scene/props'
-import { PROPS } from '@/scene/props'
+import { PROPS, propWidth, type PropDef } from '@/scene/props'
+import { ASSETS } from '@/shared/assets'
 
 const compass: PropDef = {
   id: 'compass',
-  file: 'compass.png',
-  width: 82,
-  height: 65,
+  asset: 'compass',
   label: 'Карта мира',
   to: '/map',
+  requires: 'map',
 }
 
-function renderProp(def: PropDef) {
-  const router = createMemoryRouter([{ path: '/', element: <Prop def={def} /> }], {
+function renderProp(def: PropDef, locked = false) {
+  const router = createMemoryRouter([{ path: '/', element: <Prop def={def} locked={locked} /> }], {
     initialEntries: ['/'],
   })
   render(<RouterProvider router={router} />)
@@ -28,16 +27,15 @@ describe('Prop', () => {
     expect(screen.getByRole('link', { name: /Карта мира/ }).getAttribute('href')).toBe('/map')
   })
 
-  it('отдаёт браузеру родные размеры ассета — иначе поедет раскладка при загрузке', () => {
-    renderProp(compass)
+  it('запертый предмет виден, но не кликается', () => {
+    renderProp(compass, true)
 
-    const img = screen.getByRole('img', { name: 'Карта мира' })
-
-    expect(img.getAttribute('width')).toBe('82')
-    expect(img.getAttribute('height')).toBe('65')
+    expect(screen.queryByRole('link')).toBeNull()
+    expect(screen.getByText('ещё не найдено')).toBeTruthy()
+    expect(screen.getByRole('img', { name: 'Карта мира' })).toBeTruthy()
   })
 
-  it('без маршрута остаётся декорацией, а не ссылкой', () => {
+  it('без маршрута остаётся декорацией', () => {
     renderProp({ ...compass, to: undefined })
 
     expect(screen.queryByRole('link')).toBeNull()
@@ -46,11 +44,10 @@ describe('Prop', () => {
 })
 
 describe('описания предметов', () => {
-  it('у каждого предмета есть файл, размеры и подпись', () => {
+  it('каждый предмет ссылается на существующий ассет', () => {
     for (const def of PROPS) {
-      expect(def.file).toMatch(/\.png$/)
-      expect(def.width).toBeGreaterThan(0)
-      expect(def.height).toBeGreaterThan(0)
+      expect(ASSETS[def.asset]).toBeTruthy()
+      expect(propWidth(def)).toBeGreaterThan(0)
       expect(def.label.length).toBeGreaterThan(0)
     }
   })

@@ -1,0 +1,18 @@
+.sprite {
+  width: calc(var(--sprite-w) * 1px * var(--s));
+  height: calc(var(--sprite-h) * 1px * var(--s));
+}
+
+/* Силуэт вместо отсутствующего ассета: те же размеры, поэтому вёрстка не едет. */
+.placeholder {
+  display: block;
+  width: calc(var(--sprite-w) * 1px * var(--s));
+  height: calc(var(--sprite-h) * 1px * var(--s));
+  border: px(1) dashed var(--color-panel-hi);
+  background-color: color-mix(in srgb, var(--color-panel) 70%, transparent);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 px(3),
+    color-mix(in srgb, var(--color-panel-hi) 45%, transparent) px(3) px(4)
+  );
+}

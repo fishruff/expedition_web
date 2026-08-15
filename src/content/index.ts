@@ -26,15 +26,28 @@ function toArray(raw: unknown): Dict[] {
   return Array.isArray(raw) ? raw.filter(isDict) : []
 }
 
+function socials(raw: unknown): CrewMember['socials'] {
+  const s = isDict(raw) ? raw : {}
+
+  return {
+    discord: optionalText(s.discord),
+    telegram: optionalText(s.telegram),
+    youtube: optionalText(s.youtube),
+    twitch: optionalText(s.twitch),
+  }
+}
+
 export function parseCrew(raw: unknown): CrewMember[] {
   return toArray(raw)
     .filter((item) => text(item.nick) !== '')
     .map((item) => ({
       nick: text(item.nick),
+      uuid: text(item.uuid),
       title: text(item.title),
       art: optionalText(item.art),
       description: text(item.description),
       joinedAt: text(item.joinedAt),
+      socials: socials(item.socials),
     }))
 }
 

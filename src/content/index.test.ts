@@ -6,7 +6,15 @@ describe('parseCrew', () => {
     const result = parseCrew([{ nick: 'Steve', title: 'Штурман' }])
 
     expect(result).toEqual([
-      { nick: 'Steve', title: 'Штурман', art: null, description: '', joinedAt: '' },
+      {
+        nick: 'Steve',
+        uuid: '',
+        title: 'Штурман',
+        art: null,
+        description: '',
+        joinedAt: '',
+        socials: { discord: null, telegram: null, youtube: null, twitch: null },
+      },
     ])
   })
 
