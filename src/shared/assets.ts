@@ -20,7 +20,7 @@ export interface AssetDef {
 
 export const ASSETS = {
   compass: { file: 'compass.png', width: 82, height: 65 },
-  watch: { file: 'watch.png', width: 96, height: 80 },
+  watch: { file: 'watch.png', width: 112, height: 103, version: 2 },
   lamp: { file: 'lamp.png', width: 20, height: 36 },
   player: { file: 'player.png', width: 32, height: 48 },
 } as const satisfies Record<string, AssetDef>
@@ -39,8 +39,8 @@ export function assetUrl(def: AssetDef): string {
 export function crewArt(nick: string, version?: number): AssetDef {
   return {
     file: `crew/${nick.toLowerCase()}.png`,
-    width: 64,
-    height: 96,
+    width: 128,
+    height: 192,
     version,
   }
 }

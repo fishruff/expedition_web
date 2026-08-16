@@ -24,8 +24,10 @@ describe('Sprite', () => {
 })
 
 describe('assetUrl', () => {
+  // Ассет из реестра сюда не берём: у любого может появиться версия, и тест
+  // сломается на данных, а не на поведении.
   it('без версии отдаёт простой путь', () => {
-    expect(assetUrl(ASSETS.watch)).toBe('/assets/watch.png')
+    expect(assetUrl({ file: 'lamp.png', width: 20, height: 36 })).toBe('/assets/lamp.png')
   })
 
   it('с версией добавляет её в адрес — иначе браузер покажет старый арт', () => {

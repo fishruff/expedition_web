@@ -29,3 +29,9 @@ public/data
 *.njsproj
 *.sln
 *.sw?
+
+# Сюда приезжают исходники ассетов до разбора.
+incoming/
+
+# Временное сравнение ассетов.
+public/compare/

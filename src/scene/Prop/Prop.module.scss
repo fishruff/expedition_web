@@ -1,7 +1,7 @@
 .prop {
   position: relative;
   display: block;
-  width: calc(var(--prop-w) * 1px * var(--s));
+  width: calc(var(--prop-w) * 1px * var(--sa));
   flex: none;
 }
 

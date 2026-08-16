@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Часы: плотная сетка против интерфейсной</title>
+<style>
+  @font-face { font-family: 'Monocraft'; src: url('/fonts/Monocraft.ttf') format('truetype'); }
+
+  * { box-sizing: border-box; margin: 0; }
+
+  body {
+    background: url('/assets/wood-tile.png') repeat;
+    background-size: 512px;
+    image-rendering: pixelated;
+    color: #e8dcc0;
+    font-family: 'Monocraft', ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    padding: 28px;
+    -webkit-font-smoothing: none;
+  }
+
+  img { image-rendering: pixelated; display: block; }
+
+  h1 { font-size: 18px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px; }
+  h2 { font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: #d9a441; margin: 30px 0 6px; }
+  p { color: #cbb894; max-width: 78ch; }
+  em { color: #99866a; font-style: normal; }
+
+  .pair { display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-start; margin-top: 16px; }
+
+  /* Панель настоящей рамкой — чтобы видеть точку интерфейса рядом с точкой предмета. */
+  .panel {
+    border-style: solid;
+    border-width: 24px;
+    border-image: url('/assets/frame-panel.png') 12 fill repeat;
+    padding: 10px 14px;
+    min-width: 190px;
+  }
+
+  .panel h3 { font-size: 11px; letter-spacing: 0.18em; color: #99866a; font-weight: 400; margin-bottom: 6px; }
+  .panel .row { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; }
+
+  figure { background: rgba(13,10,7,0.55); padding: 14px; border: 2px solid #4a3a26; }
+  figcaption { color: #99866a; font-size: 11px; letter-spacing: 0.1em; margin-top: 10px; text-align: center; }
+  figcaption b { color: #d9a441; font-weight: 400; }
+
+  .zoom { display: flex; gap: 24px; align-items: flex-start; margin-top: 14px; }
+</style>
+</head>
+<body>
+
+<h1>Часы: плотная сетка против интерфейсной</h1>
+<p>
+  Обе версии на экране одного размера. Отличается только величина точки: слева рисунок
+  как ты его нарисовал, справа — он же, ужатый вдвое под сетку интерфейса.
+  Рядом стоит настоящая панель сайта, чтобы было видно, как каждая версия уживается с рамкой и шрифтом.
+</p>
+
+<h2>Как это выглядит на экране 1280 — масштаб сцены 2</h2>
+
+<div class="pair">
+  <figure>
+    <img src="/compare/watch-dense.png" style="width: 112px" alt="" />
+    <figcaption>плотная сетка · <b>112×103</b> точки · показана 1:1</figcaption>
+  </figure>
+
+  <figure>
+    <img src="/compare/watch-half.png" style="width: 112px" alt="" />
+    <figcaption>интерфейсная сетка · <b>56×51</b> точка · показана 2:1</figcaption>
+  </figure>
+
+  <div class="panel">
+    <h3>ЭКИПАЖ</h3>
+    <div class="row"><span>Steve</span><span>Штурман</span></div>
+    <div class="row"><span>Alex</span><span>Кузнец</span></div>
+    <div class="row"><span>Nomad</span><span>—</span></div>
+  </div>
+</div>
+
+<h2>Тот же экран, но масштаб 4 — широкий монитор</h2>
+
+<div class="pair">
+  <figure>
+    <img src="/compare/watch-dense.png" style="width: 224px" alt="" />
+    <figcaption>плотная · показана 2:1</figcaption>
+  </figure>
+
+  <figure>
+    <img src="/compare/watch-half.png" style="width: 224px" alt="" />
+    <figcaption>интерфейсная · показана 4:1</figcaption>
+  </figure>
+</div>
+
+<h2>Крупно: что именно теряется</h2>
+<p><em>Обе увеличены до одной высоты. Смотри на стрелки, цифры делений и звенья цепочки.</em></p>
+
+<div class="zoom">
+  <figure>
+    <img src="/compare/watch-dense.png" style="width: 448px" alt="" />
+    <figcaption>плотная · 4:1</figcaption>
+  </figure>
+  <figure>
+    <img src="/compare/watch-half.png" style="width: 448px" alt="" />
+    <figcaption>интерфейсная · 8:1</figcaption>
+  </figure>
+</div>
+
+<h2>Что решаем</h2>
+<p>
+  Если выбираешь плотную — предметы живут на сетке вдвое мельче интерфейса, и это надо
+  принять как приём: рамка и шрифт остаются крупноточечными, предметы становятся подробными.
+  Цена: масштаб сцены получит две ступени вместо четырёх, потому что половина от нечётной
+  ступени даёт дробную, а дробная мылит.
+</p>
+<p>
+  Если интерфейсную — всё живёт в одной сетке, зато стрелки и деления придётся рисовать
+  заново, толщиной в две точки, иначе они исчезнут.
+</p>
+
+</body>
+</html>
