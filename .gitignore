@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Снимки из игры: во время сезона их пишет api, на дев-машине — npm run data:sample.
+# В репозитории им делать нечего, а в продакшн-сборке — тем более.
+public/data
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

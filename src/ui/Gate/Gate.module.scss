@@ -1,0 +1,24 @@
+.gate {
+  text-align: center;
+}
+
+/* Силуэт запертого: тот же приём, что у отсутствующего ассета. */
+.shape {
+  display: block;
+  width: px(48);
+  height: px(48);
+  margin: px(6) auto px(4);
+  border: px(1) dashed var(--color-panel-hi);
+  background-color: color-mix(in srgb, var(--color-panel) 70%, transparent);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 px(3),
+    color-mix(in srgb, var(--color-panel-hi) 45%, transparent) px(3) px(4)
+  );
+}
+
+.note {
+  color: var(--color-text-dim);
+  font-size: px(5);
+  letter-spacing: 0.12em;
+}

@@ -31,7 +31,7 @@ export const PROPS: PropDef[] = [
     id: 'watch',
     asset: 'watch',
     label: 'Хронометр',
-    to: ROUTES.log,
+    to: ROUTES.chronometer,
     requires: 'chronometer',
   },
 ]

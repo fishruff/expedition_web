@@ -5,9 +5,16 @@
     "lib": ["ES2023"],
     "types": ["node"],
     "skipLibCheck": true,
+    // Инструменты тянут типы снимков из src, а там принят алиас.
+    "paths": {
+      "@/*": ["./src/*"]
+    },
 
     /* Bundler mode */
-    "module": "nodenext",
+    // bundler, а не nodenext: инструменты ходят в src, где принят алиас @ и импорты
+    // без расширения. Сборкой этот проект не занимается, только проверкой типов.
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
@@ -19,5 +26,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "tools/**/*.ts"]
 }
