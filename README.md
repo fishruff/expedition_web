@@ -78,6 +78,7 @@ tools/
 
 ## Документы
 
+- Как рисовать ассеты руками — [`docs/art/README.md`](./docs/art/README.md)
 - Дневник работы и планы — [`JOURNAL.md`](./JOURNAL.md)
 - Спецификации и планы — `docs/superpowers/`
 - Референсы оформления — `docs/reference/`
