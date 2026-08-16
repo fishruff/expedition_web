@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseCrew, parseNews, parseEvents } from '@/content'
+import { parseCrew, parseNews, parseEvents, parseTitles } from '@/content'
 
 describe('parseCrew', () => {
   it('оставляет корректные записи и заполняет необязательные поля', () => {
@@ -10,7 +10,6 @@ describe('parseCrew', () => {
         nick: 'Steve',
         uuid: '',
         title: 'Штурман',
-        art: null,
         description: '',
         joinedAt: '',
         socials: { discord: null, telegram: null, youtube: null, twitch: null },
@@ -60,5 +59,31 @@ describe('parseEvents', () => {
     ])
 
     expect(result.map((event) => event.title)).toEqual(['Гонка'])
+  })
+})
+
+describe('parseTitles', () => {
+  it('оставляет правила с идентификатором и подписью', () => {
+    const result = parseTitles([
+      { id: 'ходок', label: 'Ходок', rule: 'maxDistance', frame: 'silver' },
+    ])
+
+    expect(result).toEqual([
+      { id: 'ходок', label: 'Ходок', rule: 'maxDistance', frame: 'silver' },
+    ])
+  })
+
+  it('отбрасывает правила без идентификатора или подписи', () => {
+    const result = parseTitles([
+      { label: 'Безымянное', rule: 'maxDistance' },
+      { id: 'без-подписи', rule: 'maxDistance' },
+      { id: 'ходок', label: 'Ходок', rule: 'maxDistance' },
+    ])
+
+    expect(result.map((rule) => rule.id)).toEqual(['ходок'])
+  })
+
+  it('без оформления оставляет рамку пустой, а не ломается', () => {
+    expect(parseTitles([{ id: 'ходок', label: 'Ходок', rule: 'maxDistance' }])[0].frame).toBe('')
   })
 })

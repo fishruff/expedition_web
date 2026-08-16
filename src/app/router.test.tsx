@@ -27,10 +27,10 @@ describe('маршруты', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Экипаж' })).toBeTruthy()
   })
 
-  it('открывает страницу участника', () => {
+  it('открывает страницу участника по нику из адреса', () => {
     renderAt('/crew/steve')
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Участник' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1, name: 'Steve' })).toBeTruthy()
   })
 
   it('открывает устав', () => {

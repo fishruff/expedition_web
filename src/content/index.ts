@@ -1,7 +1,8 @@
-import type { CrewMember, GameEvent, NewsItem } from '@/content/types'
+import type { CrewMember, GameEvent, NewsItem, TitleRule } from '@/content/types'
 import crewRaw from '@/content/crew.json'
 import newsRaw from '@/content/news.json'
 import eventsRaw from '@/content/events.json'
+import titlesRaw from '@/content/titles.json'
 
 // Не Record — это имя занято встроенным утилитным типом TypeScript.
 type Dict = { [key: string]: unknown }
@@ -44,7 +45,6 @@ export function parseCrew(raw: unknown): CrewMember[] {
       nick: text(item.nick),
       uuid: text(item.uuid),
       title: text(item.title),
-      art: optionalText(item.art),
       description: text(item.description),
       joinedAt: text(item.joinedAt),
       socials: socials(item.socials),
@@ -79,6 +79,22 @@ export function parseEvents(raw: unknown): GameEvent[] {
     }))
 }
 
+/**
+ * Правила автоматических званий. Показатель, которого код не знает, отсеивается
+ * позже, при выдаче: файл владельца имеет право опережать код.
+ */
+export function parseTitles(raw: unknown): TitleRule[] {
+  return toArray(raw)
+    .filter((item) => text(item.id) !== '' && text(item.label) !== '')
+    .map((item) => ({
+      id: text(item.id),
+      label: text(item.label),
+      rule: text(item.rule),
+      frame: text(item.frame),
+    }))
+}
+
 export const crew = parseCrew(crewRaw)
 export const news = parseNews(newsRaw)
 export const events = parseEvents(eventsRaw)
+export const titles = parseTitles(titlesRaw)

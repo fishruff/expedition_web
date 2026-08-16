@@ -1,0 +1,89 @@
+.member {
+  display: flex;
+  flex-direction: column;
+  gap: px(6);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  gap: px(8);
+}
+
+.art {
+  flex: none;
+}
+
+.title {
+  color: var(--color-gold);
+  font-size: px(9);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.role {
+  margin-top: px(2);
+  color: var(--color-text-dim);
+  font-size: px(6);
+  letter-spacing: 0.12em;
+}
+
+.bio {
+  margin-top: px(4);
+  max-width: 46ch;
+}
+
+.note {
+  color: var(--color-text-dim);
+}
+
+.back {
+  color: var(--color-gold);
+  align-self: flex-start;
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: px(6);
+  list-style: none;
+
+  a {
+    color: var(--color-gold);
+  }
+}
+
+.subtitle {
+  margin-top: px(4);
+  color: var(--color-text-dim);
+  font-size: px(6);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: px(2);
+  max-width: px(160);
+}
+
+// Точки между названием и значением: строка читается слева направо без блуждания.
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: px(3);
+
+  dt {
+    color: var(--color-text-dim);
+  }
+
+  dt::after {
+    content: '';
+    display: block;
+  }
+
+  dd {
+    margin-left: auto;
+  }
+}

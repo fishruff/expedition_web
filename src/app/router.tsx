@@ -1,6 +1,8 @@
 import { createBrowserRouter, type RouteObject } from 'react-router'
 import { Desk } from '@/scene/Desk/Desk'
 import { Home } from '@/sections/Home/Home'
+import { Crew } from '@/sections/Crew/Crew'
+import { Member } from '@/sections/Crew/Member'
 import { ROUTES } from '@/app/routes'
 import { Gate } from '@/ui/Gate/Gate'
 import type { SectionName } from '@/data/unlocks'
@@ -22,8 +24,8 @@ export const routes: RouteObject[] = [
     children: [
       { path: ROUTES.home, element: <Home /> },
       { path: ROUTES.log, element: stub('Дневник') },
-      { path: ROUTES.crew, element: stub('Экипаж') },
-      { path: ROUTES.crewMember, element: stub('Участник') },
+      { path: ROUTES.crew, element: <Crew /> },
+      { path: ROUTES.crewMember, element: <Member /> },
       { path: ROUTES.charter, element: stub('Устав') },
       { path: ROUTES.archive, element: gated('archive', 'Архив') },
       { path: ROUTES.map, element: gated('map', 'Карта') },

@@ -10,7 +10,6 @@ const arsen: CrewMember = {
   nick: 'Arsen',
   uuid: 'uuid-arsen',
   title: 'штурман',
-  art: '/assets/crew/arsen.png',
   description: 'Ведёт экспедицию.',
   joinedAt: '2026-03-14',
   socials: NO_SOCIALS,

@@ -10,7 +10,6 @@ export interface CrewMember {
   /** Ключ склейки с данными из игры. Пустой, пока владелец его не проставил. */
   uuid: string
   title: string
-  art: string | null
   description: string
   joinedAt: string
   socials: Socials
@@ -28,4 +27,16 @@ export interface GameEvent {
   title: string
   startsAt: string
   endsAt: string
+}
+
+/**
+ * Правило автоматического звания из titles.json.
+ * Звание получает тот, кто первый по показателю.
+ */
+export interface TitleRule {
+  id: string
+  label: string
+  rule: string
+  /** Оформление рамки: gold, silver. Пустая строка — без рамки. */
+  frame: string
 }

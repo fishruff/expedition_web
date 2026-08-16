@@ -7,7 +7,6 @@ export interface CrewView {
   uuid: string
   title: string
   bio: string
-  art: string | null
   joinedAt: string
   socials: CrewMember['socials']
   /** null, пока плагин не запущен: интерфейс рисует прочерк, а не ноль. */
@@ -24,7 +23,6 @@ function toView(member: CrewMember, entry?: CrewEntry): CrewView {
     uuid: member.uuid || entry?.uuid || '',
     title: member.title,
     bio: member.description,
-    art: member.art,
     joinedAt: member.joinedAt,
     socials: member.socials,
     stats: entry?.stats ?? null,
@@ -64,7 +62,6 @@ export function mergeCrew(authored: CrewMember[], snapshot: CrewSnapshot): CrewV
       uuid: p.uuid,
       title: '',
       bio: '',
-      art: null,
       joinedAt: p.firstSeen,
       socials: { discord: null, telegram: null, youtube: null, twitch: null },
       stats: p.stats,

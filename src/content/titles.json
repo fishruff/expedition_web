@@ -1,0 +1,6 @@
+[
+  { "id": "первопроходец", "label": "Первопроходец", "rule": "maxRecordsFound", "frame": "gold" },
+  { "id": "ходок", "label": "Ходок", "rule": "maxDistance", "frame": "silver" },
+  { "id": "старожил", "label": "Старожил", "rule": "maxPlaytime", "frame": "silver" },
+  { "id": "рудокоп", "label": "Рудокоп", "rule": "maxBlocksMined", "frame": "" }
+]
