@@ -1,85 +1,135 @@
 # Предметы на столе
 
-Общее для всех: вид сверху-сбоку, предмет лежит на столе, свет от лампы слева сверху,
-тёплая латунь и дерево. Предметы живут в плотной сетке — вдвое мельче точкой, чем
-интерфейс. Ориентир плотности — готовые часы `public/assets/watch.png`: корпус занимает
-у них около восьмидесяти точек.
+Часы уже нарисованы и лежат в проекте — они эталон. Задача остальных промптов: получить
+эскиз **в той же манере**, а не «красивый предмет вообще».
+
+К каждому запросу прикладывай [`../reference/style-sheet.png`](../reference/style-sheet.png).
+Без него генератор сползает в перспективу и в свои цвета за два-три запроса.
+
+Ракурс во всех промптах один: плоско, фронтально, без стола. Слова
+`flat orthographic front view, no perspective, no ground, no table` не убирать — именно
+они держат вид спереди вместо вида сбоку.
 
 ## Компас — `compass.png`, около 112×112
 
-Ведёт на карту. Пока карта не открыта, показывается запертым, поэтому силуэт должен
-читаться даже без деталей.
+Ведёт на карту. Пока карта не открыта, показывается запертым — силуэт должен читаться
+даже обесцвеченным.
 
 ```
-A brass pocket compass lying open on a dark wooden table, seen from above at a slight
-angle. Hinged round lid tilted back on the left. Cream-colored dial face with a compass
-rose, one red needle pointing north. Warm brass body with worn edges, single warm light
-source from the upper left, hard shadow falling to the lower right. Muted palette of
-dark brown wood, aged brass and bone-white dial. Flat dark background, no transparency,
-no text, no numbers on the dial, not photorealistic, chunky readable shapes with a clear
-silhouette, adventure-game object art.
+An open brass pocket compass, the round lid hinged open to the left, the dial facing the
+viewer, one red needle pointing up.
+
+Style reference: match the attached image exactly — same pixel density, same palette,
+same lighting, same level of detail, same hand-drawn look.
+
+Flat orthographic front view, the object faces the viewer, no perspective, no ground,
+no table, no scene, no props around. A single object centered on a plain dark brown
+background. Hand-drawn pixel art, about 110 pixels tall, chunky visible pixels, no
+anti-aliasing, no blur, no gradients, no photo texture.
+
+Limited palette of warm browns and aged brass only: #241a10 #3f2d1f #4d2e0e #654924
+#805f2c #a9773a #b7924f #c8b284 #d9a441 #fad682 #d6c6a2 #e2d4b4 #120d08.
+
+Light comes from the upper left: brighter edges on the upper left of each form, darker
+on the lower right. One dark outline around the silhouette. No cast shadow on the ground.
+No text, no numbers, no letters, no watermark, no border.
 ```
 
-Проверь на выходе: круг не превратился в овал, стрелка отличается по цвету от остального.
-
-## Карманные часы — `watch.png`, 112×103 — готово
-
-Ведут на хронометр. Цепочка обязательна: без неё часы читаются как второй компас.
-
-```
-An antique brass pocket watch lying on a dark wooden table, seen from above at a slight
-angle. Round case with an open lid, cream enamel face, thin dark hands. A short brass
-chain curling to the right of the case. Warm worn brass, single warm light from the upper
-left, hard shadow to the lower right. Muted palette of dark brown wood and aged brass.
-Flat dark background, no transparency, no text, no numerals, not photorealistic, chunky
-readable shapes, adventure-game object art.
-```
-
-Проверь: цепочка не сливается с корпусом, лид открыт в другую сторону, чем у компаса —
-иначе рядом они выглядят одинаково.
+Компас и часы — соседи на столе и обязаны различаться с одного взгляда. У часов крышка
+слева и петля сверху; у компаса проси **красную стрелку** и такую же откинутую крышку —
+тогда пара читается как набор, а не как две попытки нарисовать одно и то же.
 
 ## Лампа — `lamp.png`, около 80×160
 
-Источник света всей сцены. Стоит слева вверху, поэтому её собственный свет — тёплое пятно
-вправо-вниз.
+Источник света всей сцены, стоит слева вверху. Единственный предмет, который светится сам.
 
 ```
-A small brass oil lantern standing on a dark wooden table, seen from the side. Glass
-chamber with a warm glowing flame inside, brass base and top cap, a thin carry ring on
-top. The flame casts warm light to the lower right. Tall narrow proportions, roughly
-twice as tall as wide. Muted palette of dark brown, aged brass and warm amber glow.
-Flat dark background, no transparency, no text, not photorealistic, chunky readable
-shapes, adventure-game object art.
+A small brass oil lantern standing upright, a glass chamber with a warm glowing flame
+inside, a carry ring on top, twice as tall as it is wide.
+
+Style reference: match the attached image exactly — same pixel density, same palette,
+same lighting, same level of detail, same hand-drawn look.
+
+Flat orthographic front view, the object faces the viewer, no perspective, no ground,
+no table, no scene, no props around. A single object centered on a plain dark brown
+background. Hand-drawn pixel art, about 150 pixels tall, chunky visible pixels, no
+anti-aliasing, no blur, no gradients, no photo texture.
+
+Limited palette of warm browns and aged brass only: #241a10 #3f2d1f #4d2e0e #654924
+#805f2c #a9773a #b7924f #c8b284 #d9a441 #fad682 #d6c6a2 #e2d4b4 #120d08.
+
+The flame is the brightest thing in the image, warm amber and pale yellow. Everything
+else is lit from the upper left. One dark outline around the silhouette. No cast shadow
+on the ground, no light rays, no glow halo. No text, no watermark, no border.
 ```
 
-Проверь: пламя внутри стекла, а не поверх; корпус остаётся узким — лампа выше остальных
-предметов, но не шире.
+Ореол вокруг лампы просить не надо — приедет полупрозрачной кашей. Свечение сцены рисует
+сайт отдельным слоем.
 
 ## Сундук — `chest.png`, около 160×128
 
-Стоит в углу стола, декоративный. Крышка закрыта — открытый сундук требует содержимого,
-а оно в таком размере превратится в кашу.
+Стоит в углу стола, декоративный. Крышка закрыта: открытый требует содержимого, а оно
+в таком размере превратится в кашу.
 
 ```
-A small wooden treasure chest with a curved lid, closed, standing on a dark wooden table,
-seen from the front at a slight angle. Brass corner fittings and a brass lock plate,
-dark leather straps across the lid. Wider than tall. Single warm light from the upper
-left, hard shadow to the lower right. Muted palette of dark brown wood, aged brass and
-dark leather. Flat dark background, no transparency, no text, not photorealistic,
-chunky readable shapes, adventure-game object art.
+A small wooden treasure chest with a curved lid, closed, brass corner fittings and a
+brass lock plate, dark leather straps across the lid, wider than it is tall.
+
+Style reference: match the attached image exactly — same pixel density, same palette,
+same lighting, same level of detail, same hand-drawn look.
+
+Flat orthographic front view, the object faces the viewer, no perspective, no ground,
+no table, no scene, no props around. A single object centered on a plain dark brown
+background. Hand-drawn pixel art, about 120 pixels tall, chunky visible pixels, no
+anti-aliasing, no blur, no gradients, no photo texture.
+
+Limited palette of warm browns and aged brass only: #241a10 #3f2d1f #4d2e0e #654924
+#805f2c #a9773a #b7924f #c8b284 #d9a441 #fad682 #d6c6a2 #e2d4b4 #120d08.
+
+Light comes from the upper left: brighter edges on the upper left of each form, darker
+on the lower right. One dark outline around the silhouette. No cast shadow on the ground.
+No text, no numbers, no letters, no watermark, no border.
 ```
 
 ## Свиток — `scroll.png`, около 64×64
 
-Мелкий реквизит: лежит под книгой и по краям стола, добавляет сцене обжитости.
+Мелкий реквизит: лежит по краям стола и добавляет сцене обжитости.
 
 ```
-A rolled parchment scroll lying flat on a dark wooden table, seen from above. Aged cream
-paper, slightly uneven edges, a thin dark cord tied around the middle. Small and simple,
-readable at a glance. Single warm light from the upper left, hard shadow to the lower
-right. Muted palette of cream paper and dark brown wood. Flat dark background, no
-transparency, no text, no writing on the paper, not photorealistic, chunky readable
-shapes, adventure-game object art.
+A rolled parchment scroll tied with a thin dark cord around the middle, seen end-on so
+the roll reads as a simple cylinder.
+
+Style reference: match the attached image exactly — same pixel density, same palette,
+same lighting, same level of detail, same hand-drawn look.
+
+Flat orthographic front view, the object faces the viewer, no perspective, no ground,
+no table, no scene, no props around. A single object centered on a plain dark brown
+background. Hand-drawn pixel art, about 60 pixels tall, chunky visible pixels, no
+anti-aliasing, no blur, no gradients, no photo texture.
+
+Limited palette of aged cream paper and warm brown only: #d6c6a2 #e2d4b4 #eee2c6 #af997a
+#6b543a #3f2d1f #120d08.
+
+Light comes from the upper left: brighter along the upper left of the roll, darker below.
+One dark outline around the silhouette. No cast shadow on the ground. No text, no writing
+on the paper, no watermark, no border.
 ```
 
-Проверь: на такой мелочи любая надпись превращается в грязь — бумага должна быть чистой.
+Надписей на бумаге не просить: в этом размере они превращаются в грязь, а сюжетные тексты
+всё равно живут в `story.json` и рисуются шрифтом.
+
+## Если генератор упрямится
+
+По убыванию частоты:
+
+1. **Приехало сбоку, в перспективе.** Допиши в конец: `orthographic, no perspective,
+   like a video game sprite sheet, not a photograph`.
+2. **Слишком гладко, пиксели не видны.** Допиши: `visible square pixels, low resolution,
+   hard pixel edges, no smoothing`.
+3. **Цвета уплыли в серое или в неоновый оранжевый.** Повтори список цветов и добавь
+   `use only these colors, nothing else`.
+4. **Предмет висит в пустоте с тенью под собой.** Допиши `no shadow, no reflection,
+   no floor`.
+5. **Ничего не помогает.** Попроси правку вместо новой картинки: приложи прошлый вариант
+   и напиши `keep everything, only change the angle to a flat front view`. Правки
+   Nano Banana держит заметно лучше, чем генерацию с нуля.

@@ -4,6 +4,9 @@
 Поэтому у генератора просим не иконку, а **предмет крупно и без мелочей**, а сводишь его
 к шестнадцати точкам уже ты.
 
+К запросу прикладывай [`../reference/style-sheet.png`](../reference/style-sheet.png) —
+нарисованные часы и палитру. Без эталона стиль уплывает за два-три запроса.
+
 Общее правило приёмки: закрой глаза, открой и посмотри на иконку долю секунды.
 Если не понял, что это, — переделывай силуэт, а не детали.
 
@@ -13,10 +16,12 @@
 строка.
 
 ```
-A single <ОБЪЕКТ> shown straight on, centered, as a simple game interface icon. Bold
-readable silhouette, no small details, no background scenery. Single warm light from the
-upper left. Muted palette of aged brass, dark brown and cream. Flat dark background,
-no text, not photorealistic, chunky shapes, adventure-game interface art.
+A single <ОБЪЕКТ>, flat orthographic front view, facing the viewer, no perspective,
+no ground, no scene. Centered on a plain dark brown background. Bold readable silhouette,
+no small details. Hand-drawn pixel art with chunky visible pixels, no anti-aliasing,
+no gradients. Light from the upper left, one dark outline around the silhouette, no cast
+shadow. Palette of aged brass, dark brown and cream: #654924 #805f2c #b7924f #d9a441
+#d6c6a2 #e2d4b4 #241a10. No text, no letters, no watermark, no border.
 ```
 
 Что подставлять:
@@ -35,11 +40,12 @@ no text, not photorealistic, chunky shapes, adventure-game interface art.
 а не как «ошибка».
 
 ```
-An old brass padlock hanging closed, seen straight on, centered. Rounded body, thick
-shackle, one keyhole. Slightly worn, not shiny. Single warm light from the upper left,
-hard shadow to the lower right. Muted palette of aged brass and dark brown. Flat dark
-background, no text, not photorealistic, chunky readable shapes, adventure-game
-interface art.
+An old brass padlock, closed, rounded body, thick shackle, one keyhole, slightly worn.
+Flat orthographic front view, facing the viewer, no perspective, no ground, no scene.
+Centered on a plain dark brown background. Hand-drawn pixel art with chunky visible
+pixels, no anti-aliasing, no gradients. Light from the upper left, one dark outline
+around the silhouette, no cast shadow. Palette of aged brass and dark brown: #4d2e0e
+#654924 #805f2c #b7924f #d9a441 #241a10. No text, no watermark, no border.
 ```
 
 ## Метка на карте — `pin.png`, 8×8

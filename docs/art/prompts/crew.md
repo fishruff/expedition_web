@@ -11,13 +11,19 @@
 
 ## Промпт
 
+К запросу прикладывай [`../reference/style-sheet.png`](../reference/style-sheet.png) —
+нарисованные часы и палитру. Без эталона стиль уплывает за два-три запроса.
+
 Меняются только приметы игрока в первой строке — остальное не трогать вообще, иначе
 манера поплывёт.
 
 ```
-A pixel-art style portrait bust of <ОПИСАНИЕ ИГРОКА>, facing the viewer, seen from the
+Match the pixel density, palette and hand-drawn look of the attached image.
+
+A portrait bust of <ОПИСАНИЕ ИГРОКА>, facing the viewer, seen from the
 chest up, centered. Expedition clothing: worn coat, simple shirt, leather straps. Neutral
-calm expression. Vertical composition, roughly two units tall for every unit wide. Single
+calm expression. Flat orthographic front view, no perspective, no scene. Vertical composition, roughly
+two units tall for every unit wide. Single
 warm light from the upper left, hard shadow on the right side of the face. Muted palette
 of dark brown, aged brass, cream and skin tones, matching an old adventure journal. Plain
 flat dark brown background, no scenery, no props in hand, no text, no frame, no border,
