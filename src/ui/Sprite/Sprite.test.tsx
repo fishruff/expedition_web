@@ -4,13 +4,22 @@ import { Sprite } from '@/ui/Sprite/Sprite'
 import { ASSETS, assetUrl, crewArt } from '@/shared/assets'
 
 describe('Sprite', () => {
+  // Размеры берём из литерала, а не из реестра: ассеты перерисовываются,
+  // и тест должен падать на поведении, а не на новой картинке.
   it('отдаёт браузеру родные размеры — иначе раскладка прыгнет при загрузке', () => {
-    render(<Sprite def={ASSETS.compass} alt="Компас" />)
+    render(<Sprite def={{ file: 'compass.png', width: 92, height: 110 }} alt="Компас" />)
 
     const img = screen.getByRole('img', { name: 'Компас' })
 
-    expect(img.getAttribute('width')).toBe('82')
-    expect(img.getAttribute('height')).toBe('65')
+    expect(img.getAttribute('width')).toBe('92')
+    expect(img.getAttribute('height')).toBe('110')
+  })
+
+  it('каждый ассет реестра объявляет родные размеры', () => {
+    for (const [name, def] of Object.entries(ASSETS)) {
+      expect(def.width, name).toBeGreaterThan(0)
+      expect(def.height, name).toBeGreaterThan(0)
+    }
   })
 
   it('вместо не загрузившейся картинки показывает силуэт, а не пустоту', () => {

@@ -88,17 +88,20 @@
 
 <div class="row" id="props"></div>
 
-<h2>Компас: сгенерированный против нарисованного кодом</h2>
-<p class="note">Слева — присланный и обработанный. Справа — моя заглушка. Оба в масштабе 4×.</p>
+<h2>Компас и часы: проверка единой плотности</h2>
+<p class="note">
+  Два нарисованных предмета рядом в масштабе 3×. Точка одного должна равняться точке другого,
+  свет — падать с одной стороны, плотность деталей — совпадать.
+</p>
 
 <div class="row">
   <figure class="cell checker">
-    <img src="/assets/compass.png" style="width: calc(82px * 4)" alt="" />
-    <figcaption>от художника · 82×65 · 20 цветов</figcaption>
+    <img src="/assets/compass.png" style="width: calc(92px * 3)" alt="" />
+    <figcaption>compass · 92×110 · 27 цветов</figcaption>
   </figure>
   <figure class="cell checker">
-    <img src="/assets/compass-placeholder.png" style="width: calc(24px * 4)" alt="" />
-    <figcaption>заглушка кодом · 24×24</figcaption>
+    <img src="/assets/watch.png" style="width: calc(112px * 3)" alt="" />
+    <figcaption>watch · 112×103 · 26 цветов</figcaption>
   </figure>
 </div>
 
@@ -139,7 +142,7 @@
 
 <script>
   const PROPS = [
-    { file: 'compass.png', w: 82, label: 'compass' },
+    { file: 'compass.png', w: 92, label: 'compass' },
     { file: 'watch.png', w: 112, label: 'watch' },
     { file: 'lamp.png', w: 20, label: 'lamp' },
     { file: 'player.png', w: 32, label: 'player' },
@@ -158,7 +161,7 @@
     ['paper-tile.png', 'тайл', '32×32', 'бумага страниц'],
     ['frame-panel.png', 'рамка 9 слоёв', '48×48, углы 12', 'панели интерфейса'],
     ['frame-book.png', 'рамка 9 слоёв', '96×96, углы 24', 'переплёт книги'],
-    ['compass.png', 'предмет', '82×65', 'ведёт на карту'],
+    ['compass.png', 'предмет', '92×110', 'ведёт на карту, плотная сетка'],
     ['watch.png', 'предмет', '112×103', 'отсчёт до ивента, плотная сетка'],
     ['lamp.png', 'предмет', '20×36', 'декор'],
     ['player.png', 'предмет', '32×48', 'арт участника'],

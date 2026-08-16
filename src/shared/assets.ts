@@ -19,7 +19,7 @@ export interface AssetDef {
 }
 
 export const ASSETS = {
-  compass: { file: 'compass.png', width: 82, height: 65 },
+  compass: { file: 'compass.png', width: 92, height: 110, version: 2 },
   watch: { file: 'watch.png', width: 112, height: 103, version: 2 },
   lamp: { file: 'lamp.png', width: 20, height: 36 },
   player: { file: 'player.png', width: 32, height: 48 },
