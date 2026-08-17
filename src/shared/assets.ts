@@ -43,7 +43,7 @@ export function assetUrl(def: AssetDef): string {
 export function crewArt(nick: string, version?: number): AssetDef {
   return {
     file: `crew/${nick.toLowerCase()}.png`,
-    width: 128,
+    width: 144,
     height: 192,
     version,
   }

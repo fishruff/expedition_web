@@ -7,48 +7,78 @@
 Отсюда требования жёстче остальных: важнее всего, чтобы все арты вышли **в одной манере**.
 Один игрок в другой манере заметнее, чем десять посредственных в одной.
 
-Размер — 128×192, вертикальный портрет по пояс: арты живут в плотной предметной сетке.
+Размер — **144×192**, вертикально, три к четырём. На странице участника арт показывается
+вдвое крупнее, целым увеличением, поэтому не мылит.
+
+## Это не бюст, а сцена
+
+По референсу арт — **маленькая сцена**: блочный персонаж во весь рост стоит на камне
+с фонарём в руке, за ним ночной остров — скалы, руины, луна, туман. Фон приглушён
+и уходит в темноту, светится только фонарь и лицо рядом с ним.
+
+Три вещи, на которых это держится:
+
+- **персонаж блочный**, как в майнкрафте: руки и ноги брусками, голова кубом. Это игроки
+  сервера, а не абстрактные путешественники;
+- **фонарь — единственный источник света**, тёплый, сбоку и снизу. Он же связывает арты
+  со сценой стола, где свет тоже идёт от лампы;
+- **фон темнее фигуры на две-три ступени**. Иначе персонаж в нём растворяется, а в списке
+  экипажа арты превращаются в кашу из пятен.
 
 ## Промпт
 
-К запросу прикладывай [`../reference/style-sheet.png`](../reference/style-sheet.png) —
-нарисованные часы и палитру. Без эталона стиль уплывает за два-три запроса.
-
-Меняются только приметы игрока в первой строке — остальное не трогать вообще, иначе
-манера поплывёт.
+Меняются только приметы игрока в первой строке. Остальное не трогать: манера поплывёт,
+и арт выпадет из общего ряда.
 
 ```
-Match the pixel density, palette and hand-drawn look of the attached image.
+A blocky Minecraft-style character of <ОПИСАНИЕ ИГРОКА>, standing full body on a rocky
+ledge, facing the viewer, holding a lit brass lantern in one hand. Explorer clothing:
+worn coat, leather straps, a backpack.
 
-A portrait bust of <ОПИСАНИЕ ИГРОКА>, facing the viewer, seen from the
-chest up, centered. Expedition clothing: worn coat, simple shirt, leather straps. Neutral
-calm expression. Flat orthographic front view, no perspective, no scene. Vertical composition, roughly
-two units tall for every unit wide. Single
-warm light from the upper left, hard shadow on the right side of the face. Muted palette
-of dark brown, aged brass, cream and skin tones, matching an old adventure journal. Plain
-flat dark brown background, no scenery, no props in hand, no text, no frame, no border,
-not photorealistic, chunky readable shapes.
+Behind the character, a night island landscape fades into darkness: cliffs, distant
+ruins, a low moon, thin mist. The background is two or three steps darker than the
+figure and holds no bright spots.
+
+Hand-drawn pixel art, vertical composition three to four, the character fills about two
+thirds of the height. Chunky visible pixels, no anti-aliasing, no blur, no gradients.
+
+The lantern is the only light source: warm amber light on the character from the side
+and below, everything else in cold shadow. Muted palette of dark brown, aged brass,
+cream and skin tones: #241a10 #3f2d1f #654924 #805f2c #b7924f #d9a441 #fad682 #e2d4b4
+#8a5a34 #c98d5e.
+
+No text, no letters, no watermark, no frame, no border around the image, not
+photorealistic.
 ```
 
-Что подставлять вместо `<ОПИСАНИЕ ИГРОКА>` — коротко, две-три приметы:
+Что подставлять вместо `<ОПИСАНИЕ ИГРОКА>` — две-три приметы, коротко:
 `a bearded man with dark hair and a red bandana`, `a young woman with short blond hair
 and round glasses`.
+
+Рамку вокруг арта **не просить**: её рисует сайт, и нарисованная внутри картинки встанет
+второй рамкой поверх первой.
 
 ## После генерации
 
 ```bash
-python3 tools/pixelize.py sketch.png public/assets/crew/<ник>.png 128
+python3 tools/pixelize.py sketch.png public/assets/crew/<ник>.png 144
 ```
 
 Инструмент сам найдёт родной размер пикселя, прорядит картинку, обрежет поля, вычистит
 полупрозрачность и сократит палитру. Дальше — строка в реестре с новым номером версии,
 иначе игрок, уже заходивший на сайт, увидит старый арт из кеша.
 
+Фон у артов, в отличие от предметов, **не вырезается**: он часть картинки.
+
 ## Приёмка
 
 Открой два-три арта рядом на `assets-preview.html` и посмотри:
 
-1. **Свет с одной стороны у всех?** Это ловится первым.
+1. **Фонарь у всех в одной руке и светит одинаково?** Это ловится первым и сильнее всего
+   выдаёт разнобой.
 2. **Головы одного размера?** Генератор любит менять кадрирование от запроса к запросу.
    Если поплыло — перегенерируй, а не подрезай: подрезка ломает размер пикселя.
-3. **Фон везде одинаково тёмный?** Разнобой фона выдаёт себя на панели экипажа сразу.
+3. **Фон везде одинаково тёмный?** Светлый фон у одного арта на панели экипажа выбьется
+   мгновенно.
+4. **Персонаж читается силуэтом?** В списке экипажа арт показывается вдвое мельче, чем
+   на странице участника, и детали лица там всё равно пропадут.
