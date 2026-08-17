@@ -88,21 +88,20 @@
 
 <div class="row" id="props"></div>
 
-<h2>Компас и часы: проверка единой плотности</h2>
+<h2>Нарисованные предметы: проверка единой плотности</h2>
 <p class="note">
-  Два нарисованных предмета рядом в масштабе 3×. Точка одного должна равняться точке другого,
-  свет — падать с одной стороны, плотность деталей — совпадать.
+  Все предметы рядом в масштабе 2×, как на столе. Точка одного должна равняться точке другого,
+  свет — падать с одной стороны, а размеры — соответствовать друг другу по смыслу:
+  сундук больше книги, книга больше часов.
 </p>
 
 <div class="row">
-  <figure class="cell checker">
-    <img src="/assets/compass.png" style="width: calc(92px * 3)" alt="" />
-    <figcaption>compass · 92×110 · 27 цветов</figcaption>
-  </figure>
-  <figure class="cell checker">
-    <img src="/assets/watch.png" style="width: calc(112px * 3)" alt="" />
-    <figcaption>watch · 112×103 · 26 цветов</figcaption>
-  </figure>
+  <figure class="cell checker"><img src="/assets/compass.png" style="width: calc(92px * 2)" alt="" /><figcaption>compass · 92×110</figcaption></figure>
+  <figure class="cell checker"><img src="/assets/watch.png" style="width: calc(112px * 2)" alt="" /><figcaption>watch · 112×103</figcaption></figure>
+  <figure class="cell checker"><img src="/assets/book.png" style="width: calc(93px * 2)" alt="" /><figcaption>book · 93×108</figcaption></figure>
+  <figure class="cell checker"><img src="/assets/chest.png" style="width: calc(81px * 2)" alt="" /><figcaption>chest · 81×61</figcaption></figure>
+  <figure class="cell checker"><img src="/assets/charter.png" style="width: calc(124px * 2)" alt="" /><figcaption>charter · 124×63</figcaption></figure>
+  <figure class="cell checker"><img src="/assets/lamp.png" style="width: calc(54px * 2)" alt="" /><figcaption>lamp · 54×116</figcaption></figure>
 </div>
 
 <h2>Тайлы: проверка бесшовности</h2>
@@ -144,8 +143,11 @@
   const PROPS = [
     { file: 'compass.png', w: 92, label: 'compass' },
     { file: 'watch.png', w: 112, label: 'watch' },
-    { file: 'lamp.png', w: 20, label: 'lamp' },
-    { file: 'player.png', w: 32, label: 'player' },
+    { file: 'lamp.png', w: 54, label: 'lamp' },
+    { file: 'book.png', w: 93, label: 'book' },
+    { file: 'book-open.png', w: 119, label: 'book-open' },
+    { file: 'chest.png', w: 81, label: 'chest' },
+    { file: 'charter.png', w: 124, label: 'charter' },
   ]
 
   document.getElementById('props').innerHTML = PROPS.map((p) => `
@@ -161,10 +163,13 @@
     ['paper-tile.png', 'тайл', '32×32', 'бумага страниц'],
     ['frame-panel.png', 'рамка 9 слоёв', '48×48, углы 12', 'панели интерфейса'],
     ['frame-book.png', 'рамка 9 слоёв', '96×96, углы 24', 'переплёт книги'],
-    ['compass.png', 'предмет', '92×110', 'ведёт на карту, плотная сетка'],
-    ['watch.png', 'предмет', '112×103', 'отсчёт до ивента, плотная сетка'],
-    ['lamp.png', 'предмет', '20×36', 'декор'],
-    ['player.png', 'предмет', '32×48', 'арт участника'],
+    ['compass.png', 'предмет', '92×110', 'ведёт на карту'],
+    ['watch.png', 'предмет', '112×103', 'ведёт в хронометр'],
+    ['book.png', 'предмет', '93×108', 'ведёт в дневник'],
+    ['charter.png', 'предмет', '124×63', 'ведёт в устав'],
+    ['chest.png', 'предмет', '81×61', 'ведёт в архив'],
+    ['lamp.png', 'предмет', '54×116', 'декор, источник света'],
+    ['book-open.png', 'предмет', '119×114', 'разворот, пока не на сцене'],
   ]
 
   document.getElementById('table').innerHTML =

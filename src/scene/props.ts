@@ -21,11 +21,36 @@ export function propWidth(def: PropDef): number {
 /** Предметы на столе. Порядок в массиве — порядок слева направо. */
 export const PROPS: PropDef[] = [
   {
+    id: 'lamp',
+    asset: 'lamp',
+    label: 'Лампа',
+  },
+  {
     id: 'compass',
     asset: 'compass',
     label: 'Карта мира',
     to: ROUTES.map,
     requires: 'map',
+  },
+  {
+    id: 'book',
+    asset: 'book',
+    label: 'Дневник',
+    to: ROUTES.log,
+  },
+  {
+    id: 'charter',
+    asset: 'charter',
+    label: 'Устав',
+    to: ROUTES.charter,
+  },
+  // Замок архива живёт в самом разделе: он открывается находкой записи,
+  // а не ключом из снимка, поэтому предмет остаётся кликабельным.
+  {
+    id: 'chest',
+    asset: 'chest',
+    label: 'Архив',
+    to: ROUTES.archive,
   },
   {
     id: 'watch',

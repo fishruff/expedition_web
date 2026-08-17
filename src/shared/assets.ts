@@ -21,7 +21,11 @@ export interface AssetDef {
 export const ASSETS = {
   compass: { file: 'compass.png', width: 92, height: 110, version: 2 },
   watch: { file: 'watch.png', width: 112, height: 103, version: 2 },
-  lamp: { file: 'lamp.png', width: 20, height: 36 },
+  lamp: { file: 'lamp.png', width: 54, height: 116, version: 3 },
+  book: { file: 'book.png', width: 93, height: 108 },
+  bookOpen: { file: 'book-open.png', width: 119, height: 114 },
+  chest: { file: 'chest.png', width: 81, height: 61 },
+  charter: { file: 'charter.png', width: 124, height: 63 },
   player: { file: 'player.png', width: 32, height: 48 },
 } as const satisfies Record<string, AssetDef>
 

@@ -98,11 +98,13 @@
   padding-block: px(8);
 }
 
+// Предметов стало шесть: без переноса они вылезают за колонку на узком экране.
 .props {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: px(24);
+  flex-wrap: wrap;
+  gap: px(16) px(20);
   min-height: px(80);
 }
 
