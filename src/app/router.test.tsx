@@ -15,6 +15,25 @@ describe('маршруты', () => {
     expect(screen.getByTestId('desk')).toBeTruthy()
   })
 
+  // Содержимое живёт на развороте книги, а не просто в центре экрана:
+  // ради этого затевалась вся сцена.
+  it('кладёт раздел на разворот книги', () => {
+    renderAt('/crew')
+
+    const spread = screen.getByTestId('spread')
+
+    expect(spread.contains(screen.getByRole('heading', { level: 1, name: 'Экипаж' }))).toBe(true)
+  })
+
+  it('внизу сцены держит подвал со ссылками', () => {
+    renderAt('/')
+
+    const footer = screen.getByRole('contentinfo')
+
+    expect(footer.textContent).toContain('Expedition')
+    expect(screen.getByRole('link', { name: /discord/i })).toBeTruthy()
+  })
+
   it('открывает дневник', () => {
     renderAt('/log')
 

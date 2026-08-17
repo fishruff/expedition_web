@@ -1,8 +1,12 @@
 import { ROUTES } from '@/app/routes'
 import { ASSETS, type AssetName } from '@/shared/assets'
 
+/** Угол стола, в котором лежит предмет. Раскладка вокруг книги, как в мокапе. */
+export type PropSlot = 'tl' | 'tr' | 'bl' | 'br' | 'l' | 'r'
+
 export interface PropDef {
   id: string
+  slot: PropSlot
   /** Имя в реестре ассетов. Размеры и файл живут там, а не здесь. */
   asset: AssetName
   /** Подпись при наведении. Она же текстовая альтернатива картинки. */
@@ -22,11 +26,13 @@ export function propWidth(def: PropDef): number {
 export const PROPS: PropDef[] = [
   {
     id: 'lamp',
+    slot: 'tl',
     asset: 'lamp',
     label: 'Лампа',
   },
   {
     id: 'compass',
+    slot: 'bl',
     asset: 'compass',
     label: 'Карта мира',
     to: ROUTES.map,
@@ -34,12 +40,14 @@ export const PROPS: PropDef[] = [
   },
   {
     id: 'book',
+    slot: 'l',
     asset: 'book',
     label: 'Дневник',
     to: ROUTES.log,
   },
   {
     id: 'charter',
+    slot: 'r',
     asset: 'charter',
     label: 'Устав',
     to: ROUTES.charter,
@@ -48,12 +56,14 @@ export const PROPS: PropDef[] = [
   // а не ключом из снимка, поэтому предмет остаётся кликабельным.
   {
     id: 'chest',
+    slot: 'tr',
     asset: 'chest',
     label: 'Архив',
     to: ROUTES.archive,
   },
   {
     id: 'watch',
+    slot: 'br',
     asset: 'watch',
     label: 'Хронометр',
     to: ROUTES.chronometer,

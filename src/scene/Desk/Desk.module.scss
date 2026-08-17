@@ -91,22 +91,67 @@
 
 .center {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: px(12);
+  justify-content: center;
   min-width: 0;
   padding-block: px(8);
 }
 
-// Предметов стало шесть: без переноса они вылезают за колонку на узком экране.
-.props {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: px(16) px(20);
-  min-height: px(80);
+/* ---------- стол: разворот и предметы вокруг ---------- */
+
+// Поле, в котором лежит книга. Отступы держат место под предметы по углам,
+// поэтому они не наезжают на текст и не требуют ручной подгонки.
+.scene {
+  position: relative;
+  width: 100%;
+  max-width: px(300);
+  // Поля держат самый крупный предмет: свиток 124 точки в ширину, лампа 116 в высоту.
+  padding: px(60) px(64);
 }
+
+// Разворот: кожаная рамка снаружи, бумага внутри, текст чернилами.
+.spread {
+  @include nine-slice('frame-book.png', $frame-book-slice);
+  @include tile('paper-tile.png', px(32));
+
+  position: relative;
+  min-height: px(120);
+  padding: px(8) px(10);
+  background-clip: padding-box;
+  color: var(--color-ink);
+}
+
+// Сгиб между страницами. Одна тёмная линия, без размытия.
+.spread::before {
+  content: '';
+  position: absolute;
+  top: px(6);
+  bottom: px(6);
+  left: 50%;
+  width: px(1);
+  background-color: color-mix(in srgb, var(--color-ink) 28%, transparent);
+}
+
+@media (max-width: 900px) {
+  // Телефон: разворот занимает всё поле, предметы всё равно скрыты.
+  .scene {
+    padding: 0;
+  }
+
+  .spread::before {
+    display: none;
+  }
+}
+
+.slot {
+  position: absolute;
+}
+
+.tl { top: 0; left: 0; }
+.tr { top: 0; right: 0; }
+.bl { bottom: 0; left: 0; }
+.br { bottom: 0; right: 0; }
+.l { top: 50%; left: 0; transform: translateY(-50%); }
+.r { top: 50%; right: 0; transform: translateY(-50%); }
 
 /* ---------- список экипажа ---------- */
 
@@ -130,4 +175,33 @@
 
 .crewRole {
   color: var(--color-text-dim);
+}
+
+/* ---------- нижняя полоса ---------- */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: px(6);
+  flex-wrap: wrap;
+  padding: px(3) px(6);
+  border-top: px(2) solid var(--color-panel-hi);
+  background-color: color-mix(in srgb, var(--color-panel-lo) 88%, transparent);
+  color: var(--color-text-dim);
+  font-size: px(5);
+  letter-spacing: 0.1em;
+}
+
+.links {
+  display: flex;
+  gap: px(6);
+
+  a {
+    color: var(--color-gold-dim);
+
+    &:hover {
+      color: var(--color-gold);
+    }
+  }
 }

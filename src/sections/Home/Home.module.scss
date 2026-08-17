@@ -4,25 +4,25 @@
   align-items: center;
   gap: px(3);
   text-align: center;
+  padding-block: px(6);
 }
 
 .eyebrow {
-  color: var(--color-text-dim);
+  color: var(--color-ink-dim);
   font-size: px(5);
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
 .title {
+  color: var(--color-ink);
   font-size: px(20);
   letter-spacing: 0.16em;
-  // Жёсткая тень вместо размытой: пиксельный приём.
-  text-shadow: px(2) px(2) 0 var(--color-panel-lo);
 }
 
 .tagline {
   max-width: 46ch;
-  color: var(--color-text-dim);
+  color: var(--color-ink-dim);
 }
 
 .address {
@@ -34,11 +34,12 @@
   justify-content: center;
 }
 
+// Адрес сервера — то, ради чего игрок сюда пришёл: выделен рамкой на бумаге.
 .ip {
   padding: px(3) px(5);
-  border: px(2) solid var(--color-panel-hi);
-  background-color: var(--color-panel-lo);
-  color: var(--color-gold);
+  border: px(1) solid var(--color-ink-dim);
+  background-color: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  color: var(--color-ink);
   font-family: inherit;
   font-size: px(7);
   letter-spacing: 0.06em;
@@ -46,16 +47,16 @@
 
 .copy {
   padding: px(3) px(5);
-  border: px(2) solid var(--color-gold-dim);
-  background-color: var(--color-panel);
-  color: var(--color-gold);
+  border: px(1) solid var(--color-ink-dim);
+  background-color: transparent;
+  color: var(--color-ink);
   font-size: px(5);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   transition: background-color $duration-fast $steps-fast;
 
   &:hover {
-    background-color: var(--color-panel-hi);
+    background-color: color-mix(in srgb, var(--color-ink) 12%, transparent);
   }
 
   &:active {

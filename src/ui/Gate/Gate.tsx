@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { useSnapshots } from '@/data/useSnapshots'
 import { isSectionOpen, type SectionName } from '@/data/unlocks'
-import { Panel } from '@/ui/Panel/Panel'
 import styles from './Gate.module.scss'
 
 interface GateProps {
@@ -21,9 +20,10 @@ export function Gate({ section, title, children }: GateProps) {
   if (isSectionOpen(section, snapshots)) return <>{children}</>
 
   return (
-    <Panel title={title} className={styles.gate}>
+    <section className={styles.gate}>
+      <h2 className={styles.title}>{title}</h2>
       <span className={styles.shape} aria-hidden="true" />
       <p className={styles.note}>ещё не найдено</p>
-    </Panel>
+    </section>
   )
 }

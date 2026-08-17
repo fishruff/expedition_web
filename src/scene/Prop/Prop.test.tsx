@@ -7,6 +7,7 @@ import { ASSETS } from '@/shared/assets'
 
 const compass: PropDef = {
   id: 'compass',
+  slot: 'bl',
   asset: 'compass',
   label: 'Карта мира',
   to: '/map',

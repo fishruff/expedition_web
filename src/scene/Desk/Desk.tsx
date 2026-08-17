@@ -58,15 +58,19 @@ export function Desk() {
         </aside>
 
         <main className={styles.center}>
-          <Outlet />
+          {/* Стол: разворот книги в середине, предметы вокруг него по углам. */}
+          <div className={styles.scene}>
+            <div className={styles.spread} data-testid="spread">
+              <Outlet />
+            </div>
 
-          <div className={styles.props}>
             {PROPS.map((def) => (
-              <Prop
-                key={def.id}
-                def={def}
-                locked={Boolean(def.requires) && !isUnlocked(snapshots.unlocks, def.requires!)}
-              />
+              <div key={def.id} className={`${styles.slot} ${styles[def.slot]}`}>
+                <Prop
+                  def={def}
+                  locked={Boolean(def.requires) && !isUnlocked(snapshots.unlocks, def.requires!)}
+                />
+              </div>
             ))}
           </div>
         </main>
@@ -84,6 +88,19 @@ export function Desk() {
           </Panel>
         </aside>
       </div>
+
+      <footer className={styles.footer}>
+        <span>{SITE.name} · {SITE.tagline}</span>
+
+        <nav className={styles.links} aria-label="Связь">
+          <a href={SITE.discordUrl} target="_blank" rel="noreferrer noopener">
+            Discord
+          </a>
+          <a href={SITE.telegramUrl} target="_blank" rel="noreferrer noopener">
+            Telegram
+          </a>
+        </nav>
+      </footer>
     </div>
   )
 }

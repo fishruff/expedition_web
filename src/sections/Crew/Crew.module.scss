@@ -5,14 +5,14 @@
 }
 
 .title {
-  color: var(--color-gold);
+  color: var(--color-ink);
   font-size: px(9);
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
 .empty {
-  color: var(--color-text-dim);
+  color: var(--color-ink-dim);
 }
 
 .list {
@@ -22,10 +22,11 @@
   list-style: none;
 }
 
+// Карточка на бумаге: тонкая чернильная рамка вместо тёмной панели.
 .card {
-  @include nine-slice('frame-panel.png', $frame-panel-slice, $fill: true);
-
   display: flex;
+  padding: px(4) px(3);
+  border: px(1) solid color-mix(in srgb, var(--color-ink) 35%, transparent);
   flex-direction: column;
   align-items: center;
   gap: px(2);
@@ -35,9 +36,8 @@
 
 .card:hover,
 .card:focus-visible {
-  .nick {
-    color: var(--color-gold);
-  }
+  background-color: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  border-color: var(--color-ink-dim);
 }
 
 .art {
@@ -50,25 +50,26 @@
 }
 
 .role {
-  color: var(--color-text-dim);
+  color: var(--color-ink-dim);
   font-size: px(5);
   letter-spacing: 0.1em;
   text-align: center;
 }
 
 .status {
-  color: var(--color-text-dim);
+  color: var(--color-ink-dim);
   font-size: px(5);
   letter-spacing: 0.1em;
 }
 
 .status[data-online='true'] {
-  color: var(--color-green);
+  // Зелёный на бумаге приглушён: чистый неон рядом с чернилами кричит.
+  color: color-mix(in srgb, var(--color-green) 70%, var(--color-ink));
 }
 
 // Пометка о неописанном участнике: тише звания, но заметнее пустоты.
 .unlisted {
-  color: var(--color-text-dim);
+  color: var(--color-ink-dim);
   font-size: px(5);
   letter-spacing: 0.1em;
   text-align: center;
