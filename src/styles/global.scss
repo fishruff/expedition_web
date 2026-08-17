@@ -84,7 +84,8 @@ body::after {
   z-index: 100;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 110% 80% at 18% -10%, rgb(255 214 150 / 14%) 0%, transparent 55%),
+    radial-gradient(circle 260px at 26% 16%, rgb(255 198 120 / 22%) 0%, transparent 70%),
+    radial-gradient(ellipse 110% 80% at 18% -10%, rgb(255 214 150 / 16%) 0%, transparent 55%),
     radial-gradient(ellipse 120% 110% at 50% 45%, transparent 40%, rgb(8 5 3 / 55%) 100%);
 }
 

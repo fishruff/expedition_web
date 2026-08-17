@@ -11,24 +11,36 @@
   display: flex;
   align-items: center;
   gap: px(8);
-  flex-wrap: wrap;
-  padding: px(4) px(6);
-  border-bottom: px(2) solid var(--color-panel-hi);
-  background-color: color-mix(in srgb, var(--color-panel-lo) 88%, transparent);
+  padding: px(3) px(6);
+  border-bottom: px(1) solid var(--color-panel-hi);
+  background-color: color-mix(in srgb, var(--color-panel-lo) 92%, transparent);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: px(4);
+  color: inherit;
+}
+
+// Знак у названия. Пока ромб из бордюров: иконка компаса ещё не нарисована.
+.mark {
+  width: px(8);
+  height: px(8);
+  border: px(2) solid var(--color-gold);
+  transform: rotate(45deg);
 }
 
 .logo {
-  font-size: px(8);
-  letter-spacing: 0.22em;
+  font-size: px(9);
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  text-shadow: px(2) px(2) 0 var(--color-panel-lo);
 }
 
 .nav {
   display: flex;
-  gap: px(6);
+  gap: px(8);
   margin-inline: auto;
-  flex-wrap: wrap;
 }
 
 .navLink {
@@ -52,17 +64,23 @@
 .online {
   display: flex;
   align-items: center;
-  gap: px(2);
+  gap: px(3);
   padding: px(2) px(4);
-  border: px(2) solid var(--color-panel-hi);
+  border: px(1) solid var(--color-panel-hi);
   background-color: var(--color-panel);
+  color: var(--color-text-dim);
   font-size: px(5);
   letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .dot {
   width: px(2);
   height: px(2);
+  background-color: var(--color-panel-hi);
+}
+
+.online[data-live='true'] .dot {
   background-color: var(--color-green);
 }
 
@@ -71,29 +89,29 @@
 .stage {
   display: grid;
   grid-template-columns: 1fr;
-  gap: px(6);
+  gap: px(8);
   flex: 1;
   align-items: start;
-  padding: px(6);
+  padding: px(8);
 
   @include up('lg') {
-    grid-template-columns: px(160) 1fr px(160);
-    align-items: center;
+    // Ширины колонок сняты с референса: боковые узкие, вся площадь — столу.
+    grid-template-columns: px(88) 1fr px(100);
   }
 }
 
 .side {
   display: flex;
   flex-direction: column;
-  gap: px(6);
+  gap: px(8);
   min-width: 0;
 }
 
 .center {
   display: flex;
   justify-content: center;
+  align-items: center;
   min-width: 0;
-  padding-block: px(8);
 }
 
 /* ---------- стол: разворот и предметы вокруг ---------- */
@@ -103,9 +121,8 @@
 .scene {
   position: relative;
   width: 100%;
-  max-width: px(300);
-  // Поля держат самый крупный предмет: свиток 124 точки в ширину, лампа 116 в высоту.
-  padding: px(60) px(64);
+  max-width: px(430);
+  padding: px(52) px(60);
 }
 
 // Разворот: кожаная рамка снаружи, бумага внутри, текст чернилами.
@@ -114,21 +131,44 @@
   @include tile('paper-tile.png', px(32));
 
   position: relative;
-  min-height: px(120);
-  padding: px(8) px(10);
+  min-height: px(210);
+  padding: px(10) px(12);
   background-clip: padding-box;
   color: var(--color-ink);
 }
 
-// Сгиб между страницами. Одна тёмная линия, без размытия.
+// Сгиб между страницами: тёмная линия и притенение по обе стороны от неё —
+// именно оно читается как «две страницы», а не один лист.
 .spread::before {
   content: '';
   position: absolute;
-  top: px(6);
-  bottom: px(6);
+  top: px(4);
+  bottom: px(4);
   left: 50%;
-  width: px(1);
-  background-color: color-mix(in srgb, var(--color-ink) 28%, transparent);
+  width: px(14);
+  transform: translateX(-50%);
+  background-image: linear-gradient(
+    to right,
+    transparent 0%,
+    color-mix(in srgb, var(--color-ink) 22%, transparent) 42%,
+    color-mix(in srgb, var(--color-ink) 55%, transparent) 50%,
+    color-mix(in srgb, var(--color-ink) 22%, transparent) 58%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+// Торцы стопки страниц у внешних краёв разворота.
+.spread::after {
+  content: '';
+  position: absolute;
+  inset: px(2);
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--color-ink) 30%, transparent) 0 px(1), transparent px(1) px(3),
+      color-mix(in srgb, var(--color-ink) 18%, transparent) px(3) px(4), transparent px(4)),
+    linear-gradient(to left, color-mix(in srgb, var(--color-ink) 30%, transparent) 0 px(1), transparent px(1) px(3),
+      color-mix(in srgb, var(--color-ink) 18%, transparent) px(3) px(4), transparent px(4));
 }
 
 @media (max-width: 900px) {
@@ -144,58 +184,58 @@
 
 .slot {
   position: absolute;
+  // Тень жёсткая и смещённая, без размытия: размытая тень выдаёт непиксельность.
+  filter: drop-shadow(px(2) px(3) 0 rgb(0 0 0 / 45%));
 }
 
-.tl { top: 0; left: 0; }
-.tr { top: 0; right: 0; }
-.bl { bottom: 0; left: 0; }
-.br { bottom: 0; right: 0; }
-.l { top: 50%; left: 0; transform: translateY(-50%); }
-.r { top: 50%; right: 0; transform: translateY(-50%); }
-
-/* ---------- список экипажа ---------- */
-
-.crew {
-  display: flex;
-  flex-direction: column;
-  gap: px(2);
-  padding: 0;
-  list-style: none;
+// Лампа и сундук стоят за книгой, компас и часы лежат на ней — как в референсе.
+.tl,
+.tr {
+  z-index: 0;
 }
 
-.crewRow {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: px(3);
-  padding-bottom: px(2);
-  border-bottom: px(1) dotted var(--color-panel-hi);
-  font-size: px(5);
+.bl,
+.br {
+  z-index: 2;
 }
 
-.crewRole {
-  color: var(--color-text-dim);
+.spread {
+  z-index: 1;
 }
+
+// Предметы прижаты к развороту и слегка на него наезжают: на столе вещи
+// лежат вплотную к книге, а не по углам пустого поля.
+.tl { top: px(10); left: px(30); }
+.tr { top: px(8); right: px(20); }
+.bl { bottom: px(16); left: px(22); }
+.br { bottom: px(10); right: px(16); }
 
 /* ---------- нижняя полоса ---------- */
 
 .footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: px(6);
-  flex-wrap: wrap;
   padding: px(3) px(6);
-  border-top: px(2) solid var(--color-panel-hi);
-  background-color: color-mix(in srgb, var(--color-panel-lo) 88%, transparent);
+  border-top: px(1) solid var(--color-panel-hi);
+  background-color: color-mix(in srgb, var(--color-panel-lo) 92%, transparent);
   color: var(--color-text-dim);
   font-size: px(5);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
+}
+
+.footerSide {
+  flex: 1;
+  display: flex;
+  gap: px(6);
+}
+
+.footerCenter {
+  text-transform: uppercase;
 }
 
 .links {
-  display: flex;
-  gap: px(6);
+  justify-content: flex-end;
 
   a {
     color: var(--color-gold-dim);
@@ -204,4 +244,9 @@
       color: var(--color-gold);
     }
   }
+}
+
+.sep {
+  margin-inline: px(3);
+  color: var(--color-panel-hi);
 }

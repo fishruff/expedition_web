@@ -1,0 +1,50 @@
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: px(3);
+}
+
+// Цифры в моноширинной сетке: иначе табло дёргается каждую секунду.
+.digits {
+  display: flex;
+  align-items: baseline;
+  gap: px(3);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: px(1);
+  flex: 1;
+}
+
+// Двоеточие висит справа от разряда и не влияет на ширину ячейки.
+.colon {
+  position: absolute;
+  right: px(-2);
+  color: var(--color-text-dim);
+}
+
+.value {
+  position: relative;
+  color: var(--color-text);
+  font-size: px(11);
+  letter-spacing: 0.04em;
+}
+
+.label {
+  color: var(--color-text-dim);
+  font-size: px(4);
+  letter-spacing: 0.1em;
+}
+
+.event {
+  color: var(--color-text-dim);
+  font-size: px(5);
+}
+
+.empty {
+  color: var(--color-text-dim);
+  font-size: px(5);
+}

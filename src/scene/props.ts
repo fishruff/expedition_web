@@ -2,7 +2,7 @@ import { ROUTES } from '@/app/routes'
 import { ASSETS, type AssetName } from '@/shared/assets'
 
 /** Угол стола, в котором лежит предмет. Раскладка вокруг книги, как в мокапе. */
-export type PropSlot = 'tl' | 'tr' | 'bl' | 'br' | 'l' | 'r'
+export type PropSlot = 'tl' | 'tr' | 'bl' | 'br'
 
 export interface PropDef {
   id: string
@@ -37,20 +37,6 @@ export const PROPS: PropDef[] = [
     label: 'Карта мира',
     to: ROUTES.map,
     requires: 'map',
-  },
-  {
-    id: 'book',
-    slot: 'l',
-    asset: 'book',
-    label: 'Дневник',
-    to: ROUTES.log,
-  },
-  {
-    id: 'charter',
-    slot: 'r',
-    asset: 'charter',
-    label: 'Устав',
-    to: ROUTES.charter,
   },
   // Замок архива живёт в самом разделе: он открывается находкой записи,
   // а не ключом из снимка, поэтому предмет остаётся кликабельным.

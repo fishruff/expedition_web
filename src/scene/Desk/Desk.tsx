@@ -1,10 +1,13 @@
-import { NavLink, Outlet } from 'react-router'
+import { Link, NavLink, Outlet } from 'react-router'
 import { useScale } from '@/scene/useScale'
 import { PROPS } from '@/scene/props'
 import { Prop } from '@/scene/Prop/Prop'
 import { Panel } from '@/ui/Panel/Panel'
-import { Countdown } from '@/ui/Countdown/Countdown'
-import { NAV_ITEMS } from '@/app/routes'
+import { CountdownBoard } from '@/scene/Desk/panels/CountdownBoard'
+import { FeedPanel } from '@/scene/Desk/panels/FeedPanel'
+import { CrewPanel } from '@/scene/Desk/panels/CrewPanel'
+import { QuickLinks } from '@/scene/Desk/panels/QuickLinks'
+import { NAV_ITEMS, ROUTES } from '@/app/routes'
 import { crew } from '@/content'
 import { useSnapshots } from '@/data/useSnapshots'
 import { isServerLive, isUnlocked, mergeCrew } from '@/data/merge'
@@ -13,8 +16,8 @@ import { SITE } from '@/shared/config/site'
 import styles from './Desk.module.scss'
 
 /**
- * Постоянный слой сцены. Рендерится один раз и при навигации не
- * перерисовывается — меняется только содержимое центрального слота.
+ * Постоянный слой сцены: полоса сверху, три колонки, полоса снизу.
+ * При навигации меняется только разворот в середине.
  */
 export function Desk() {
   useScale()
@@ -28,7 +31,10 @@ export function Desk() {
   return (
     <div className={styles.desk} data-testid="desk">
       <header className={styles.header}>
-        <span className={styles.logo}>{SITE.name}</span>
+        <Link className={styles.brand} to={ROUTES.home}>
+          <span className={styles.mark} aria-hidden="true" />
+          <span className={styles.logo}>{SITE.name}</span>
+        </Link>
 
         <nav className={styles.nav} aria-label="Разделы">
           {NAV_ITEMS.map((item) => (
@@ -53,7 +59,15 @@ export function Desk() {
       <div className={styles.stage}>
         <aside className={styles.side}>
           <Panel title="До конца сезона">
-            <Countdown />
+            <CountdownBoard />
+          </Panel>
+
+          <Panel title="Последние записи">
+            <FeedPanel limit={3} to={ROUTES.log} action="Смотреть все" />
+          </Panel>
+
+          <Panel title="Быстрый доступ">
+            <QuickLinks />
           </Panel>
         </aside>
 
@@ -76,23 +90,24 @@ export function Desk() {
         </main>
 
         <aside className={styles.side}>
-          <Panel title="Экипаж">
-            <ul className={styles.crew}>
-              {members.map((member) => (
-                <li key={member.nick} className={styles.crewRow} data-online={String(member.online)}>
-                  <span>{member.nick}</span>
-                  <span className={styles.crewRole}>{member.title || '—'}</span>
-                </li>
-              ))}
-            </ul>
+          <Panel title="Уведомления">
+            <FeedPanel limit={3} to={ROUTES.log} action="Все уведомления" />
+          </Panel>
+
+          <Panel title="Участники">
+            <CrewPanel />
           </Panel>
         </aside>
       </div>
 
       <footer className={styles.footer}>
-        <span>{SITE.name} · {SITE.tagline}</span>
+        <span className={styles.footerSide} />
 
-        <nav className={styles.links} aria-label="Связь">
+        <span className={styles.footerCenter}>
+          {SITE.name} <span className={styles.sep}>|</span> {SITE.tagline}
+        </span>
+
+        <nav className={`${styles.footerSide} ${styles.links}`} aria-label="Связь">
           <a href={SITE.discordUrl} target="_blank" rel="noreferrer noopener">
             Discord
           </a>

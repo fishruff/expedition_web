@@ -1,0 +1,76 @@
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: px(4);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: px(4);
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: px(3);
+}
+
+// Значок вида: квадрат с двумя буквами, пока не нарисованы иконки.
+.mark {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: px(12);
+  height: px(12);
+  border: px(1) solid var(--color-panel-hi);
+  background-color: var(--color-panel-lo);
+  color: var(--color-gold-dim);
+  font-size: px(4);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: px(1);
+  min-width: 0;
+}
+
+.title {
+  color: var(--color-text);
+  font-size: px(5);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  color: var(--color-text-dim);
+  font-size: px(4);
+}
+
+.empty {
+  color: var(--color-text-dim);
+  font-size: px(5);
+}
+
+// Кнопка под списком: во всю ширину панели, со стрелкой у правого края.
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: px(3) px(4);
+  border: px(1) solid var(--color-panel-hi);
+  color: var(--color-text-dim);
+  font-size: px(4);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  &:hover {
+    border-color: var(--color-gold-dim);
+    color: var(--color-gold);
+  }
+}

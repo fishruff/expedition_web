@@ -21,9 +21,9 @@ export function crewMemberPath(nick: string): string {
  * компасом и часами, и там же показываются запертыми.
  */
 export const NAV_ITEMS = [
-  { to: ROUTES.home, label: 'Стол' },
   { to: ROUTES.log, label: 'Дневник' },
-  { to: ROUTES.crew, label: 'Экипаж' },
+  { to: ROUTES.map, label: 'Карта' },
   { to: ROUTES.archive, label: 'Архив' },
+  { to: ROUTES.chronometer, label: 'Хронометр' },
   { to: ROUTES.charter, label: 'Устав' },
 ] as const
