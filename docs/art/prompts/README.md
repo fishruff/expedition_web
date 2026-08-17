@@ -66,7 +66,7 @@ No text, no numbers, no letters, no watermark, no border.
 
 | Файл | Что в нём |
 | --- | --- |
-| [`props.md`](./props.md) | компас, лампа, сундук, свиток |
+| [`props.md`](./props.md) | шестнадцать предметов на столе: пять ведут в разделы, остальные декор |
 | [`tiles.md`](./tiles.md) | дерево стола, бумага |
 | [`frames.md`](./frames.md) | панель и переплёт книги |
 | [`icons.md`](./icons.md) | иконки разделов, замок, метка на карте |
