@@ -16,3 +16,12 @@
     color-mix(in srgb, var(--color-panel-hi) 45%, transparent) px(3) px(4)
   );
 }
+
+/* Иллюстрация: рисунок вписывается в отведённую рамку и сглаживается.
+   Пиксельные правила к ней не применяются — она не спрайт. */
+.illustration {
+  image-rendering: auto;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}

@@ -18,11 +18,12 @@
 
 // Арт в рамке: в референсе он вклеен в страницу, как фотокарточка.
 // Показывается вдвое крупнее списочного — увеличение целое, поэтому не мылит.
-.art .portrait {
-  width: calc(var(--sprite-w) * 2px * var(--sa));
-  height: calc(var(--sprite-h) * 2px * var(--sa));
+.portrait {
+  width: 100%;
+  aspect-ratio: 3 / 4;
   border: px(2) solid color-mix(in srgb, var(--color-ink) 45%, transparent);
   background-color: color-mix(in srgb, var(--color-ink) 10%, transparent);
+  overflow: hidden;
 }
 
 .info,

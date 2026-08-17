@@ -27,6 +27,8 @@ export const ASSETS = {
   chest: { file: 'chest.png', width: 81, height: 61 },
   charter: { file: 'charter.png', width: 124, height: 63 },
   player: { file: 'player.png', width: 32, height: 48 },
+  // Карта — иллюстрация: размер ей задаёт лист на странице, а не родные точки.
+  islandMap: { file: 'island-map.png', width: 320, height: 240 },
 } as const satisfies Record<string, AssetDef>
 
 export type AssetName = keyof typeof ASSETS

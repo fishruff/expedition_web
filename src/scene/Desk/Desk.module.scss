@@ -130,6 +130,11 @@
   min-width: 0;
 }
 
+// Колонки не тянутся за столом: панели прижаты к верху, как в референсе.
+.side {
+  align-self: start;
+}
+
 /* ---------- стол: разворот и предметы вокруг ---------- */
 
 // Поле, в котором лежит книга. Отступы держат место под предметы по углам,
@@ -147,7 +152,7 @@
   @include tile('paper-tile.png', px(32));
 
   position: relative;
-  min-height: px(210);
+  min-height: px(196);
   padding: px(10) px(12);
   background-clip: padding-box;
   color: var(--color-ink);

@@ -18,7 +18,9 @@ export function Crew() {
         {members.map((member) => (
           <li key={member.uuid || member.nick}>
             <Link className={styles.card} to={crewMemberPath(member.nick)}>
-              <Sprite className={styles.art} def={crewArt(member.nick)} alt={member.nick} />
+              <span className={styles.art}>
+                <Sprite illustration def={crewArt(member.nick)} alt={member.nick} />
+              </span>
 
               <span className={styles.nick}>{member.nick}</span>
 

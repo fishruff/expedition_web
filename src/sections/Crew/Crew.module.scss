@@ -17,13 +17,19 @@
 
 .list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(px(64), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(px(60), 1fr));
   gap: px(6);
   list-style: none;
+  align-items: stretch;
+}
+
+.list > li {
+  display: flex;
 }
 
 // Карточка на бумаге: тонкая чернильная рамка вместо тёмной панели.
 .card {
+  flex: 1;
   display: flex;
   padding: px(4) px(3);
   border: px(1) solid color-mix(in srgb, var(--color-ink) 35%, transparent);
@@ -41,7 +47,12 @@
 }
 
 .art {
-  margin-bottom: px(2);
+  display: block;
+  width: px(48);
+  aspect-ratio: 3 / 4;
+  margin-bottom: px(3);
+  border: px(1) solid color-mix(in srgb, var(--color-ink) 35%, transparent);
+  overflow: hidden;
 }
 
 .nick {

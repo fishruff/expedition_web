@@ -34,8 +34,12 @@ const RECORDS = ['храм-1', 'храм-2', 'гавань-1']
 
 const PLACES = ['первая-гавань', 'храм-в-джунглях']
 
-/** Открыт хронометр, но не карта: запертый раздел на дев-сервере нужен не меньше открытого. */
-const ARTIFACT = 'chronometer'
+/**
+ * Найденные артефакты показательного сезона. Хронометр и карта открыты,
+ * архив открывается сам первой находкой записи — остаётся запертым только то,
+ * чего в сезоне не случилось.
+ */
+const ARTIFACTS = ['chronometer', 'map']
 
 const NOTES = [
   {
@@ -118,11 +122,13 @@ export function buildSeason({ nicks, now }: SeasonOptions): Season {
     })
   })
 
-  add({
-    type: 'artifact.found',
-    at: at(3 * DAY + 14 * HOUR),
-    player: players[0],
-    artifactId: ARTIFACT,
+  ARTIFACTS.forEach((artifactId, index) => {
+    add({
+      type: 'artifact.found',
+      at: at((index + 2) * DAY + 14 * HOUR),
+      player: players[index % players.length],
+      artifactId,
+    })
   })
 
   PLACES.forEach((placeId, index) => {

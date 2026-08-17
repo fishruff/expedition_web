@@ -34,12 +34,14 @@ describe('поток событий показательного сезона', 
     expect(snapshots.crew.players[0].stats.playtimeMinutes).toBeGreaterThan(0)
   })
 
-  // Запертые разделы надо видеть на дев-сервере не реже, чем открытые.
-  it('оставляет часть разделов запертыми', () => {
+  // На дев-сервере сцена должна выглядеть живой: предмет с ключом не заперт.
+  it('открывает разделы, ключи которых нашлись в сезоне', () => {
     const { unlocked } = snapshotsOf().unlocks
 
     expect(Object.hasOwn(unlocked, 'chronometer')).toBe(true)
-    expect(Object.hasOwn(unlocked, 'map')).toBe(false)
+    expect(Object.hasOwn(unlocked, 'map')).toBe(true)
+    // А чего в сезоне не случилось — остаётся запертым.
+    expect(Object.hasOwn(unlocked, 'ковчег')).toBe(false)
   })
 
   // Игрок, которого владелец не описал, — обычное дело в начале сезона.

@@ -1,0 +1,59 @@
+.charter {
+  display: flex;
+  flex-direction: column;
+  gap: px(8);
+}
+
+.title {
+  color: var(--color-ink);
+  font-size: px(12);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.empty {
+  color: var(--color-ink-dim);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: px(3);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: px(4);
+  color: var(--color-ink-dim);
+  font-size: px(6);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.sectionTitle::after {
+  content: '';
+  flex: 1;
+  height: px(1);
+  background-color: color-mix(in srgb, var(--color-ink) 25%, transparent);
+}
+
+// Нумерация вручную: список на бумаге читается как рукописный, с точкой.
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: px(2);
+  counter-reset: rule;
+  list-style: none;
+}
+
+.item {
+  counter-increment: rule;
+  color: var(--color-ink);
+  max-width: 64ch;
+}
+
+.item::before {
+  content: counter(rule) '. ';
+  color: var(--color-ink-dim);
+}

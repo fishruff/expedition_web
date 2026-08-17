@@ -55,7 +55,7 @@ describe('маршруты', () => {
   it('открывает устав', () => {
     renderAt('/charter')
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Устав' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1, name: 'Устав экипажа' })).toBeTruthy()
   })
 
   // Без снимков из игры находок ещё не было — значит, эти разделы заперты.

@@ -52,3 +52,18 @@ export interface StoryRecord {
   /** Какой раздел включает. Пустая строка — ничего. */
   unlocks: string
 }
+
+/** Раздел устава: заголовок и пункты. */
+export interface CharterSection {
+  title: string
+  items: string[]
+}
+
+/** Метка на карте. Координаты — доли от картинки, а не игровые. */
+export interface Place {
+  id: string
+  x: number
+  y: number
+  title: string
+  text: string
+}

@@ -1,0 +1,43 @@
+.archive {
+  display: flex;
+  flex-direction: column;
+  gap: px(8);
+}
+
+.title {
+  color: var(--color-ink);
+  font-size: px(12);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.empty {
+  color: var(--color-ink-dim);
+}
+
+.record {
+  display: flex;
+  flex-direction: column;
+  gap: px(2);
+  padding-bottom: px(5);
+  border-bottom: px(1) dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+
+.recordTitle {
+  color: var(--color-ink);
+  font-size: px(8);
+  letter-spacing: 0.1em;
+}
+
+.meta {
+  color: var(--color-ink-dim);
+  font-size: px(5);
+}
+
+// Текст записи — самое ценное на странице, поэтому шире и свободнее.
+.text {
+  margin-top: px(2);
+  max-width: 60ch;
+  color: var(--color-ink);
+  line-height: 1.7;
+}

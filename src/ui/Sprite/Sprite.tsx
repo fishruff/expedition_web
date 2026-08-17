@@ -6,6 +6,11 @@ interface SpriteProps {
   def: AssetDef
   alt: string
   className?: string
+  /**
+   * Рисунок, а не спрайт: арты участников и карта. Размер им задаёт рамка
+   * на странице, поэтому родные точки не навязываются и сглаживание разрешено.
+   */
+  illustration?: boolean
 }
 
 /**
@@ -15,7 +20,7 @@ interface SpriteProps {
  * ровно тех же размеров — раскладка не смещается. Поэтому раздел можно
  * собирать до того, как арт нарисован.
  */
-export function Sprite({ def, alt, className }: SpriteProps) {
+export function Sprite({ def, alt, className, illustration = false }: SpriteProps) {
   const [failed, setFailed] = useState(false)
 
   const size = {
@@ -37,7 +42,9 @@ export function Sprite({ def, alt, className }: SpriteProps) {
 
   return (
     <img
-      className={[styles.sprite, className].filter(Boolean).join(' ')}
+      className={[illustration ? styles.illustration : styles.sprite, className]
+        .filter(Boolean)
+        .join(' ')}
       style={size}
       src={assetUrl(def)}
       width={def.width}

@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { parseCrew, parseNews, parseEvents, parseTitles, parseStory } from '@/content'
+import {
+  parseCrew,
+  parseNews,
+  parseEvents,
+  parseTitles,
+  parseStory,
+  parseCharter,
+  parsePlaces,
+} from '@/content'
 
 describe('parseCrew', () => {
   it('оставляет корректные записи и заполняет необязательные поля', () => {
@@ -101,5 +109,43 @@ describe('parseStory', () => {
     expect(parseStory([{ title: 'Безымянная' }, { id: 'храм-2' }]).map((r) => r.id)).toEqual([
       'храм-2',
     ])
+  })
+})
+
+describe('parseCharter', () => {
+  it('оставляет разделы с заголовком и пунктами', () => {
+    const result = parseCharter([{ title: 'Порядок', items: ['Не ломать чужое', ''] }])
+
+    expect(result).toEqual([{ title: 'Порядок', items: ['Не ломать чужое'] }])
+  })
+
+  it('отбрасывает раздел без заголовка и раздел без пунктов', () => {
+    const result = parseCharter([
+      { items: ['Пункт'] },
+      { title: 'Пустой', items: [] },
+      { title: 'Годный', items: ['Пункт'] },
+    ])
+
+    expect(result.map((s) => s.title)).toEqual(['Годный'])
+  })
+})
+
+describe('parsePlaces', () => {
+  it('оставляет метки с долями в пределах картинки', () => {
+    const result = parsePlaces([{ id: 'гавань', x: 0.42, y: 0.61, title: 'Гавань', text: 'тут' }])
+
+    expect(result).toEqual([{ id: 'гавань', x: 0.42, y: 0.61, title: 'Гавань', text: 'тут' }])
+  })
+
+  // Координаты — доли от картинки: за её пределами метка окажется вне карты.
+  it('отбрасывает метки за пределами картинки и без номера', () => {
+    const result = parsePlaces([
+      { id: 'мимо', x: 1.4, y: 0.2 },
+      { id: 'тоже-мимо', x: 0.2, y: -1 },
+      { x: 0.2, y: 0.2 },
+      { id: 'годная', x: 0.2, y: 0.2 },
+    ])
+
+    expect(result.map((p) => p.id)).toEqual(['годная'])
   })
 })

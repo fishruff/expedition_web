@@ -1,9 +1,19 @@
-import type { CrewMember, GameEvent, NewsItem, StoryRecord, TitleRule } from '@/content/types'
+import type {
+  CharterSection,
+  CrewMember,
+  GameEvent,
+  NewsItem,
+  Place,
+  StoryRecord,
+  TitleRule,
+} from '@/content/types'
 import crewRaw from '@/content/crew.json'
 import newsRaw from '@/content/news.json'
 import eventsRaw from '@/content/events.json'
 import titlesRaw from '@/content/titles.json'
 import storyRaw from '@/content/story.json'
+import charterRaw from '@/content/charter.json'
+import placesRaw from '@/content/places.json'
 
 // Не Record — это имя занято встроенным утилитным типом TypeScript.
 type Dict = { [key: string]: unknown }
@@ -112,8 +122,41 @@ export function parseStory(raw: unknown): StoryRecord[] {
     }))
 }
 
+/** Устав. Раздел без заголовка или без пунктов показывать нечем. */
+export function parseCharter(raw: unknown): CharterSection[] {
+  return toArray(raw)
+    .map((item) => ({
+      title: text(item.title),
+      items: Array.isArray(item.items)
+        ? item.items.filter((line): line is string => typeof line === 'string' && line !== '')
+        : [],
+    }))
+    .filter((section) => section.title !== '' && section.items.length > 0)
+}
+
+/**
+ * Метки карты. Координаты — доли от размера картинки, поэтому всё, что вне
+ * отрезка от нуля до единицы, оказалось бы за пределами карты.
+ */
+export function parsePlaces(raw: unknown): Place[] {
+  const fraction = (value: unknown): number | null =>
+    typeof value === 'number' && value >= 0 && value <= 1 ? value : null
+
+  return toArray(raw)
+    .map((item) => ({
+      id: text(item.id),
+      x: fraction(item.x),
+      y: fraction(item.y),
+      title: text(item.title),
+      text: text(item.text),
+    }))
+    .filter((place): place is Place => place.id !== '' && place.x !== null && place.y !== null)
+}
+
 export const crew = parseCrew(crewRaw)
 export const news = parseNews(newsRaw)
 export const events = parseEvents(eventsRaw)
 export const titles = parseTitles(titlesRaw)
 export const story = parseStory(storyRaw)
+export const charter = parseCharter(charterRaw)
+export const places = parsePlaces(placesRaw)

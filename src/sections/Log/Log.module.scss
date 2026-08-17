@@ -1,0 +1,72 @@
+.log {
+  display: flex;
+  flex-direction: column;
+  gap: px(6);
+}
+
+.title {
+  color: var(--color-ink);
+  font-size: px(12);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.empty {
+  color: var(--color-ink-dim);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: px(5);
+  list-style: none;
+}
+
+// Дата слева колонкой: лента читается по времени, а не по заголовкам.
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: px(6);
+  padding-bottom: px(4);
+  border-bottom: px(1) dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+
+.date {
+  flex: none;
+  width: px(38);
+  color: var(--color-ink-dim);
+  font-size: px(5);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: px(1);
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: px(4);
+  flex-wrap: wrap;
+}
+
+.name {
+  color: var(--color-ink);
+  letter-spacing: 0.04em;
+}
+
+.kind {
+  padding: 0 px(2);
+  border: px(1) solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+  color: var(--color-ink-dim);
+  font-size: px(4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  color: var(--color-ink-dim);
+  font-size: px(5);
+}

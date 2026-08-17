@@ -1,0 +1,63 @@
+.map {
+  display: flex;
+  flex-direction: column;
+  gap: px(6);
+}
+
+.title {
+  color: var(--color-ink);
+  font-size: px(12);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.empty {
+  color: var(--color-ink-dim);
+}
+
+// Лист карты: рисунок внутри, метки поверх него в долях от размера.
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: px(320);
+  aspect-ratio: 4 / 3;
+  border: px(2) solid color-mix(in srgb, var(--color-ink) 40%, transparent);
+  background-color: color-mix(in srgb, var(--color-ink) 6%, transparent);
+}
+
+.pin {
+  position: absolute;
+  width: px(6);
+  height: px(6);
+  transform: translate(-50%, -50%);
+  border: px(1) solid var(--color-ink);
+  background-color: var(--color-red);
+  cursor: pointer;
+  padding: 0;
+}
+
+.pin:hover,
+.pin[data-open='true'] {
+  outline: px(1) solid var(--color-ink);
+  outline-offset: px(1);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: px(2);
+  padding: px(4) px(5);
+  border: px(1) solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+  background-color: color-mix(in srgb, var(--color-ink) 5%, transparent);
+}
+
+.cardTitle {
+  color: var(--color-ink);
+  font-size: px(7);
+  letter-spacing: 0.1em;
+}
+
+.cardText {
+  max-width: 60ch;
+  color: var(--color-ink);
+}

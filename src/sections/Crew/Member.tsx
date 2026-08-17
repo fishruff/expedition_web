@@ -46,7 +46,9 @@ export function Member() {
   return (
     <article className={styles.member}>
       <div className={styles.art}>
-        <Sprite className={styles.portrait} def={crewArt(member.nick)} alt={member.nick} />
+        <div className={styles.portrait}>
+          <Sprite illustration def={crewArt(member.nick)} alt={member.nick} />
+        </div>
 
         <section className={styles.block}>
           <h2 className={styles.blockTitle}>Звание</h2>
