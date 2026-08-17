@@ -1,96 +1,44 @@
 # Предметы на столе
 
-Компас и часы нарисованы и стоят в проекте — они эталон. Остальным промптам нужно попасть
-**в ту же манеру**, а не нарисовать красивый предмет вообще.
+Промпт на каждый предмет лежит отдельным файлом в [`props/`](./props/) — собранный
+целиком, копируется одним куском. К любому из них прикладывай картинкой
+[`../reference/style-sheet.png`](../reference/style-sheet.png).
 
-К каждому запросу прикладывай [`../reference/style-sheet.png`](../reference/style-sheet.png):
-оба нарисованных предмета в увеличении и вся палитра плашками.
+## Ведут в разделы
 
-## Как собрать промпт
+Силуэт важнее деталей: пока раздел заперт, предмет показывается серым.
 
-Строка предмета из таблицы ниже, пустая строка, дальше общий блок дословно.
-
-### Общий блок
-
-```
-Style reference: match the attached image exactly — same pixel density, same palette,
-same lighting, same level of detail, same hand-drawn look.
-
-Flat orthographic front view, the object faces the viewer, no perspective, no ground,
-no table, no scene, no props around. A single object centered on a plain dark brown
-background. Hand-drawn pixel art, about 110 pixels tall, chunky visible pixels, no
-anti-aliasing, no blur, no gradients, no photo texture.
-
-Limited palette of warm browns and aged brass only: #241a10 #3f2d1f #4d2e0e #654924
-#805f2c #a9773a #b7924f #c8b284 #d9a441 #fad682 #d6c6a2 #e2d4b4 #120d08.
-
-Light comes from the upper left: brighter edges on the upper left of each form, darker
-on the lower right. One dark outline around the silhouette. No cast shadow on the ground.
-No text, no numbers, no letters, no watermark, no border.
-```
-
-### Пример в сборе — лампа
-
-```
-A small brass oil lantern standing upright, a glass chamber with a warm glowing flame
-inside, a carry ring on top, twice as tall as it is wide.
-
-Style reference: match the attached image exactly — same pixel density, same palette,
-same lighting, same level of detail, same hand-drawn look.
-
-Flat orthographic front view, the object faces the viewer, no perspective, no ground,
-no table, no scene, no props around. A single object centered on a plain dark brown
-background. Hand-drawn pixel art, about 150 pixels tall, chunky visible pixels, no
-anti-aliasing, no blur, no gradients, no photo texture.
-
-Limited palette of warm browns and aged brass only: #241a10 #3f2d1f #4d2e0e #654924
-#805f2c #a9773a #b7924f #c8b284 #d9a441 #fad682 #d6c6a2 #e2d4b4 #120d08.
-
-The flame is the brightest thing in the image, warm amber and pale yellow. Everything
-else is lit from the upper left. One dark outline around the silhouette. No cast shadow
-on the ground, no light rays, no glow halo. No text, no watermark, no border.
-```
-
-Единственное, что меняется в общем блоке от предмета к предмету, — число в
-`about 110 pixels tall`. Для высоких (лампа, свеча) ставь 150, для мелочи (монеты,
-ключ) — 60. Это подсказка о пропорциях, точный размер всё равно задаёшь ты в редакторе.
-
-## Предметы, ведущие в разделы
-
-Эти кликабельные, поэтому силуэт обязан читаться даже обесцвеченным: пока раздел заперт,
-предмет показывается серым.
-
-| Файл | Размер | Куда ведёт | Строка предмета |
+| Предмет | Файл | Размер | Раздел |
 | --- | --- | --- | --- |
-| `compass.png` | 92×110 | Карта | готов |
-| `watch.png` | 112×103 | Хронометр | готов |
-| `book.png` | ≈128×96 | Дневник | `A closed leather-bound journal seen from the front cover, dark brown leather, brass corner fittings, a leather strap clasp on the right side.` |
-| `chest.png` | ≈160×128 | Архив | `A small wooden treasure chest with a curved lid, closed, brass corner fittings and a brass lock plate, dark leather straps across the lid, wider than it is tall.` |
-| `charter.png` | ≈96×64 | Устав | `A rolled parchment scroll with a dark red wax seal in the middle and a thin ribbon around it, oriented horizontally.` |
+| [Компас](./props/compass.md) | `compass.png` | 92×110 | Карта · **готов** |
+| [Часы](./props/watch.md) | `watch.png` | 112×103 | Хронометр · **готов** |
+| [Книга](./props/book.md) | `book.png` | ≈128×96 | Дневник |
+| [Сундук](./props/chest.md) | `chest.png` | ≈160×128 | Архив |
+| [Свиток с печатью](./props/charter.md) | `charter.png` | ≈96×64 | Устав |
 
 ## Декор
 
-Эти никуда не ведут, они делают стол обжитым. Рисовать можно в любом порядке и не все
-сразу — каждый добавляется на сцену одной строкой.
+Никуда не ведут, делают стол обжитым. Порядок любой, каждый добавляется на сцену одной
+строкой — можно присылать по одному.
 
-| Файл | Размер | Строка предмета |
+| Предмет | Файл | Размер |
 | --- | --- | --- |
-| `lamp.png` | ≈80×160 | `A small brass oil lantern standing upright, a glass chamber with a warm glowing flame inside, a carry ring on top, twice as tall as it is wide.` |
-| `inkwell.png` | ≈96×96 | `A glass inkwell with a brass rim, a white feather quill standing in it at a slight angle.` |
-| `candle.png` | ≈48×96 | `A short candle stub with a small warm flame, standing in a simple brass holder with a ring handle.` |
-| `spyglass.png` | ≈128×48 | `A collapsed brass spyglass with a worn leather grip in the middle, oriented horizontally.` |
-| `knife.png` | ≈128×48 | `A worn hunting knife in a leather sheath, oriented horizontally, handle to the left.` |
-| `key.png` | ≈96×48 | `A large old iron key with an ornate bow, oriented horizontally, teeth to the right.` |
-| `magnifier.png` | ≈96×64 | `A magnifying glass with a brass rim and a wooden handle, oriented diagonally, handle to the lower left.` |
-| `mug.png` | ≈64×64 | `A dented tin camp mug with a handle on the right side, empty.` |
-| `pouch.png` | ≈64×64 | `A small drawstring leather pouch, tied at the neck, slightly full.` |
-| `coins.png` | ≈64×48 | `A small pile of five worn gold coins, some flat and one leaning.` |
-| `scroll.png` | ≈64×64 | `A rolled parchment scroll tied with a thin dark cord around the middle, seen end-on so the roll reads as a simple cylinder.` |
+| [Лампа](./props/lamp.md) | `lamp.png` | ≈80×160 |
+| [Чернильница с пером](./props/inkwell.md) | `inkwell.png` | ≈96×96 |
+| [Свеча](./props/candle.md) | `candle.png` | ≈48×96 |
+| [Подзорная труба](./props/spyglass.md) | `spyglass.png` | ≈128×48 |
+| [Нож](./props/knife.md) | `knife.png` | ≈128×48 |
+| [Ключ](./props/key.md) | `key.png` | ≈96×48 |
+| [Лупа](./props/magnifier.md) | `magnifier.png` | ≈96×64 |
+| [Кружка](./props/mug.md) | `mug.png` | ≈64×64 |
+| [Мешочек](./props/pouch.md) | `pouch.png` | ≈64×64 |
+| [Монеты](./props/coins.md) | `coins.png` | ≈64×48 |
+| [Свиток](./props/scroll.md) | `scroll.png` | ≈64×64 |
 
 ## Если хочется набором
 
 Nano Banana умеет выдать несколько предметов одной картинкой, и в наборе они получаются
-заметно однороднее, чем поштучно, — модель держит один свет и одну плотность на весь лист.
+однороднее, чем поштучно: модель держит один свет и одну плотность на весь лист.
 
 ```
 A sprite sheet of six expedition objects on a plain dark brown background, evenly spaced
@@ -112,10 +60,9 @@ Light comes from the upper left on every object. One dark outline around each si
 No cast shadows, no text, no labels, no watermark, no border.
 ```
 
-Цена набора: каждый предмет выйдет мельче, чем поштучно, и деталей в нём меньше. Поэтому
-набор хорош, чтобы **договориться о наборе и стиле разом**, а то, что пойдёт в дело,
-лучше перегенерировать поштучно — или сразу рисовать по нему руками, эскиза для этого
-достаточно.
+Цена набора: каждый предмет выйдет мельче и проще. Поэтому лист хорош, чтобы разом
+договориться о составе и манере, а рисовать руками можно прямо по нему — эскизу
+детализации хватает.
 
 ## Если генератор упрямится
 
@@ -135,5 +82,5 @@ No cast shadows, no text, no labels, no watermark, no border.
 
 ## Куда класть готовое
 
-В [`incoming/`](../../../incoming/) — папка в репозитории, грузить можно прямо
-через GitHub. Правила именования и что я проверяю при приёмке — в её README.
+В [`incoming/`](../../../incoming/), именем будущего ассета. Что я проверяю при приёмке —
+в [README этой папки](../../../incoming/README.md).
