@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet } from 'react-router'
+import { Link, NavLink, Outlet, useMatches } from 'react-router'
 import { useScale } from '@/scene/useScale'
 import { PROPS } from '@/scene/props'
 import { Prop } from '@/scene/Prop/Prop'
@@ -21,6 +21,10 @@ import styles from './Desk.module.scss'
  */
 export function Desk() {
   useScale()
+
+  const matches = useMatches()
+  // Раздел может попросить весь разворот: у карточки участника свои три колонки.
+  const wide = matches.some((match) => (match.handle as { wide?: boolean } | undefined)?.wide)
 
   const snapshots = useSnapshots()
   const now = useNow(30_000)
@@ -56,20 +60,24 @@ export function Desk() {
         </span>
       </header>
 
-      <div className={styles.stage}>
-        <aside className={styles.side}>
-          <Panel title="До конца сезона">
-            <CountdownBoard />
-          </Panel>
+      <div className={`${styles.stage} ${wide ? styles.stageWide : ''}`}>
+        {/* В широком режиме панели не прячутся, а не рендерятся: скрытый flex
+            всё равно занимает место в сетке. */}
+        {!wide && (
+          <aside className={styles.side}>
+            <Panel title="До конца сезона">
+              <CountdownBoard />
+            </Panel>
 
-          <Panel title="Последние записи">
-            <FeedPanel limit={3} to={ROUTES.log} action="Смотреть все" />
-          </Panel>
+            <Panel title="Последние записи">
+              <FeedPanel limit={3} to={ROUTES.log} action="Смотреть все" />
+            </Panel>
 
-          <Panel title="Быстрый доступ">
-            <QuickLinks />
-          </Panel>
-        </aside>
+            <Panel title="Быстрый доступ">
+              <QuickLinks />
+            </Panel>
+          </aside>
+        )}
 
         <main className={styles.center}>
           {/* Стол: разворот книги в середине, предметы вокруг него по углам. */}
@@ -78,26 +86,30 @@ export function Desk() {
               <Outlet />
             </div>
 
-            {PROPS.map((def) => (
-              <div key={def.id} className={`${styles.slot} ${styles[def.slot]}`}>
-                <Prop
-                  def={def}
-                  locked={Boolean(def.requires) && !isUnlocked(snapshots.unlocks, def.requires!)}
-                />
-              </div>
-            ))}
+            {/* Широкий разворот занимает весь стол — предметам на нём места нет. */}
+            {!wide &&
+              PROPS.map((def) => (
+                <div key={def.id} className={`${styles.slot} ${styles[def.slot]}`}>
+                  <Prop
+                    def={def}
+                    locked={Boolean(def.requires) && !isUnlocked(snapshots.unlocks, def.requires!)}
+                  />
+                </div>
+              ))}
           </div>
         </main>
 
-        <aside className={styles.side}>
-          <Panel title="Уведомления">
-            <FeedPanel limit={3} to={ROUTES.log} action="Все уведомления" />
-          </Panel>
+        {!wide && (
+          <aside className={styles.side}>
+            <Panel title="Уведомления">
+              <FeedPanel limit={3} to={ROUTES.log} action="Все уведомления" />
+            </Panel>
 
-          <Panel title="Участники">
-            <CrewPanel />
-          </Panel>
-        </aside>
+            <Panel title="Участники">
+              <CrewPanel />
+            </Panel>
+          </aside>
+        )}
       </div>
 
       <footer className={styles.footer}>

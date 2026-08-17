@@ -1,91 +1,223 @@
+// Три колонки на развороте, как в референсе: арт, о человеке, цифры.
 .member {
-  display: flex;
-  flex-direction: column;
-  gap: px(6);
-}
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: px(10);
 
-.head {
-  display: flex;
-  align-items: flex-start;
-  gap: px(8);
+  @include up('lg') {
+    grid-template-columns: px(136) 1fr 1fr;
+    gap: px(14);
+  }
 }
 
 .art {
-  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: px(8);
 }
 
-.title {
+// Арт в рамке: в референсе он вклеен в страницу, как фотокарточка.
+// Показывается вдвое крупнее списочного — увеличение целое, поэтому не мылит.
+.art .portrait {
+  width: calc(var(--sprite-w) * 2px * var(--sa));
+  height: calc(var(--sprite-h) * 2px * var(--sa));
+  border: px(2) solid color-mix(in srgb, var(--color-ink) 45%, transparent);
+  background-color: color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.info,
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: px(8);
+  min-width: 0;
+}
+
+.name {
   color: var(--color-ink);
-  font-size: px(9);
-  letter-spacing: 0.16em;
+  font-size: px(16);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-.role {
-  margin-top: px(2);
+// Плашка под именем: тонкая рамка чернилами, без заливки.
+.badge {
+  align-self: flex-start;
+  padding: px(2) px(4);
+  border: px(1) solid color-mix(in srgb, var(--color-ink) 35%, transparent);
   color: var(--color-ink-dim);
-  font-size: px(6);
-  letter-spacing: 0.12em;
+  font-size: px(5);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: px(3);
+}
+
+// Заголовок с линией до края: разделяет разделы страницы, не занимая места.
+.blockTitle {
+  display: flex;
+  align-items: center;
+  gap: px(4);
+  color: var(--color-ink-dim);
+  font-size: px(5);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.blockTitle::after {
+  content: '';
+  flex: 1;
+  height: px(1);
+  background-color: color-mix(in srgb, var(--color-ink) 25%, transparent);
+}
+
+.rank {
+  color: var(--color-ink);
+  font-size: px(7);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .bio {
-  margin-top: px(4);
-  max-width: 46ch;
+  max-width: 42ch;
+  color: var(--color-ink);
+}
+
+.line {
+  color: var(--color-ink);
 }
 
 .note {
   color: var(--color-ink-dim);
 }
 
-.back {
-  color: var(--color-ink);
-  text-decoration: underline;
-  align-self: flex-start;
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: px(3);
+  list-style: none;
 }
 
-.socials {
-  display: flex;
-  flex-wrap: wrap;
-  gap: px(6);
-  list-style: none;
+.contact {
+  display: block;
+  padding: px(3) px(4);
+  border: px(1) solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+  color: var(--color-ink);
+  letter-spacing: 0.06em;
 
-  a {
-    color: var(--color-ink);
-    text-decoration: underline;
+  &:hover {
+    background-color: color-mix(in srgb, var(--color-ink) 8%, transparent);
   }
 }
 
-.subtitle {
-  margin-top: px(4);
-  color: var(--color-ink-dim);
-  font-size: px(6);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+/* ---------- статистика ---------- */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: px(4);
+  list-style: none;
 }
 
-.stats {
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: px(1);
+  padding: px(4) px(3);
+  border: px(1) solid color-mix(in srgb, var(--color-ink) 25%, transparent);
+  background-color: color-mix(in srgb, var(--color-ink) 5%, transparent);
+}
+
+.cardValue {
+  color: var(--color-ink);
+  font-size: px(7);
+  letter-spacing: 0.04em;
+}
+
+.cardLabel {
+  color: var(--color-ink-dim);
+  font-size: px(4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* ---------- находки и прогресс ---------- */
+
+.finds {
   display: flex;
   flex-direction: column;
   gap: px(2);
-  max-width: px(160);
+  list-style: none;
 }
 
-// Точки между названием и значением: строка читается слева направо без блуждания.
-.row {
+.find {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: px(3);
+}
 
-  dt {
-    color: var(--color-ink-dim);
-  }
+.findMark {
+  width: px(4);
+  height: px(4);
+  border: px(1) solid var(--color-ink-dim);
+}
 
-  dt::after {
-    content: '';
-    display: block;
-  }
+.findTitle {
+  color: var(--color-ink);
+}
 
-  dd {
-    margin-left: auto;
-  }
+.progress {
+  display: flex;
+  align-items: center;
+  gap: px(4);
+}
+
+// Полоса из сегментов: сплошная выглядела бы не пиксельно.
+.bar {
+  position: relative;
+  flex: 1;
+  height: px(8);
+  border: px(1) solid color-mix(in srgb, var(--color-ink) 35%, transparent);
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0 px(5),
+    color-mix(in srgb, var(--color-ink) 35%, transparent) px(5) px(6)
+  );
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background-color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+}
+
+.percent {
+  color: var(--color-ink);
+  font-size: px(6);
+}
+
+/* ---------- страница не нашлась ---------- */
+
+.missing {
+  display: flex;
+  flex-direction: column;
+  gap: px(4);
+  align-items: flex-start;
+}
+
+.title {
+  color: var(--color-ink);
+  font-size: px(12);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.back {
+  color: var(--color-ink);
+  text-decoration: underline;
 }

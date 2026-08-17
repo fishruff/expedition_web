@@ -40,3 +40,15 @@ export interface TitleRule {
   /** Оформление рамки: gold, silver. Пустая строка — без рамки. */
   frame: string
 }
+
+/** Сюжетная запись из story.json: текст авторский, факт находки — из игры. */
+export interface StoryRecord {
+  id: string
+  title: string
+  chapter: number
+  text: string
+  /** Что показать на сайте по находке: метку места или намёк на главу. */
+  opens: string[]
+  /** Какой раздел включает. Пустая строка — ничего. */
+  unlocks: string
+}

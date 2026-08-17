@@ -15,6 +15,7 @@ function member(nick: string, patch: Partial<CrewView> = {}): CrewView {
     title: '',
     bio: '',
     joinedAt: '2026-10-15',
+    lastSeen: '',
     socials: { discord: null, telegram: null, youtube: null, twitch: null },
     stats: null,
     online: false,

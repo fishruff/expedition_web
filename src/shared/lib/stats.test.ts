@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatCount, formatDistance, formatPlaytime, STAT_ROWS } from '@/shared/lib/stats'
+import { formatCount, formatDistance, formatPlaytime, statCards, STAT_ROWS } from '@/shared/lib/stats'
 
 describe('formatPlaytime', () => {
   it('до часа считает минутами', () => {
@@ -54,5 +54,29 @@ describe('STAT_ROWS', () => {
       expect(row.label.length).toBeGreaterThan(0)
       expect(row.format(stats).length).toBeGreaterThan(0)
     }
+  })
+})
+
+describe('statCards', () => {
+  const stats = {
+    playtimeMinutes: 412,
+    distanceCm: 120_400_000,
+    blocksMined: 184_902,
+    blocksPlaced: 63_120,
+    mobsKilled: 1042,
+    deaths: 37,
+  }
+
+  it('даёт шесть карточек с подписью в две строки', () => {
+    const cards = statCards(stats, 3)
+
+    expect(cards).toHaveLength(6)
+    expect(cards[0].label).toEqual(['блоков', 'поставлено'])
+    expect(cards[3].value).toBe('3')
+  })
+
+  // Ноль вместо неизвестного игрок прочитает как «я ничего не сделал».
+  it('без снимка ставит прочерк в каждой карточке', () => {
+    expect(statCards(null, null).every((card) => card.value === '—')).toBe(true)
   })
 })

@@ -59,9 +59,9 @@ describe('Страница участника', () => {
   it('без снимков ставит прочерк вместо статистики', () => {
     renderMember('/crew/Steve')
 
-    expect(screen.getByText('Время в игре')).toBeTruthy()
-    expect(screen.getAllByText('—').length).toBeGreaterThan(0)
-    expect(screen.getByText(/данных пока нет/i)).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Статистика' })).toBeTruthy()
+    // Шесть карточек, и в каждой прочерк вместо выдуманного нуля.
+    expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(6)
   })
 
   it('показывает статистику, когда снимок пришёл', () => {

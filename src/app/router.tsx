@@ -25,7 +25,8 @@ export const routes: RouteObject[] = [
       { path: ROUTES.home, element: <Home /> },
       { path: ROUTES.log, element: stub('Дневник') },
       { path: ROUTES.crew, element: <Crew /> },
-      { path: ROUTES.crewMember, element: <Member /> },
+      // Карточка участника занимает весь разворот: боковые панели ей мешают.
+      { path: ROUTES.crewMember, element: <Member />, handle: { wide: true } },
       { path: ROUTES.charter, element: stub('Устав') },
       { path: ROUTES.archive, element: gated('archive', 'Архив') },
       { path: ROUTES.map, element: gated('map', 'Карта') },

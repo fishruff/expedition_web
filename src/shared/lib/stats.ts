@@ -42,3 +42,49 @@ export const STAT_ROWS: StatRow[] = [
   { key: 'mobs', label: 'Побеждено мобов', format: (s) => formatCount(s.mobsKilled) },
   { key: 'deaths', label: 'Смертей', format: (s) => formatCount(s.deaths) },
 ]
+
+export interface StatCard {
+  key: string
+  /** Подпись в две строки, как в референсе: «блоков» / «поставлено». */
+  label: [string, string]
+  value: string
+}
+
+/**
+ * Карточки статистики для страницы участника.
+ *
+ * Число находок приходит отдельно от снимка статистики, поэтому передаётся
+ * вторым аргументом, а не прячется внутри.
+ */
+export function statCards(stats: PlayerStats | null, recordsFound: number | null): StatCard[] {
+  const dash = '—'
+
+  return [
+    {
+      key: 'placed',
+      label: ['блоков', 'поставлено'],
+      value: stats ? formatCount(stats.blocksPlaced) : dash,
+    },
+    { key: 'mobs', label: ['мобов', 'убито'], value: stats ? formatCount(stats.mobsKilled) : dash },
+    {
+      key: 'mined',
+      label: ['блоков', 'добыто'],
+      value: stats ? formatCount(stats.blocksMined) : dash,
+    },
+    {
+      key: 'records',
+      label: ['записей', 'найдено'],
+      value: recordsFound === null ? dash : formatCount(recordsFound),
+    },
+    {
+      key: 'playtime',
+      label: ['времени', 'в игре'],
+      value: stats ? formatPlaytime(stats.playtimeMinutes) : dash,
+    },
+    {
+      key: 'distance',
+      label: ['пройдено', 'пути'],
+      value: stats ? formatDistance(stats.distanceCm) : dash,
+    },
+  ]
+}

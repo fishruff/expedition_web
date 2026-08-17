@@ -8,6 +8,8 @@ export interface CrewView {
   title: string
   bio: string
   joinedAt: string
+  /** Когда игрока видели в последний раз. Пусто, пока снимков нет. */
+  lastSeen: string
   socials: CrewMember['socials']
   /** null, пока плагин не запущен: интерфейс рисует прочерк, а не ноль. */
   stats: PlayerStats | null
@@ -24,6 +26,7 @@ function toView(member: CrewMember, entry?: CrewEntry): CrewView {
     title: member.title,
     bio: member.description,
     joinedAt: member.joinedAt,
+    lastSeen: entry?.lastSeen ?? '',
     socials: member.socials,
     stats: entry?.stats ?? null,
     online: entry?.online ?? false,
@@ -63,6 +66,7 @@ export function mergeCrew(authored: CrewMember[], snapshot: CrewSnapshot): CrewV
       title: '',
       bio: '',
       joinedAt: p.firstSeen,
+      lastSeen: p.lastSeen,
       socials: { discord: null, telegram: null, youtube: null, twitch: null },
       stats: p.stats,
       online: p.online,

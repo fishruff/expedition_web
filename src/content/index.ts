@@ -1,8 +1,9 @@
-import type { CrewMember, GameEvent, NewsItem, TitleRule } from '@/content/types'
+import type { CrewMember, GameEvent, NewsItem, StoryRecord, TitleRule } from '@/content/types'
 import crewRaw from '@/content/crew.json'
 import newsRaw from '@/content/news.json'
 import eventsRaw from '@/content/events.json'
 import titlesRaw from '@/content/titles.json'
+import storyRaw from '@/content/story.json'
 
 // Не Record — это имя занято встроенным утилитным типом TypeScript.
 type Dict = { [key: string]: unknown }
@@ -94,7 +95,25 @@ export function parseTitles(raw: unknown): TitleRule[] {
     }))
 }
 
+/**
+ * Сюжет. Текст показывается только у записей, которые уже найдены в игре,
+ * поэтому здесь достаточно отсеять записи без номера.
+ */
+export function parseStory(raw: unknown): StoryRecord[] {
+  return toArray(raw)
+    .filter((item) => text(item.id) !== '')
+    .map((item) => ({
+      id: text(item.id),
+      title: text(item.title),
+      chapter: typeof item.chapter === 'number' ? item.chapter : 0,
+      text: text(item.text),
+      opens: Array.isArray(item.opens) ? item.opens.filter((o): o is string => typeof o === 'string') : [],
+      unlocks: text(item.unlocks),
+    }))
+}
+
 export const crew = parseCrew(crewRaw)
 export const news = parseNews(newsRaw)
 export const events = parseEvents(eventsRaw)
 export const titles = parseTitles(titlesRaw)
+export const story = parseStory(storyRaw)

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseCrew, parseNews, parseEvents, parseTitles } from '@/content'
+import { parseCrew, parseNews, parseEvents, parseTitles, parseStory } from '@/content'
 
 describe('parseCrew', () => {
   it('оставляет корректные записи и заполняет необязательные поля', () => {
@@ -85,5 +85,21 @@ describe('parseTitles', () => {
 
   it('без оформления оставляет рамку пустой, а не ломается', () => {
     expect(parseTitles([{ id: 'ходок', label: 'Ходок', rule: 'maxDistance' }])[0].frame).toBe('')
+  })
+})
+
+describe('parseStory', () => {
+  it('оставляет записи с номером и подтягивает необязательные поля', () => {
+    const result = parseStory([{ id: 'храм-1', title: 'Первая табличка' }])
+
+    expect(result).toEqual([
+      { id: 'храм-1', title: 'Первая табличка', chapter: 0, text: '', opens: [], unlocks: '' },
+    ])
+  })
+
+  it('отбрасывает записи без номера: по нему сходится находка из игры', () => {
+    expect(parseStory([{ title: 'Безымянная' }, { id: 'храм-2' }]).map((r) => r.id)).toEqual([
+      'храм-2',
+    ])
   })
 })
