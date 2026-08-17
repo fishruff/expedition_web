@@ -172,6 +172,12 @@
   color: var(--color-ink);
 }
 
+.findDate {
+  margin-left: auto;
+  color: var(--color-ink-dim);
+  font-size: px(5);
+}
+
 .progress {
   display: flex;
   align-items: center;

@@ -56,20 +56,24 @@ export interface StatCard {
  * Число находок приходит отдельно от снимка статистики, поэтому передаётся
  * вторым аргументом, а не прячется внутри.
  */
-export function statCards(stats: PlayerStats | null, recordsFound: number | null): StatCard[] {
+export function statCards(
+  stats: PlayerStats | null,
+  recordsFound: number | null,
+  artifactsFound: number | null,
+): StatCard[] {
   const dash = '—'
 
   return [
     {
-      key: 'placed',
-      label: ['блоков', 'поставлено'],
-      value: stats ? formatCount(stats.blocksPlaced) : dash,
-    },
-    { key: 'mobs', label: ['мобов', 'убито'], value: stats ? formatCount(stats.mobsKilled) : dash },
-    {
       key: 'mined',
       label: ['блоков', 'добыто'],
       value: stats ? formatCount(stats.blocksMined) : dash,
+    },
+    { key: 'mobs', label: ['мобов', 'убито'], value: stats ? formatCount(stats.mobsKilled) : dash },
+    {
+      key: 'playtime',
+      label: ['времени', 'в игре'],
+      value: stats ? formatPlaytime(stats.playtimeMinutes) : dash,
     },
     {
       key: 'records',
@@ -77,14 +81,9 @@ export function statCards(stats: PlayerStats | null, recordsFound: number | null
       value: recordsFound === null ? dash : formatCount(recordsFound),
     },
     {
-      key: 'playtime',
-      label: ['времени', 'в игре'],
-      value: stats ? formatPlaytime(stats.playtimeMinutes) : dash,
-    },
-    {
-      key: 'distance',
-      label: ['пройдено', 'пути'],
-      value: stats ? formatDistance(stats.distanceCm) : dash,
+      key: 'artifacts',
+      label: ['артефактов', 'найдено'],
+      value: artifactsFound === null ? dash : formatCount(artifactsFound),
     },
   ]
 }

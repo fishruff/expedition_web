@@ -4,7 +4,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router'
 import { SnapshotsContext } from '@/data/context'
 import { emptySnapshots } from '@/data/empty'
 import type { CrewEntry, Snapshots } from '@/data/types'
-import { Crew } from '@/sections/Crew/Crew'
+import { Players } from '@/sections/Crew/Players'
 
 function entry(name: string, patch: Partial<CrewEntry> = {}): CrewEntry {
   return {
@@ -27,9 +27,9 @@ function entry(name: string, patch: Partial<CrewEntry> = {}): CrewEntry {
   }
 }
 
-function renderCrew(snapshots: Snapshots = emptySnapshots()) {
-  const router = createMemoryRouter([{ path: '/crew', element: <Crew /> }], {
-    initialEntries: ['/crew'],
+function renderPlayers(snapshots: Snapshots = emptySnapshots()) {
+  const router = createMemoryRouter([{ path: '/players', element: <Players /> }], {
+    initialEntries: ['/players'],
   })
 
   render(
@@ -41,21 +41,21 @@ function renderCrew(snapshots: Snapshots = emptySnapshots()) {
 
 describe('Экипаж', () => {
   it('показывает участников из авторского списка и без данных из игры', () => {
-    renderCrew()
+    renderPlayers()
 
     expect(screen.getByText('Steve')).toBeTruthy()
     expect(screen.getByText('Alex')).toBeTruthy()
   })
 
   it('ведёт на страницу участника', () => {
-    renderCrew()
+    renderPlayers()
 
-    expect(screen.getByRole('link', { name: /Steve/ }).getAttribute('href')).toBe('/crew/Steve')
+    expect(screen.getByRole('link', { name: /Steve/ }).getAttribute('href')).toBe('/players/Steve')
   })
 
   // Пока плагин молчит, «не в сети» — такое же враньё, как «в сети».
   it('без снимков никого не объявляет ни в сети, ни офлайн', () => {
-    renderCrew()
+    renderPlayers()
 
     expect(screen.queryByText(/в сети/)).toBeNull()
     expect(screen.queryByText(/не в сети/)).toBeNull()
@@ -66,7 +66,7 @@ describe('Экипаж', () => {
     snapshots.available = true
     snapshots.crew.players = [entry('Nomad', { online: true })]
 
-    renderCrew(snapshots)
+    renderPlayers(snapshots)
 
     expect(screen.getByText('Nomad')).toBeTruthy()
     expect(screen.getByText(/не представился/)).toBeTruthy()
@@ -80,14 +80,14 @@ describe('Экипаж', () => {
       entry('Nomad', { stats: { ...entry('Nomad').stats, distanceCm: 900_000_000 } }),
     ]
 
-    renderCrew(snapshots)
+    renderPlayers(snapshots)
 
     expect(screen.getByText('Ходок')).toBeTruthy()
   })
 
   // Авторское звание — решение владельца, автоматика его не перебивает.
   it('оставляет авторское звание, когда оно проставлено', () => {
-    renderCrew()
+    renderPlayers()
 
     expect(screen.getByText('Штурман')).toBeTruthy()
   })

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, NavLink, Outlet, useMatches } from 'react-router'
 import { useScale } from '@/scene/useScale'
 import { PROPS } from '@/scene/props'
@@ -12,7 +13,7 @@ import { crew } from '@/content'
 import { useSnapshots } from '@/data/useSnapshots'
 import { isServerLive, isUnlocked, mergeCrew } from '@/data/merge'
 import { useNow } from '@/shared/lib/useNow'
-import { SITE } from '@/shared/config/site'
+import { SERVER_ADDRESS, SITE } from '@/shared/config/site'
 import styles from './Desk.module.scss'
 
 /**
@@ -26,11 +27,22 @@ export function Desk() {
   // Раздел может попросить весь разворот: у карточки участника свои три колонки.
   const wide = matches.some((match) => (match.handle as { wide?: boolean } | undefined)?.wide)
 
+  const [copied, setCopied] = useState(false)
   const snapshots = useSnapshots()
   const now = useNow(30_000)
   const live = isServerLive(snapshots.status.updatedAt, snapshots.status.serverOnline, now)
   const members = mergeCrew(crew, snapshots.crew)
   const onlineCount = members.filter((m) => m.online).length
+
+  const copyAddress = async () => {
+    try {
+      await navigator.clipboard.writeText(SERVER_ADDRESS)
+    } catch {
+      // Буфер может быть недоступен без https — адрес виден рядом, переживём молча.
+    }
+    setCopied(true)
+    setTimeout(() => setCopied(false), 1600)
+  }
 
   return (
     <div className={styles.desk} data-testid="desk">
@@ -70,7 +82,7 @@ export function Desk() {
             </Panel>
 
             <Panel title="Последние записи">
-              <FeedPanel limit={3} to={ROUTES.log} action="Смотреть все" />
+              <FeedPanel limit={3} to={ROUTES.home} action="Смотреть все" />
             </Panel>
 
             <Panel title="Быстрый доступ">
@@ -102,7 +114,7 @@ export function Desk() {
         {!wide && (
           <aside className={styles.side}>
             <Panel title="Уведомления">
-              <FeedPanel limit={3} to={ROUTES.log} action="Все уведомления" />
+              <FeedPanel limit={3} to={ROUTES.home} action="Все уведомления" />
             </Panel>
 
             <Panel title="Участники">
@@ -113,7 +125,13 @@ export function Desk() {
       </div>
 
       <footer className={styles.footer}>
-        <span className={styles.footerSide} />
+        {/* Адрес сервера живёт здесь: в композиции стола он лишний, но игроку,
+            пришедшему играть, нужен на каждой странице. */}
+        <span className={styles.footerSide}>
+          <button type="button" className={styles.address} onClick={copyAddress}>
+            {copied ? 'Адрес скопирован' : SERVER_ADDRESS}
+          </button>
+        </span>
 
         <span className={styles.footerCenter}>
           {SITE.name} <span className={styles.sep}>|</span> {SITE.tagline}
@@ -126,6 +144,7 @@ export function Desk() {
           <a href={SITE.telegramUrl} target="_blank" rel="noreferrer noopener">
             Telegram
           </a>
+          <span className={styles.copy}>© {SITE.name}</span>
         </nav>
       </footer>
     </div>

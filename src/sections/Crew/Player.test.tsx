@@ -4,7 +4,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router'
 import { SnapshotsContext } from '@/data/context'
 import { emptySnapshots } from '@/data/empty'
 import type { CrewEntry, Snapshots } from '@/data/types'
-import { Member } from '@/sections/Crew/Member'
+import { Player } from '@/sections/Crew/Player'
 
 function entry(name: string, patch: Partial<CrewEntry> = {}): CrewEntry {
   return {
@@ -28,7 +28,7 @@ function entry(name: string, patch: Partial<CrewEntry> = {}): CrewEntry {
 }
 
 function renderMember(path: string, snapshots: Snapshots = emptySnapshots()) {
-  const router = createMemoryRouter([{ path: '/crew/:nick', element: <Member /> }], {
+  const router = createMemoryRouter([{ path: '/players/:nick', element: <Player /> }], {
     initialEntries: [path],
   })
 
@@ -41,7 +41,7 @@ function renderMember(path: string, snapshots: Snapshots = emptySnapshots()) {
 
 describe('Страница участника', () => {
   it('показывает ник, звание и биографию', () => {
-    renderMember('/crew/Steve')
+    renderMember('/players/Steve')
 
     expect(screen.getByRole('heading', { level: 1, name: 'Steve' })).toBeTruthy()
     expect(screen.getByText('Штурман')).toBeTruthy()
@@ -50,14 +50,14 @@ describe('Страница участника', () => {
 
   // Ник в адресе игрок набирает как хочет, а регистр в майнкрафте роли не играет.
   it('находит участника независимо от регистра в адресе', () => {
-    renderMember('/crew/steve')
+    renderMember('/players/steve')
 
     expect(screen.getByRole('heading', { level: 1, name: 'Steve' })).toBeTruthy()
   })
 
   // Ноль вместо неизвестного — враньё: игрок решит, что он ничего не добыл.
   it('без снимков ставит прочерк вместо статистики', () => {
-    renderMember('/crew/Steve')
+    renderMember('/players/Steve')
 
     expect(screen.getByRole('heading', { name: 'Статистика' })).toBeTruthy()
     // Шесть карточек, и в каждой прочерк вместо выдуманного нуля.
@@ -69,15 +69,15 @@ describe('Страница участника', () => {
     snapshots.available = true
     snapshots.crew.players = [entry('Steve')]
 
-    renderMember('/crew/Steve', snapshots)
+    renderMember('/players/Steve', snapshots)
 
     expect(screen.getByText('6 часов 52 минуты')).toBeTruthy()
-    expect(screen.getByText('1204 км')).toBeTruthy()
+    expect(screen.getByText('184 902')).toBeTruthy() // добыто блоков
     expect(screen.getByText('3')).toBeTruthy() // найдено записей
   })
 
   it('на неизвестном нике показывает вырванную страницу', () => {
-    renderMember('/crew/Кто-то')
+    renderMember('/players/Кто-то')
 
     expect(screen.getByRole('heading', { level: 1, name: /вырвана/i })).toBeTruthy()
     expect(screen.getByRole('link', { name: /экипаж/i })).toBeTruthy()

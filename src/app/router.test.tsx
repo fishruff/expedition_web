@@ -10,7 +10,7 @@ function renderAt(path: string) {
 
 describe('маршруты', () => {
   it('на каждом маршруте рендерится сцена стола', () => {
-    renderAt('/crew')
+    renderAt('/players')
 
     expect(screen.getByTestId('desk')).toBeTruthy()
   })
@@ -18,7 +18,7 @@ describe('маршруты', () => {
   // Содержимое живёт на развороте книги, а не просто в центре экрана:
   // ради этого затевалась вся сцена.
   it('кладёт раздел на разворот книги', () => {
-    renderAt('/crew')
+    renderAt('/players')
 
     const spread = screen.getByTestId('spread')
 
@@ -35,25 +35,25 @@ describe('маршруты', () => {
   })
 
   it('открывает дневник', () => {
-    renderAt('/log')
+    renderAt('/')
 
     expect(screen.getByRole('heading', { level: 1, name: 'Дневник' })).toBeTruthy()
   })
 
   it('открывает раздел экипажа', () => {
-    renderAt('/crew')
+    renderAt('/players')
 
     expect(screen.getByRole('heading', { level: 1, name: 'Экипаж' })).toBeTruthy()
   })
 
   it('открывает страницу участника по нику из адреса', () => {
-    renderAt('/crew/steve')
+    renderAt('/players/steve')
 
     expect(screen.getByRole('heading', { level: 1, name: 'Steve' })).toBeTruthy()
   })
 
   it('открывает устав', () => {
-    renderAt('/charter')
+    renderAt('/about')
 
     expect(screen.getByRole('heading', { level: 1, name: 'Устав экипажа' })).toBeTruthy()
   })

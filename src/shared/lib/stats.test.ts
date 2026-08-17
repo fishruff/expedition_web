@@ -67,16 +67,24 @@ describe('statCards', () => {
     deaths: 37,
   }
 
-  it('даёт шесть карточек с подписью в две строки', () => {
-    const cards = statCards(stats, 3)
+  // Набор показателей зафиксирован владельцем: чанки не отслеживаем, поставленные
+  // блоки и пройденный путь в карточку не выносим.
+  it('даёт пять карточек с подписью в две строки', () => {
+    const cards = statCards(stats, 3, 2)
 
-    expect(cards).toHaveLength(6)
-    expect(cards[0].label).toEqual(['блоков', 'поставлено'])
+    expect(cards.map((card) => card.key)).toEqual([
+      'mined',
+      'mobs',
+      'playtime',
+      'records',
+      'artifacts',
+    ])
     expect(cards[3].value).toBe('3')
+    expect(cards[4].value).toBe('2')
   })
 
   // Ноль вместо неизвестного игрок прочитает как «я ничего не сделал».
   it('без снимка ставит прочерк в каждой карточке', () => {
-    expect(statCards(null, null).every((card) => card.value === '—')).toBe(true)
+    expect(statCards(null, null, null).every((card) => card.value === '—')).toBe(true)
   })
 })

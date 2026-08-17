@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { crewMemberPath, ROUTES } from '@/app/routes'
+import { playerPath, ROUTES } from '@/app/routes'
 import { useCrew } from '@/data/useCrew'
 import styles from './CrewPanel.module.scss'
 
@@ -14,7 +14,7 @@ export function CrewPanel({ limit = 8 }: { limit?: number }) {
       <ul className={styles.list}>
         {members.slice(0, limit).map((member) => (
           <li key={member.uuid || member.nick} className={styles.row}>
-            <Link className={styles.nick} to={crewMemberPath(member.nick)}>
+            <Link className={styles.nick} to={playerPath(member.nick)}>
               {member.nick}
             </Link>
 
@@ -24,7 +24,7 @@ export function CrewPanel({ limit = 8 }: { limit?: number }) {
         ))}
       </ul>
 
-      <Link className={styles.action} to={ROUTES.crew}>
+      <Link className={styles.action} to={ROUTES.players}>
         Все участники
         <span aria-hidden="true">›</span>
       </Link>

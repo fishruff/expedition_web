@@ -1,29 +1,25 @@
 // Единый источник правды по путям: роутер, навигация и предметы берут их отсюда.
 export const ROUTES = {
+  // Главная — это и есть дневник: человек приходит смотреть, что случилось.
   home: '/',
-  log: '/log',
-  crew: '/crew',
-  crewMember: '/crew/:nick',
-  archive: '/archive',
   map: '/map',
+  archive: '/archive',
+  players: '/players',
+  player: '/players/:nick',
   chronometer: '/chronometer',
-  charter: '/charter',
+  about: '/about',
 } as const
 
-export function crewMemberPath(nick: string): string {
-  return `${ROUTES.crew}/${encodeURIComponent(nick)}`
+export function playerPath(nick: string): string {
+  return `${ROUTES.players}/${encodeURIComponent(nick)}`
 }
 
-/**
- * Навигация в шапке. Короткие подписи — в полосе мало места.
- *
- * Карты и хронометра здесь нет намеренно: они живут предметами на столе,
- * компасом и часами, и там же показываются запертыми.
- */
+/** Навигация в шапке. Короткие подписи — в полосе мало места. */
 export const NAV_ITEMS = [
-  { to: ROUTES.log, label: 'Дневник' },
+  { to: ROUTES.home, label: 'Дневник' },
   { to: ROUTES.map, label: 'Карта' },
   { to: ROUTES.archive, label: 'Архив' },
+  { to: ROUTES.players, label: 'Участники' },
   { to: ROUTES.chronometer, label: 'Хронометр' },
-  { to: ROUTES.charter, label: 'Устав' },
+  { to: ROUTES.about, label: 'О проекте' },
 ] as const

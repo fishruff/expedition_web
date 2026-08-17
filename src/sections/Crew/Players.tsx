@@ -1,11 +1,11 @@
 import { Link } from 'react-router'
-import { crewMemberPath } from '@/app/routes'
+import { playerPath } from '@/app/routes'
 import { titleOf, useCrew } from '@/data/useCrew'
 import { crewArt } from '@/shared/assets'
 import { Sprite } from '@/ui/Sprite/Sprite'
-import styles from './Crew.module.scss'
+import styles from './Players.module.scss'
 
-export function Crew() {
+export function Players() {
   const { members, awards, available } = useCrew()
 
   return (
@@ -17,7 +17,7 @@ export function Crew() {
       <ul className={styles.list}>
         {members.map((member) => (
           <li key={member.uuid || member.nick}>
-            <Link className={styles.card} to={crewMemberPath(member.nick)}>
+            <Link className={styles.card} to={playerPath(member.nick)}>
               <span className={styles.art}>
                 <Sprite illustration def={crewArt(member.nick)} alt={member.nick} />
               </span>

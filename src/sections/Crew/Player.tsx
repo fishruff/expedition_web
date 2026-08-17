@@ -8,7 +8,7 @@ import { formatDay, formatLastSeen } from '@/shared/lib/dates'
 import { statCards } from '@/shared/lib/stats'
 import { useNow } from '@/shared/lib/useNow'
 import { Sprite } from '@/ui/Sprite/Sprite'
-import styles from './Member.module.scss'
+import styles from './Player.module.scss'
 
 const SOCIAL_LABELS: Record<string, string> = {
   discord: 'Discord',
@@ -17,7 +17,7 @@ const SOCIAL_LABELS: Record<string, string> = {
   twitch: 'Twitch',
 }
 
-export function Member() {
+export function Player() {
   const { nick = '' } = useParams()
   const { members, awards } = useCrew()
   const snapshots = useSnapshots()
@@ -31,7 +31,7 @@ export function Member() {
       <section className={styles.missing}>
         <h1 className={styles.title}>Страница вырвана</h1>
         <p className={styles.note}>Такого участника в экспедиции нет.</p>
-        <Link className={styles.back} to={ROUTES.crew}>
+        <Link className={styles.back} to={ROUTES.players}>
           Вернуться к экипажу
         </Link>
       </section>
@@ -39,8 +39,18 @@ export function Member() {
   }
 
   const socials = Object.entries(member.socials).filter(([, url]) => url)
-  const cards = statCards(member.stats, member.recordsFound)
   const found = snapshots.records.found.filter((record) => record.foundBy.uuid === member.uuid)
+
+  // Артефакты приходят разблокировками: у каждого ключа записано, кто его нашёл.
+  const artifacts = Object.entries(snapshots.unlocks.unlocked).filter(
+    ([, unlock]) => unlock.by.toLowerCase() === member.nick.toLowerCase(),
+  )
+
+  const cards = statCards(
+    member.stats,
+    member.recordsFound,
+    snapshots.available ? artifacts.length : null,
+  )
   const progress = story.length > 0 ? Math.round((found.length / story.length) * 100) : null
 
   return (
@@ -139,6 +149,22 @@ export function Member() {
             })}
           </ul>
         </section>
+
+        {artifacts.length > 0 && (
+          <section className={styles.block}>
+            <h2 className={styles.blockTitle}>Найденные артефакты</h2>
+
+            <ul className={styles.finds}>
+              {artifacts.map(([key, unlock]) => (
+                <li key={key} className={styles.find}>
+                  <span className={styles.findMark} aria-hidden="true" />
+                  <span className={styles.findTitle}>{key}</span>
+                  <span className={styles.findDate}>{formatDay(unlock.at)}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {progress !== null && (
           <section className={styles.block}>

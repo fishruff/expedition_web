@@ -42,7 +42,7 @@ export function FeedPanel({ limit = 3, to, action }: FeedPanelProps) {
         ))}
       </ul>
 
-      <Link className={styles.action} to={to || ROUTES.log}>
+      <Link className={styles.action} to={to || ROUTES.home}>
         {action}
         <span aria-hidden="true">›</span>
       </Link>
