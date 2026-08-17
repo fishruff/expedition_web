@@ -1,4 +1,4 @@
-import type { ExpeditionEvent, PlayerRef } from './events.ts'
+import type { ExpeditionEvent, PlayerRef } from '../../api/src/events.ts'
 
 export interface SeasonOptions {
   /** Ники из авторского списка: показательный сезон должен склеиться с ним по имени. */

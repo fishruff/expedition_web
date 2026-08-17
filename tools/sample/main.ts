@@ -8,7 +8,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { applyEvents } from './apply.ts'
+import { applyEvents } from '../../api/src/apply.ts'
 import { buildSeason } from './season.ts'
 import { snapshotFiles } from './files.ts'
 

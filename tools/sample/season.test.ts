@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, it, expect } from 'vitest'
 import { buildSeason } from './season.ts'
-import { applyEvents } from './apply.ts'
+import { applyEvents } from '../../api/src/apply.ts'
 
 const NOW = new Date('2026-10-20T21:00:00Z')
 const NICKS = ['Steve', 'Alex']
