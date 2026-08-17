@@ -1,5 +1,15 @@
 [
   {
+    "nick": "fish_ruff",
+    "title": "Начальник экспедиции",
+    "description": "Ведёт эту экспедицию. Описание — заглушка, замени своим.",
+    "joinedAt": "2026-03-01",
+    "socials": {
+      "telegram": "https://t.me/example",
+      "discord": "fishruff"
+    }
+  },
+  {
     "nick": "Steve",
     "title": "Штурман",
     "description": "Ведёт экспедицию по компасу и звёздам. Первым нашёл храм в джунглях.",
