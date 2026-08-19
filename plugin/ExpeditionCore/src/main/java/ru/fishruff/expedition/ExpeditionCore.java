@@ -17,6 +17,7 @@ import ru.fishruff.expedition.watch.BlocksPlaced;
 import ru.fishruff.expedition.watch.InventorySweep;
 import ru.fishruff.expedition.watch.PresenceWatcher;
 import ru.fishruff.expedition.watch.ReadWatcher;
+import ru.fishruff.expedition.zone.ZoneWatcher;
 
 /**
  * Глаза системы внутри игры: замечает, что произошло, и отправляет это в api.
@@ -87,7 +88,12 @@ public final class ExpeditionCore extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new ReadWatcher(events, outbox, marks, seen), this);
 
-        getCommand("expedition").setExecutor(new ExpeditionCommand(outbox, marks));
+        // Раз в секунду: пятнадцать сравнений координат, то есть ничто. Следить за
+        // каждым движением нельзя — PlayerMoveEvent приходит десятки раз в секунду.
+        ZoneWatcher zones = new ZoneWatcher(getServer(), events, outbox, settings.zones(), seen);
+        getServer().getScheduler().runTaskTimer(this, zones, TICKS_PER_SECOND, TICKS_PER_SECOND);
+
+        getCommand("expedition").setExecutor(new ExpeditionCommand(outbox, marks, events, seen));
         getCommand("note").setExecutor(new NoteCommand(events, outbox, marks, seen));
         getCommand("love").setExecutor(new LoveCommand());
 

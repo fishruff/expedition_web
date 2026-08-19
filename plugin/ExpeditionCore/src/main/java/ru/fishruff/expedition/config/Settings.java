@@ -2,6 +2,7 @@ package ru.fishruff.expedition.config;
 
 import java.net.URI;
 import java.time.Duration;
+import ru.fishruff.expedition.zone.Zones;
 
 /**
  * Разобранная настройка плагина.
@@ -15,10 +16,12 @@ public record Settings(
         Duration timeout,
         int heartbeatSeconds,
         int statsMinutes,
-        int sweepSeconds) {
+        int sweepSeconds,
+        Zones zones) {
 
     public Settings {
         if (apiUrl == null) throw new IllegalArgumentException("не задан адрес api");
+        if (zones == null) throw new IllegalArgumentException("зоны не разобраны");
 
         requireUsableKey(key);
 

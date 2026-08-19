@@ -6,12 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URI;
 import java.time.Duration;
+import ru.fishruff.expedition.zone.Zones;
 import org.junit.jupiter.api.Test;
 
 class SettingsTest {
 
     private static Settings withKey(String key) {
-        return new Settings(URI.create("http://api:4000/events"), key, Duration.ofSeconds(10), 60, 5, 5);
+        return new Settings(URI.create("http://api:4000/events"), key, Duration.ofSeconds(10), 60, 5, 5, Zones.empty());
     }
 
     @Test
@@ -39,18 +40,18 @@ class SettingsTest {
     @Test
     void периодыДолжныБытьПоложительными() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Settings(URI.create("http://api:4000/events"), "k", Duration.ofSeconds(10), 0, 5, 5));
+                () -> new Settings(URI.create("http://api:4000/events"), "k", Duration.ofSeconds(10), 0, 5, 5, Zones.empty()));
         assertThrows(IllegalArgumentException.class,
-                () -> new Settings(URI.create("http://api:4000/events"), "k", Duration.ofSeconds(10), 60, 0, 5));
+                () -> new Settings(URI.create("http://api:4000/events"), "k", Duration.ofSeconds(10), 60, 0, 5, Zones.empty()));
         assertThrows(IllegalArgumentException.class,
-                () -> new Settings(URI.create("http://api:4000/events"), "k", Duration.ofSeconds(10), 60, 5, 0));
+                () -> new Settings(URI.create("http://api:4000/events"), "k", Duration.ofSeconds(10), 60, 5, 0, Zones.empty()));
         assertThrows(IllegalArgumentException.class,
-                () -> new Settings(URI.create("http://api:4000/events"), "k", Duration.ZERO, 60, 5, 5));
+                () -> new Settings(URI.create("http://api:4000/events"), "k", Duration.ZERO, 60, 5, 5, Zones.empty()));
     }
 
     @Test
     void адресОбязателен() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Settings(null, "k", Duration.ofSeconds(10), 60, 5, 5));
+                () -> new Settings(null, "k", Duration.ofSeconds(10), 60, 5, 5, Zones.empty()));
     }
 }
