@@ -1,0 +1,16 @@
+name: ExpeditionCore
+version: 0.1.0
+main: ru.fishruff.expedition.ExpeditionCore
+api-version: '1.21'
+
+author: fish_ruff
+
+description: Core plugin for Expedition survival server
+
+commands:
+  expedition:
+    description: Main Expedition command
+    usage: /expedition
+  love:
+    description: love diana
+    usage: /love
