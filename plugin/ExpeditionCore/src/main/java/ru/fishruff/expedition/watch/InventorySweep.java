@@ -52,12 +52,12 @@ public final class InventorySweep implements Runnable {
 
                 String record = marks.recordOf(item);
                 if (record != null && seen.rememberRecord(record)) {
-                    outbox.offer(events.recordFound(ref, record));
+                    outbox.offer(events.recordFound(ref, record).json());
                 }
 
                 String artifact = marks.artifactOf(item);
                 if (artifact != null && seen.rememberArtifact(artifact)) {
-                    outbox.offer(events.artifactFound(ref, artifact));
+                    outbox.offer(events.artifactFound(ref, artifact).json());
                 }
             }
         }

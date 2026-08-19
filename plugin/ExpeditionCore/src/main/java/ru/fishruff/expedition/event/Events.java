@@ -32,34 +32,34 @@ public final class Events {
         this.clock = clock;
     }
 
-    public String join(PlayerRef player) {
+    public Event join(PlayerRef player) {
         return event("player.join", "player", player.toJson());
     }
 
-    public String leave(PlayerRef player) {
+    public Event leave(PlayerRef player) {
         return event("player.leave", "player", player.toJson());
     }
 
-    public String heartbeat(List<PlayerRef> online) {
+    public Event heartbeat(List<PlayerRef> online) {
         List<String> refs = new ArrayList<>(online.size());
         for (PlayerRef player : online) refs.add(player.toJson());
 
         return event("server.heartbeat", "online", Json.raws(refs));
     }
 
-    public String recordFound(PlayerRef player, String recordId) {
+    public Event recordFound(PlayerRef player, String recordId) {
         return event("record.found", "player", player.toJson(), "recordId", Json.string(recordId));
     }
 
-    public String recordRead(PlayerRef player, String recordId) {
+    public Event recordRead(PlayerRef player, String recordId) {
         return event("record.read", "player", player.toJson(), "recordId", Json.string(recordId));
     }
 
-    public String artifactFound(PlayerRef player, String artifactId) {
+    public Event artifactFound(PlayerRef player, String artifactId) {
         return event("artifact.found", "player", player.toJson(), "artifactId", Json.string(artifactId));
     }
 
-    public String notePublished(PlayerRef player, String title, List<String> pages, boolean draft) {
+    public Event notePublished(PlayerRef player, String title, List<String> pages, boolean draft) {
         String note = Json.object(
                 "title", Json.string(title),
                 "pages", Json.strings(pages),
@@ -68,11 +68,11 @@ public final class Events {
         return event("note.published", "player", player.toJson(), "note", note);
     }
 
-    public String statsSnapshot(PlayerRef player, Stats stats) {
+    public Event statsSnapshot(PlayerRef player, Stats stats) {
         return event("stats.snapshot", "player", player.toJson(), "stats", stats.toJson());
     }
 
-    public String placeRevealed(String placeId, String by) {
+    public Event placeRevealed(String placeId, String by) {
         return event("place.revealed", "placeId", Json.string(placeId), "by", Json.string(by));
     }
 
@@ -82,17 +82,18 @@ public final class Events {
      * Время с миллисекундами, а не до секунды: api сортирует события по at, и при
      * равном времени первенство находки решала бы случайность прихода.
      */
-    private String event(String type, String... bodyKeysAndValues) {
+    private Event event(String type, String... bodyKeysAndValues) {
         String at = DateTimeFormatter.ISO_INSTANT.format(clock.instant().truncatedTo(ChronoUnit.MILLIS));
+        String id = ids.get();
 
         List<String> parts = new ArrayList<>(List.of(
-                "id", Json.string(ids.get()),
+                "id", Json.string(id),
                 "v", Integer.toString(VERSION),
                 "type", Json.string(type),
                 "at", Json.string(at)));
 
         parts.addAll(List.of(bodyKeysAndValues));
 
-        return Json.object(parts.toArray(String[]::new));
+        return new Event(id, Json.object(parts.toArray(String[]::new)));
     }
 }

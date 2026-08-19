@@ -76,6 +76,28 @@ class SeenStateTest {
     }
 
     @Test
+    void дневнойСчётЗаписейВедётсяПоИгрокуИДню() {
+        SeenState state = state();
+
+        state.rememberNote("2026-10-16", "arsen", "e1");
+        state.rememberNote("2026-10-16", "arsen", "e2");
+
+        assertEquals(2, state.notesOn("2026-10-16", "arsen"));
+
+        // Другой игрок в тот же день и тот же игрок на следующий — счёт свой.
+        assertEquals(0, state.notesOn("2026-10-16", "kira"));
+        assertEquals(0, state.notesOn("2026-10-17", "arsen"));
+    }
+
+    @Test
+    void дневнойСчётПереживаетПерезапуск() {
+        SeenState first = state();
+        first.rememberNote("2026-10-16", "arsen", "e1");
+
+        assertEquals(1, state().notesOn("2026-10-16", "arsen"));
+    }
+
+    @Test
     void пустыеСтрокиВФайлеНеМешают() throws IOException {
         Files.writeString(dir.resolve("state.txt"), "record\ttemple_1\n\n\nzone\tsouth_beach\n",
                 StandardCharsets.UTF_8);

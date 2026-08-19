@@ -36,10 +36,9 @@ class OutboxTest {
             return status;
         }
 
-        int events() {
-            int count = 0;
-            for (String batch : batches) count += batch.isEmpty() ? 0 : batch.split("\\},\\{").length;
-            return count;
+        /** Сколько событий было в последней отправленной пачке. */
+        int lastBatchSize() {
+            return batches.get(batches.size() - 1).split("\\},\\{").length;
         }
     }
 
@@ -129,7 +128,7 @@ class OutboxTest {
     }
 
     @Test
-    void битаяПачкаНеОстанавливаетОчередь() throws IOException {
+    void битоеСобытиеНеОстанавливаетОчередь() throws IOException {
         FakeSender sender = new FakeSender();
         sender.status = 400;
 
@@ -151,6 +150,26 @@ class OutboxTest {
     }
 
     @Test
+    void изБитойПачкиВыбрасываетсяТолькоВиноватый() {
+        // Отказ приходит на всю пачку, а испорчено в ней одно событие. Выбросить
+        // восемь из-за одного — потерять семь находок ни за что.
+        FakeSender sender = new FakeSender();
+        sender.status = 400;
+
+        try (Outbox outbox = outbox(sender)) {
+            for (int i = 0; i < 8; i++) outbox.offer(event("e" + i));
+
+            outbox.pumpOnce();
+
+            // Ничего не выброшено: сначала ищем виноватого делением пополам.
+            assertEquals(8, outbox.pending());
+
+            outbox.pumpOnce();
+            assertEquals(4, sender.lastBatchSize());
+        }
+    }
+
+    @Test
     void большаяПачкаДелитсяПополам() {
         FakeSender sender = new FakeSender();
         sender.status = 413;
@@ -159,11 +178,12 @@ class OutboxTest {
             for (int i = 0; i < 8; i++) outbox.offer(event("e" + i));
 
             outbox.pumpOnce();
-            assertEquals(8, sender.events());
+            assertEquals(8, sender.lastBatchSize());
 
             // Следующая попытка уже вдвое короче.
             sender.status = 200;
             outbox.pumpOnce();
+            assertEquals(4, sender.lastBatchSize());
             assertEquals(4, outbox.pending());
         }
     }

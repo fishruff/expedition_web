@@ -75,7 +75,19 @@ const server = createServer((req, res) => {
         headers: req.headers as Record<string, string | undefined>,
         body: Buffer.concat(chunks).toString('utf8'),
       },
-      { key: KEY, accept: (events) => log.accept(events) },
+      {
+        key: KEY,
+        accept: (events) => log.accept(events),
+        notesToday: (uuid, day) =>
+          log
+            .all()
+            .filter(
+              (event) =>
+                event.type === 'note.published' &&
+                event.player.uuid === uuid &&
+                event.at.startsWith(day),
+            ).length,
+      },
     )
 
     res.writeHead(response.status, { 'content-type': 'application/json; charset=utf-8' })

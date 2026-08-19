@@ -12,6 +12,10 @@ commands:
     description: Состояние обмена с api
     usage: /expedition [status|flush]
     permission: expedition.admin
+  note:
+    description: Опубликовать подписанную книгу в дневнике экспедиции
+    usage: /note [draft]
+    permission: expedition.note
   love:
     description: love diana
     usage: /love
@@ -20,3 +24,6 @@ permissions:
   expedition.admin:
     description: Команды оператора экспедиции
     default: op
+  expedition.note:
+    description: Публикация записей книгой
+    default: true

@@ -8,6 +8,7 @@ import ru.fishruff.expedition.config.ConfigManager;
 import ru.fishruff.expedition.config.Settings;
 import ru.fishruff.expedition.event.Events;
 import ru.fishruff.expedition.mark.Marks;
+import ru.fishruff.expedition.note.NoteCommand;
 import ru.fishruff.expedition.outbox.HttpEventSender;
 import ru.fishruff.expedition.outbox.Outbox;
 import ru.fishruff.expedition.state.SeenState;
@@ -87,6 +88,7 @@ public final class ExpeditionCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ReadWatcher(events, outbox, marks, seen), this);
 
         getCommand("expedition").setExecutor(new ExpeditionCommand(outbox, marks));
+        getCommand("note").setExecutor(new NoteCommand(events, outbox, marks, seen));
         getCommand("love").setExecutor(new LoveCommand());
 
         getLogger().info("ExpeditionCore запущен, события уезжают в " + settings.apiUrl());
@@ -106,7 +108,7 @@ public final class ExpeditionCore extends JavaPlugin {
         // Отдельных «вышел» на остановке не будет: Bukkit гасит плагины раньше, чем
         // отключает игроков, и до слушателя события уже не дойдут. Онлайн от этого
         // не страдает — он и так считается по сигналу, а не по входам и выходам.
-        outbox.offer(events.heartbeat(List.of()));
+        outbox.offer(events.heartbeat(List.of()).json());
         outbox.close();
 
         getLogger().info("ExpeditionCore остановлен");

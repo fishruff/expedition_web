@@ -32,6 +32,7 @@ public final class SeenState {
     private static final String ARTIFACT = "artifact";
     private static final String READ = "read";
     private static final String ZONE = "zone";
+    private static final String NOTE = "note";
 
     private final Path file;
     private final Consumer<Runnable> background;
@@ -60,6 +61,26 @@ public final class SeenState {
 
     public boolean rememberZone(String placeId) {
         return remember(ZONE, placeId);
+    }
+
+    /**
+     * Опубликованная запись. Номер события в строке нужен только чтобы строки
+     * не сливались: считаем мы их, а не читаем.
+     */
+    public boolean rememberNote(String day, String uuid, String eventId) {
+        return remember(NOTE, day, uuid, eventId);
+    }
+
+    /** Сколько записей игрок опубликовал за эти сутки. Сутки считаем по UTC, как и всё время. */
+    public int notesOn(String day, String uuid) {
+        String prefix = String.join("\t", NOTE, day, uuid) + "\t";
+        int count = 0;
+
+        for (String line : lines) {
+            if (line.startsWith(prefix)) count++;
+        }
+
+        return count;
     }
 
     public int size() {

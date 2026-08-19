@@ -36,18 +36,18 @@ public final class PresenceWatcher implements Listener, Runnable {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        outbox.offer(events.join(Refs.of(event.getPlayer())));
+        outbox.offer(events.join(Refs.of(event.getPlayer())).json());
     }
 
     /** Ловит и обычный выход, и кик, и вылет по сети. */
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        outbox.offer(events.leave(Refs.of(event.getPlayer())));
+        outbox.offer(events.leave(Refs.of(event.getPlayer())).json());
     }
 
     /** Сигнал. Приходит всегда, даже когда на сервере пусто. */
     @Override
     public void run() {
-        outbox.offer(events.heartbeat(Refs.online(server)));
+        outbox.offer(events.heartbeat(Refs.online(server)).json());
     }
 }

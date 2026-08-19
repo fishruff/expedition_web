@@ -48,7 +48,7 @@ public final class ReadWatcher implements Listener {
         if (record == null) return;
 
         if (seen.rememberRead(record, event.getPlayer().getUniqueId().toString())) {
-            outbox.offer(events.recordRead(Refs.of(event.getPlayer()), record));
+            outbox.offer(events.recordRead(Refs.of(event.getPlayer()), record).json());
         }
     }
 }

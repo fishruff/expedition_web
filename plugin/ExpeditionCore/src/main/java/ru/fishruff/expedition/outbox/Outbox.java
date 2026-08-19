@@ -175,18 +175,30 @@ public final class Outbox implements AutoCloseable {
                 lastSuccess = Instant.now().toString();
             }
             case SPLIT -> {
-                if (batch.size() > 1) {
-                    limit = Math.max(1, batch.size() / 2);
-                    log.accept("api считает пачку большой, делю пополам: " + limit);
-                } else {
-                    reject(batch, "api не принял даже одно событие");
-                }
+                if (halve(batch, "api считает пачку большой")) break;
+
+                reject(batch, "api не принял даже одно событие");
             }
-            case REJECT -> reject(batch, "api отверг пачку как битую");
+            // Виновато одно событие, а страдает вся пачка. Поэтому сначала делим
+            // пополам и ищем виноватого, и только одиночное событие выбрасываем.
+            case REJECT -> {
+                if (halve(batch, "api отверг пачку")) break;
+
+                reject(batch, "api отверг событие как битое");
+            }
             case RETRY -> fail(status == 401
                     ? "api не принял ключ — проверь EXPEDITION_KEY с обеих сторон"
                     : "api ответил " + status);
         }
+    }
+
+    /** Делит пачку пополам, если делить есть что. */
+    private boolean halve(List<String> batch, String reason) {
+        if (batch.size() <= 1) return false;
+
+        limit = Math.max(1, batch.size() / 2);
+        log.accept(reason + ", делю пополам: " + limit);
+        return true;
     }
 
     private void fail(String reason) {

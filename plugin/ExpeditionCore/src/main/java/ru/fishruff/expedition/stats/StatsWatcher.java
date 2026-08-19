@@ -72,6 +72,6 @@ public final class StatsWatcher implements Listener, Runnable {
     }
 
     private void snapshot(Player player) {
-        outbox.offer(events.statsSnapshot(Refs.of(player), StatsReader.of(player, blocksPlaced.of(player))));
+        outbox.offer(events.statsSnapshot(Refs.of(player), StatsReader.of(player, blocksPlaced.of(player))).json());
     }
 }
