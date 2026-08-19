@@ -7,11 +7,15 @@ import ru.fishruff.expedition.command.LoveCommand;
 import ru.fishruff.expedition.config.ConfigManager;
 import ru.fishruff.expedition.config.Settings;
 import ru.fishruff.expedition.event.Events;
+import ru.fishruff.expedition.mark.Marks;
 import ru.fishruff.expedition.outbox.HttpEventSender;
 import ru.fishruff.expedition.outbox.Outbox;
+import ru.fishruff.expedition.state.SeenState;
 import ru.fishruff.expedition.stats.StatsWatcher;
 import ru.fishruff.expedition.watch.BlocksPlaced;
+import ru.fishruff.expedition.watch.InventorySweep;
 import ru.fishruff.expedition.watch.PresenceWatcher;
+import ru.fishruff.expedition.watch.ReadWatcher;
 
 /**
  * Глаза системы внутри игры: замечает, что произошло, и отправляет это в api.
@@ -69,7 +73,20 @@ public final class ExpeditionCore extends JavaPlugin {
         long statsTicks = settings.statsMinutes() * 60 * TICKS_PER_SECOND;
         getServer().getScheduler().runTaskTimer(this, stats, statsTicks, statsTicks);
 
-        getCommand("expedition").setExecutor(new ExpeditionCommand(outbox));
+        Marks marks = new Marks(this);
+
+        // Состояние пишется на другом потоке: главный не должен ждать файловую систему.
+        SeenState seen = new SeenState(
+                getDataFolder().toPath().resolve("state.txt"),
+                write -> getServer().getScheduler().runTaskAsynchronously(this, write));
+
+        InventorySweep sweep = new InventorySweep(getServer(), events, outbox, marks, seen);
+        long sweepTicks = settings.sweepSeconds() * TICKS_PER_SECOND;
+        getServer().getScheduler().runTaskTimer(this, sweep, sweepTicks, sweepTicks);
+
+        getServer().getPluginManager().registerEvents(new ReadWatcher(events, outbox, marks, seen), this);
+
+        getCommand("expedition").setExecutor(new ExpeditionCommand(outbox, marks));
         getCommand("love").setExecutor(new LoveCommand());
 
         getLogger().info("ExpeditionCore запущен, события уезжают в " + settings.apiUrl());
