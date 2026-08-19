@@ -9,6 +9,8 @@ import ru.fishruff.expedition.config.Settings;
 import ru.fishruff.expedition.event.Events;
 import ru.fishruff.expedition.outbox.HttpEventSender;
 import ru.fishruff.expedition.outbox.Outbox;
+import ru.fishruff.expedition.stats.StatsWatcher;
+import ru.fishruff.expedition.watch.BlocksPlaced;
 import ru.fishruff.expedition.watch.PresenceWatcher;
 
 /**
@@ -24,6 +26,7 @@ public final class ExpeditionCore extends JavaPlugin {
     private static final long TICKS_PER_SECOND = 20;
 
     private Outbox outbox;
+    private StatsWatcher stats;
     private final Events events = new Events();
 
     @Override
@@ -56,6 +59,16 @@ public final class ExpeditionCore extends JavaPlugin {
         getServer().getScheduler().runTaskTimer(
                 this, presence, 0, settings.heartbeatSeconds() * TICKS_PER_SECOND);
 
+        BlocksPlaced blocksPlaced = new BlocksPlaced(this);
+        getServer().getPluginManager().registerEvents(blocksPlaced, this);
+
+        stats = new StatsWatcher(getServer(), events, outbox, blocksPlaced);
+        getServer().getPluginManager().registerEvents(stats, this);
+
+        // Ванильная статистика не потокобезопасна — задача тоже обычная.
+        long statsTicks = settings.statsMinutes() * 60 * TICKS_PER_SECOND;
+        getServer().getScheduler().runTaskTimer(this, stats, statsTicks, statsTicks);
+
         getCommand("expedition").setExecutor(new ExpeditionCommand(outbox));
         getCommand("love").setExecutor(new LoveCommand());
 
@@ -65,6 +78,10 @@ public final class ExpeditionCore extends JavaPlugin {
     @Override
     public void onDisable() {
         if (outbox == null) return;
+
+        // Плагины гасят раньше, чем отключают игроков, поэтому счётчик поставленных
+        // блоков надо уронить на диск здесь: события «вышел» уже не будет.
+        stats.saveAll();
 
         // Сигнал с пустым списком честнее, чем ждать три минуты тишины: сервер
         // выключается прямо сейчас, и сайт вправе узнать об этом сразу.
