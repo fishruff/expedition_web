@@ -1,17 +1,15 @@
 package ru.fishruff.expedition;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.fishruff.expedition.command.ExpeditionCommand;
 import ru.fishruff.expedition.command.LoveCommand;
 import ru.fishruff.expedition.config.ConfigManager;
 import ru.fishruff.expedition.config.Settings;
 import ru.fishruff.expedition.event.Events;
-import ru.fishruff.expedition.event.PlayerRef;
 import ru.fishruff.expedition.outbox.HttpEventSender;
 import ru.fishruff.expedition.outbox.Outbox;
+import ru.fishruff.expedition.watch.PresenceWatcher;
 
 /**
  * Глаза системы внутри игры: замечает, что произошло, и отправляет это в api.
@@ -22,6 +20,8 @@ import ru.fishruff.expedition.outbox.Outbox;
  * данные не пострадают, потому что они лежат в журнале api.
  */
 public final class ExpeditionCore extends JavaPlugin {
+
+    private static final long TICKS_PER_SECOND = 20;
 
     private Outbox outbox;
     private final Events events = new Events();
@@ -48,12 +48,16 @@ public final class ExpeditionCore extends JavaPlugin {
 
         outbox.start();
 
+        PresenceWatcher presence = new PresenceWatcher(getServer(), events, outbox);
+        getServer().getPluginManager().registerEvents(presence, this);
+
+        // Первый сигнал уходит сразу, дальше по расписанию. Читать список онлайна
+        // можно только с главного потока, поэтому задача обычная, не асинхронная.
+        getServer().getScheduler().runTaskTimer(
+                this, presence, 0, settings.heartbeatSeconds() * TICKS_PER_SECOND);
+
         getCommand("expedition").setExecutor(new ExpeditionCommand(outbox));
         getCommand("love").setExecutor(new LoveCommand());
-
-        // Первое настоящее событие. Дальше сигнал станет расписанием, но уже сейчас
-        // по нему видно, доходит ли обмен вообще, — без единого игрока на сервере.
-        outbox.offer(events.heartbeat(online()));
 
         getLogger().info("ExpeditionCore запущен, события уезжают в " + settings.apiUrl());
     }
@@ -62,20 +66,15 @@ public final class ExpeditionCore extends JavaPlugin {
     public void onDisable() {
         if (outbox == null) return;
 
-        // Честнее, чем ждать три минуты: сервер выключается прямо сейчас.
+        // Сигнал с пустым списком честнее, чем ждать три минуты тишины: сервер
+        // выключается прямо сейчас, и сайт вправе узнать об этом сразу.
+        //
+        // Отдельных «вышел» на остановке не будет: Bukkit гасит плагины раньше, чем
+        // отключает игроков, и до слушателя события уже не дойдут. Онлайн от этого
+        // не страдает — он и так считается по сигналу, а не по входам и выходам.
         outbox.offer(events.heartbeat(List.of()));
         outbox.close();
 
         getLogger().info("ExpeditionCore остановлен");
-    }
-
-    private List<PlayerRef> online() {
-        List<PlayerRef> refs = new ArrayList<>();
-
-        for (Player player : getServer().getOnlinePlayers()) {
-            refs.add(new PlayerRef(player.getUniqueId().toString(), player.getName()));
-        }
-
-        return refs;
     }
 }
