@@ -37,6 +37,8 @@ npm test         # vitest
 npm run lint     # ESLint
 
 npm run data:sample  # показательные снимки из игры в public/data
+
+EXPEDITION_KEY=secret-key npm run api  # приём событий от плагина на :4000
 ```
 
 Сайт работает и без снимков — это нормальный режим до запуска плагина. Но разделы удобнее

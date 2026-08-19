@@ -6,8 +6,13 @@
 ## Запуск
 
 ```bash
-EXPEDITION_KEY=secret-key node api/src/main.ts
+EXPEDITION_KEY=secret-key npm run api
 ```
+
+Запускается через `tsx`, а не голым `node`. Собственное разбирательство TypeScript у Node
+появляется только в официальных сборках 22.18 и новее — на Node из репозитория Ubuntu
+его нет вовсе, и `node api/src/main.ts` падает с «Node.js is not compiled with TypeScript
+support». Зависеть от того, чьей сборкой запущен сервис, не хочется.
 
 | Переменная | По умолчанию | Зачем |
 | --- | --- | --- |

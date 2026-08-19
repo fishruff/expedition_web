@@ -9,8 +9,14 @@ description: Core plugin for Expedition survival server
 
 commands:
   expedition:
-    description: Main Expedition command
-    usage: /expedition
+    description: Состояние обмена с api
+    usage: /expedition [status|flush]
+    permission: expedition.admin
   love:
     description: love diana
     usage: /love
+
+permissions:
+  expedition.admin:
+    description: Команды оператора экспедиции
+    default: op
