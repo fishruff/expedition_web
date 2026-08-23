@@ -72,4 +72,39 @@ describe('лента событий', () => {
 
     expect(buildFeed(snapshots, [], 3)).toHaveLength(3)
   })
+
+  it('несёт текст записи абзацами, по странице книги на абзац', () => {
+    const snapshots = emptySnapshots()
+
+    snapshots.notes.notes = [
+      {
+        id: 'n1',
+        author: { uuid: 'u1', name: 'Arsen' },
+        at: '2026-10-17T22:05:00Z',
+        title: 'День третий',
+        // Пустая страница в конце — в игре книгу нередко подписывают, не дописав.
+        pages: ['Вышли к обрыву.\nВнизу долина.', '  ', 'За ночь вода поднялась.'],
+      },
+    ]
+
+    expect(buildFeed(snapshots, [])[0].body).toEqual([
+      'Вышли к обрыву.\nВнизу долина.',
+      'За ночь вода поднялась.',
+    ])
+  })
+
+  it('у находок и событий текста нет', () => {
+    const snapshots = emptySnapshots()
+
+    snapshots.records.found = [
+      {
+        recordId: 'temple_1',
+        foundBy: { uuid: 'u1', name: 'Arsen' },
+        foundAt: '2026-10-16T21:47:03Z',
+        readBy: 0,
+      },
+    ]
+
+    expect(buildFeed(snapshots, [])[0].body).toBeUndefined()
+  })
 })

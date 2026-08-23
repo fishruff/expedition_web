@@ -9,6 +9,14 @@ export interface FeedItem {
   title: string
   /** Вторая строка: кто и что. Пустая, если сказать нечего. */
   subtitle: string
+  /**
+   * Текст записи игрока, абзацами. У находок и событий его нет.
+   *
+   * Абзац — это страница книги: в игре страницы делятся по месту, а не по смыслу,
+   * поэтому склеивать их в сплошной кусок нельзя, а придумывать за автора, где у него
+   * абзацы, — тем более. Переносы внутри страницы сохраняются как есть.
+   */
+  body?: string[]
   /** ISO-время. По нему лента и сортируется. */
   at: string
 }
@@ -27,7 +35,9 @@ export function buildFeed(snapshots: Snapshots, events: GameEvent[], limit = 20)
       id: `note-${note.id}`,
       kind: 'note',
       title: note.title || 'Запись без названия',
-      subtitle: `${note.author.name} · новая запись в дневнике`,
+      subtitle: note.author.name,
+      // Пустые страницы выбрасываем: в игре книгу нередко дописывают до конца разворота.
+      body: note.pages.map((page) => page.trim()).filter((page) => page !== ''),
       at: note.at,
     })
   }

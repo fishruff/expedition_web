@@ -34,6 +34,12 @@ export function Log() {
                 <span className={styles.kind}>{KIND_LABEL[item.kind]}</span>
               </span>
               <span className={styles.subtitle}>{item.subtitle}</span>
+
+              {item.body?.map((paragraph, index) => (
+                <span key={index} className={styles.text}>
+                  {paragraph}
+                </span>
+              ))}
             </span>
           </li>
         ))}

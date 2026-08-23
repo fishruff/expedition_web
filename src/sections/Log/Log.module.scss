@@ -70,3 +70,12 @@
   color: var(--color-ink-dim);
   font-size: px(5);
 }
+
+// Текст записи игрока. Переносы автора сохраняются: он писал книгу руками,
+// и решать за него, где строка кончается, мы не будем.
+.text {
+  margin-top: px(3);
+  max-width: px(180);
+  color: var(--color-ink);
+  white-space: pre-wrap;
+}
