@@ -1,5 +1,4 @@
 export interface Socials {
-  discord: string | null
   telegram: string | null
   youtube: string | null
   twitch: string | null
@@ -7,6 +6,8 @@ export interface Socials {
 
 export interface CrewMember {
   nick: string
+  /** Имя человека, а не ник. Пустое, пока владелец не заполнил. */
+  name: string
   /** Ключ склейки с данными из игры. Пустой, пока владелец его не проставил. */
   uuid: string
   title: string

@@ -118,4 +118,12 @@ describe('Страница участника', () => {
 
     expect(screen.getByText('ещё ничего не писал')).toBeTruthy()
   })
+
+  it('под ником показывает имя человека', () => {
+    renderMember('/players/Steve')
+
+    // Ник — как зовут в игре, имя — как в жизни.
+    expect(screen.getByRole('heading', { level: 1, name: 'Steve' })).toBeTruthy()
+    expect(screen.getByText('Степан')).toBeTruthy()
+  })
 })

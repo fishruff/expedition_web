@@ -138,9 +138,6 @@ export function Desk() {
         </span>
 
         <nav className={`${styles.footerSide} ${styles.links}`} aria-label="Связь">
-          <a href={SITE.discordUrl} target="_blank" rel="noreferrer noopener">
-            Discord
-          </a>
           <a href={SITE.telegramUrl} target="_blank" rel="noreferrer noopener">
             Telegram
           </a>

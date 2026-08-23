@@ -11,12 +11,13 @@ const RULES: TitleRule[] = [
 function member(nick: string, patch: Partial<CrewView> = {}): CrewView {
   return {
     nick,
+    name: '',
     uuid: `uuid-${nick}`,
     title: '',
     bio: '',
     joinedAt: '2026-10-15',
     lastSeen: '',
-    socials: { discord: null, telegram: null, youtube: null, twitch: null },
+    socials: { telegram: null, youtube: null, twitch: null },
     stats: null,
     online: false,
     recordsFound: null,

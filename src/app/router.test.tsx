@@ -31,7 +31,7 @@ describe('маршруты', () => {
     const footer = screen.getByRole('contentinfo')
 
     expect(footer.textContent).toContain('Expedition')
-    expect(screen.getByRole('link', { name: /discord/i })).toBeTruthy()
+    expect(screen.getByRole('link', { name: /telegram/i })).toBeTruthy()
   })
 
   it('открывает дневник', () => {

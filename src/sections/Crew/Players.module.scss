@@ -75,7 +75,8 @@
 
 .status[data-online='true'] {
   // Зелёный на бумаге приглушён: чистый неон рядом с чернилами кричит.
-  color: color-mix(in srgb, var(--color-green) 70%, var(--color-ink));
+  // Доля подобрана по контрасту — на 70% текст читался вдвое хуже нормы.
+  color: color-mix(in srgb, var(--color-green) 40%, var(--color-ink));
 }
 
 // Пометка о неописанном участнике: тише звания, но заметнее пустоты.

@@ -1,22 +1,24 @@
 [
   {
     "nick": "fish_ruff",
+    "name": "",
     "title": "Начальник экспедиции",
     "description": "Ведёт эту экспедицию. Описание — заглушка, замени своим.",
     "joinedAt": "2026-03-01",
     "socials": {
-      "telegram": "https://t.me/example",
-      "discord": "fishruff"
+      "telegram": "https://t.me/example"
     }
   },
   {
     "nick": "Steve",
+    "name": "Степан",
     "title": "Штурман",
     "description": "Ведёт экспедицию по компасу и звёздам. Первым нашёл храм в джунглях.",
     "joinedAt": "2026-03-14"
   },
   {
     "nick": "Alex",
+    "name": "",
     "title": "Кузнец",
     "description": "Кует снаряжение для всего экипажа. Не выходит из шахты неделями.",
     "joinedAt": "2026-04-02"

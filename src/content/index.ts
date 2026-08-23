@@ -42,7 +42,6 @@ function socials(raw: unknown): CrewMember['socials'] {
   const s = isDict(raw) ? raw : {}
 
   return {
-    discord: optionalText(s.discord),
     telegram: optionalText(s.telegram),
     youtube: optionalText(s.youtube),
     twitch: optionalText(s.twitch),
@@ -54,6 +53,7 @@ export function parseCrew(raw: unknown): CrewMember[] {
     .filter((item) => text(item.nick) !== '')
     .map((item) => ({
       nick: text(item.nick),
+      name: text(item.name),
       uuid: text(item.uuid),
       title: text(item.title),
       description: text(item.description),

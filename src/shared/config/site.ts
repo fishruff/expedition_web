@@ -8,7 +8,6 @@ export const SITE = {
   port: 25565,
   version: '1.21.x',
   edition: 'Java Edition',
-  discordUrl: 'https://discord.gg/example',
   telegramUrl: 'https://t.me/example',
 } as const
 

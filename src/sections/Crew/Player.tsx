@@ -11,7 +11,6 @@ import { Sprite } from '@/ui/Sprite/Sprite'
 import styles from './Player.module.scss'
 
 const SOCIAL_LABELS: Record<string, string> = {
-  discord: 'Discord',
   telegram: 'Telegram',
   youtube: 'YouTube',
   twitch: 'Twitch',
@@ -68,6 +67,8 @@ export function Player() {
 
           <div className={styles.who}>
             <h1 className={styles.name}>{member.nick}</h1>
+
+            {member.name && <p className={styles.person}>{member.name}</p>}
 
             <p className={styles.badge}>
               {member.unlisted ? 'ещё не представился' : 'участник экспедиции'}
@@ -209,7 +210,14 @@ export function Player() {
         <section className={styles.block}>
           <h2 className={styles.blockTitle}>Последняя активность</h2>
           <p className={styles.line}>
-            {member.online ? 'Сейчас в игре' : formatLastSeen(member.lastSeen, now)}
+            {member.online ? (
+              <>
+                <span className={styles.online} aria-hidden="true" />
+                Сейчас в игре
+              </>
+            ) : (
+              formatLastSeen(member.lastSeen, now)
+            )}
           </p>
         </section>
       </div>

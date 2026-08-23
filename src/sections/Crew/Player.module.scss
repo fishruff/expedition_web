@@ -77,6 +77,13 @@
   text-transform: uppercase;
 }
 
+// Имя человека под ником: ник — как его зовут в игре, имя — как в жизни.
+.person {
+  color: var(--color-ink-dim);
+  font-size: px(7);
+  letter-spacing: 0.06em;
+}
+
 // Плашка под именем: тонкая рамка чернилами, без заливки.
 .badge {
   align-self: flex-start;
@@ -125,7 +132,22 @@
 }
 
 .line {
+  display: flex;
+  align-items: center;
+  gap: px(4);
   color: var(--color-ink);
+}
+
+// Метка «в сети». Квадратная, а не круглая: при размере в несколько точек
+// скругление даёт кашу, а канон оформления скруглений не знает вовсе.
+//
+// Зелёный приглушён чернилами, как и в списке экипажа: чистый неон рядом
+// с бумагой кричит.
+.online {
+  flex: none;
+  width: px(4);
+  height: px(4);
+  background-color: color-mix(in srgb, var(--color-green) 50%, var(--color-ink));
 }
 
 .note {
@@ -266,10 +288,15 @@
 }
 
 // Записи игрока: то, что он писал книгой в игре.
+// За сезон их набежит много, поэтому блок прокручивается, а не растёт бесконечно:
+// иначе левая страница разворота уедет вниз на два экрана.
 .notes {
   display: flex;
   flex-direction: column;
   gap: px(7);
+  max-height: px(200);
+  padding-right: px(4);
+  overflow-y: auto;
   list-style: none;
 }
 

@@ -16,11 +16,12 @@ describe('parseCrew', () => {
     expect(result).toEqual([
       {
         nick: 'Steve',
+        name: '',
         uuid: '',
         title: 'Штурман',
         description: '',
         joinedAt: '',
-        socials: { discord: null, telegram: null, youtube: null, twitch: null },
+        socials: { telegram: null, youtube: null, twitch: null },
       },
     ])
   })

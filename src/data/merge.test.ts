@@ -4,10 +4,11 @@ import { emptySnapshots } from '@/data/empty'
 import type { CrewMember } from '@/content/types'
 import type { CrewEntry, CrewSnapshot } from '@/data/types'
 
-const NO_SOCIALS = { discord: null, telegram: null, youtube: null, twitch: null }
+const NO_SOCIALS = { telegram: null, youtube: null, twitch: null }
 
 const arsen: CrewMember = {
   nick: 'Arsen',
+  name: 'Арсений',
   uuid: 'uuid-arsen',
   title: 'штурман',
   description: 'Ведёт экспедицию.',

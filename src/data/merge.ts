@@ -4,6 +4,8 @@ import type { CrewEntry, CrewSnapshot, PlayerStats, UnlocksSnapshot } from '@/da
 /** Участник таким, каким его видит интерфейс: авторское плюс игровое. */
 export interface CrewView {
   nick: string
+  /** Имя человека. Пустое у тех, кого владелец не описал. */
+  name: string
   uuid: string
   title: string
   bio: string
@@ -22,6 +24,7 @@ export interface CrewView {
 function toView(member: CrewMember, entry?: CrewEntry): CrewView {
   return {
     nick: member.nick,
+    name: member.name,
     uuid: member.uuid || entry?.uuid || '',
     title: member.title,
     bio: member.description,
@@ -62,12 +65,13 @@ export function mergeCrew(authored: CrewMember[], snapshot: CrewSnapshot): CrewV
     .filter((p) => !used.has(p.uuid))
     .map<CrewView>((p) => ({
       nick: p.name,
+      name: '',
       uuid: p.uuid,
       title: '',
       bio: '',
       joinedAt: p.firstSeen,
       lastSeen: p.lastSeen,
-      socials: { discord: null, telegram: null, youtube: null, twitch: null },
+      socials: { telegram: null, youtube: null, twitch: null },
       stats: p.stats,
       online: p.online,
       recordsFound: p.recordsFound,
