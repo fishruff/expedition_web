@@ -82,4 +82,40 @@ describe('Страница участника', () => {
     expect(screen.getByRole('heading', { level: 1, name: /вырвана/i })).toBeTruthy()
     expect(screen.getByRole('link', { name: /экипаж/i })).toBeTruthy()
   })
+
+  it('показывает записи, написанные этим участником', () => {
+    const snapshots = emptySnapshots()
+    snapshots.available = true
+    snapshots.crew.players = [entry('Steve')]
+    snapshots.notes.notes = [
+      {
+        id: 'n1',
+        author: { uuid: 'uuid-Steve', name: 'Steve' },
+        at: '2026-10-17T22:05:00Z',
+        title: 'День третий',
+        pages: ['Вышли к обрыву.', '  ', 'За ночь вода поднялась.'],
+      },
+      {
+        id: 'n2',
+        author: { uuid: 'uuid-Alex', name: 'Alex' },
+        at: '2026-10-18T10:00:00Z',
+        title: 'Чужая запись',
+        pages: ['Не должна тут появиться.'],
+      },
+    ]
+
+    renderMember('/players/Steve', snapshots)
+
+    expect(screen.getByText('День третий')).toBeTruthy()
+    expect(screen.getByText('Вышли к обрыву.')).toBeTruthy()
+    expect(screen.getByText('За ночь вода поднялась.')).toBeTruthy()
+    // Склейка идёт по uuid, а не по нику: чужая запись на страницу не попадает.
+    expect(screen.queryByText('Чужая запись')).toBeNull()
+  })
+
+  it('без записей честно говорит, что их нет', () => {
+    renderMember('/players/Steve')
+
+    expect(screen.getByText('ещё ничего не писал')).toBeTruthy()
+  })
 })

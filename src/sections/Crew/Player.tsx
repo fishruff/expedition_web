@@ -53,25 +53,32 @@ export function Player() {
   )
   const progress = story.length > 0 ? Math.round((found.length / story.length) * 100) : null
 
+  // Записи склеиваются по uuid, как и всё игровое: ник в адресе набирают как придётся.
+  const notes = snapshots.notes.notes
+    .filter((note) => note.author.uuid === member.uuid)
+    .sort((a, b) => Date.parse(b.at) - Date.parse(a.at))
+
   return (
     <article className={styles.member}>
-      <div className={styles.art}>
-        <div className={styles.portrait}>
-          <Sprite illustration def={crewArt(member.nick)} alt={member.nick} />
+      <div className={styles.page}>
+        <div className={styles.heading}>
+          <div className={styles.portrait}>
+            <Sprite illustration def={crewArt(member.nick)} alt={member.nick} />
+          </div>
+
+          <div className={styles.who}>
+            <h1 className={styles.name}>{member.nick}</h1>
+
+            <p className={styles.badge}>
+              {member.unlisted ? 'ещё не представился' : 'участник экспедиции'}
+            </p>
+
+            <section className={styles.block}>
+              <h2 className={styles.blockTitle}>Звание</h2>
+              <p className={styles.rank}>{titleOf(member, awards) || '—'}</p>
+            </section>
+          </div>
         </div>
-
-        <section className={styles.block}>
-          <h2 className={styles.blockTitle}>Звание</h2>
-          <p className={styles.rank}>{titleOf(member, awards) || '—'}</p>
-        </section>
-      </div>
-
-      <div className={styles.info}>
-        <h1 className={styles.name}>{member.nick}</h1>
-
-        <p className={styles.badge}>
-          {member.unlisted ? 'ещё не представился' : 'участник экспедиции'}
-        </p>
 
         {member.bio && (
           <section className={styles.block}>
@@ -80,40 +87,35 @@ export function Player() {
           </section>
         )}
 
-        {socials.length > 0 && (
-          <section className={styles.block}>
-            <h2 className={styles.blockTitle}>Контакты</h2>
-            <ul className={styles.contacts}>
-              {socials.map(([key, url]) => (
-                <li key={key}>
-                  <a
-                    className={styles.contact}
-                    href={url as string}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  >
-                    {SOCIAL_LABELS[key] ?? key}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
         <section className={styles.block}>
-          <h2 className={styles.blockTitle}>Дата присоединения</h2>
-          <p className={styles.line}>{formatDay(member.joinedAt)}</p>
-        </section>
+          <h2 className={styles.blockTitle}>Его записи</h2>
 
-        <section className={styles.block}>
-          <h2 className={styles.blockTitle}>Последняя активность</h2>
-          <p className={styles.line}>
-            {member.online ? 'Сейчас в игре' : formatLastSeen(member.lastSeen, now)}
-          </p>
+          {notes.length === 0 && <p className={styles.note}>ещё ничего не писал</p>}
+
+          <ul className={styles.notes}>
+            {notes.map((note) => (
+              <li key={note.id} className={styles.noteItem}>
+                <span className={styles.noteHead}>
+                  <span className={styles.noteTitle}>{note.title || 'Без названия'}</span>
+                  <span className={styles.noteDate}>{formatDay(note.at)}</span>
+                </span>
+
+                {/* Абзац — это страница книги: в игре они делятся по месту, а не по смыслу. */}
+                {note.pages
+                  .map((page) => page.trim())
+                  .filter((page) => page !== '')
+                  .map((page, index) => (
+                    <span key={index} className={styles.notePage}>
+                      {page}
+                    </span>
+                  ))}
+              </li>
+            ))}
+          </ul>
         </section>
       </div>
 
-      <div className={styles.stats}>
+      <div className={styles.page}>
         <section className={styles.block}>
           <h2 className={styles.blockTitle}>Статистика</h2>
 
@@ -178,6 +180,38 @@ export function Player() {
             </div>
           </section>
         )}
+
+        {socials.length > 0 && (
+          <section className={styles.block}>
+            <h2 className={styles.blockTitle}>Контакты</h2>
+            <ul className={styles.contacts}>
+              {socials.map(([key, url]) => (
+                <li key={key}>
+                  <a
+                    className={styles.contact}
+                    href={url as string}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    {SOCIAL_LABELS[key] ?? key}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section className={styles.block}>
+          <h2 className={styles.blockTitle}>Дата присоединения</h2>
+          <p className={styles.line}>{formatDay(member.joinedAt)}</p>
+        </section>
+
+        <section className={styles.block}>
+          <h2 className={styles.blockTitle}>Последняя активность</h2>
+          <p className={styles.line}>
+            {member.online ? 'Сейчас в игре' : formatLastSeen(member.lastSeen, now)}
+          </p>
+        </section>
       </div>
     </article>
   )

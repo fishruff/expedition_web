@@ -1,37 +1,73 @@
-// Три колонки на развороте, как в референсе: арт, о человеке, цифры.
+// Разворот книги: слева человек и его голос, справа цифры и находки.
+// Две страницы, а не три колонки — страниц у разворота ровно столько.
 .member {
   display: grid;
   grid-template-columns: 1fr;
   gap: px(10);
 
   @include up('lg') {
-    grid-template-columns: px(136) 1fr 1fr;
-    gap: px(14);
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
   }
 }
 
-.art {
+.page {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: px(8);
+  min-width: 0;
+
+  @include up('lg') {
+    padding: 0 px(12);
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    // Сгиб: две тонкие линии, а не одна толстая. У настоящего разворота это
+    // не черта, а место, где сходятся две страницы.
+    & + &::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto 0 px(-3);
+      width: px(1);
+      background-color: color-mix(in srgb, var(--color-ink) 18%, transparent);
+    }
+
+    & + & {
+      border-left: px(1) solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+    }
+  }
+}
+
+// Шапка левой страницы: арт и кто это — рядом, как вклеенная фотокарточка с подписью.
+.heading {
+  display: flex;
+  gap: px(8);
+  align-items: flex-start;
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  gap: px(6);
+  min-width: 0;
 }
 
 // Арт в рамке: в референсе он вклеен в страницу, как фотокарточка.
 // Показывается вдвое крупнее списочного — увеличение целое, поэтому не мылит.
 .portrait {
-  width: 100%;
+  flex: none;
+  width: px(96);
   aspect-ratio: 3 / 4;
   border: px(2) solid color-mix(in srgb, var(--color-ink) 45%, transparent);
   background-color: color-mix(in srgb, var(--color-ink) 10%, transparent);
   overflow: hidden;
-}
-
-.info,
-.stats {
-  display: flex;
-  flex-direction: column;
-  gap: px(8);
-  min-width: 0;
 }
 
 .name {
@@ -227,4 +263,51 @@
 .back {
   color: var(--color-ink);
   text-decoration: underline;
+}
+
+// Записи игрока: то, что он писал книгой в игре.
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: px(7);
+  list-style: none;
+}
+
+.noteItem {
+  display: flex;
+  flex-direction: column;
+  gap: px(2);
+  padding-bottom: px(5);
+  border-bottom: px(1) dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+}
+
+.noteHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: px(4);
+}
+
+.noteTitle {
+  color: var(--color-ink);
+  letter-spacing: 0.04em;
+}
+
+.noteDate {
+  flex: none;
+  color: var(--color-ink-dim);
+  font-size: px(5);
+}
+
+// Переносы автора сохраняются: он писал книгу руками, и решать за него,
+// где кончается строка, мы не будем.
+.notePage {
+  margin-top: px(2);
+  color: var(--color-ink);
+  white-space: pre-wrap;
 }
