@@ -10,6 +10,7 @@
     "test": "vitest run",
     "api": "tsx api/src/main.ts",
     "data:sample": "tsx tools/sample/main.ts",
+    "season:check": "tsx --tsconfig tsconfig.app.json tools/check-season.ts",
     "preview": "vite preview"
   },
   "dependencies": {
