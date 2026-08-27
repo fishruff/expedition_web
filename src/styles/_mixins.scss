@@ -50,3 +50,14 @@
   outline: calc(2px * var(--s)) solid var(--color-gold);
   outline-offset: calc(1px * var(--s));
 }
+
+/// Прокрутка без полосы. Системная полоса скруглённая и размытая — рядом
+/// с пиксельной сценой она чужероднее, чем её отсутствие.
+@mixin hidden-scrollbar {
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

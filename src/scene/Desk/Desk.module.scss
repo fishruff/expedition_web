@@ -3,6 +3,25 @@
   flex-direction: column;
   flex: 1;
   min-height: 100dvh;
+
+  /*
+    Широкий экран — это сцена, а не страница: стол целиком, книга посреди него,
+    предметы по углам. Прокручиваться должно содержимое книги, а не стол вместе
+    с ней — иначе компас и часы уезжают под нижний край, и от референса остаётся
+    один верхний угол.
+
+    На узком экране всё наоборот: предметы там всё равно скрыты, а загонять
+    дневник в окошко высотой в ладонь незачем.
+  */
+  @include up('lg') {
+    // `flex: 1` задаёт основу 0 и делает высоту делом раскладки родителя:
+    // собственный `height` флекс-элемент при этом игнорирует. Поэтому здесь
+    // основа возвращается своей, и стол наконец равен экрану.
+    flex: 0 0 auto;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
 }
 
 /* ---------- верхняя полоса ---------- */
@@ -33,7 +52,7 @@
 
 .logo {
   font-size: px(9);
-  letter-spacing: 0.26em;
+  letter-spacing: px(2);
   text-transform: uppercase;
 }
 
@@ -48,7 +67,7 @@
   border-bottom: px(2) solid transparent;
   color: var(--color-text-dim);
   font-size: px(5);
-  letter-spacing: 0.16em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 
   &:hover {
@@ -70,7 +89,7 @@
   background-color: var(--color-panel);
   color: var(--color-text-dim);
   font-size: px(5);
-  letter-spacing: 0.1em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
@@ -97,6 +116,15 @@
   @include up('lg') {
     // Ширины колонок сняты с референса: боковые узкие, вся площадь — столу.
     grid-template-columns: px(88) 1fr px(100);
+
+    // Ряд ровно в высоту стола. Без этого он `auto`, то есть по самому высокому
+    // содержимому: колонке со столом не от чего считать свои сто процентов,
+    // и книга растёт вниз без предела, унося предметы под нижний край.
+    // Панели при этом остаются прижаты к верху: у них своё align-self.
+    grid-template-rows: minmax(0, 1fr);
+    align-items: stretch;
+    min-height: 0;
+    overflow: hidden;
   }
 }
 
@@ -119,8 +147,15 @@
 .side {
   display: flex;
   flex-direction: column;
-  gap: px(8);
+  gap: px(6);
   min-width: 0;
+
+  // Панелей может стать больше, чем помещается: пусть скроллятся сами,
+  // а не растягивают стол.
+  @include up('lg') {
+    max-height: 100%;
+    @include hidden-scrollbar;
+  }
 }
 
 .center {
@@ -128,6 +163,11 @@
   justify-content: center;
   align-items: center;
   min-width: 0;
+
+  @include up('lg') {
+    min-height: 0;
+    height: 100%;
+  }
 }
 
 // Колонки не тянутся за столом: панели прижаты к верху, как в референсе.
@@ -142,8 +182,22 @@
 .scene {
   position: relative;
   width: 100%;
+
   max-width: px(430);
   padding: px(52) px(60);
+
+  // Поля вокруг книги держат место предметам, поэтому и в высоту стол занимает
+  // всё, что дают: книга тянется, предметы остаются по углам, а не жмутся к ней.
+  //
+  // Сверху и снизу поле меньше, чем по бокам: предметы стоят по углам и заходят
+  // на книгу краем, как на референсе, а не отжимают её вверх. Высокая книга там
+  // и есть главное — на неё смотрят, всё остальное лежит вокруг.
+  @include up('lg') {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    padding: px(14) px(72);
+  }
 }
 
 // Разворот: кожаная рамка снаружи, бумага внутри, текст чернилами.
@@ -156,40 +210,69 @@
   padding: px(10) px(12);
   background-clip: padding-box;
   color: var(--color-ink);
+
+  // Тайл бумаги нарисован холоднее и светлее, чем страница на референсе: рядом
+  // с тёплым деревом он читается как офисный лист. Умножение на песочный тон
+  // возвращает ему возраст, не трогая файла.
+  background-color: #d8c8a2;
+  background-blend-mode: multiply;
+
+  // Листается содержимое, а не стол. Полосу прокрутки прячем: она рисуется
+  // системой, скруглённая и размытая, и рядом с пиксельной книгой выглядит
+  // чужеродной сильнее, чем отсутствие полосы мешает.
+  @include up('lg') {
+    flex: 1;
+    min-height: 0;
+    @include hidden-scrollbar;
+  }
+}
+
+/*
+  Отсвет лампы на развороте. Лампа стоит слева над книгой, и на референсе её свет
+  лежит на левой странице пятном, а к правому нижнему углу бумага уходит в тень.
+  Без этого разворот выглядит отсканированным, а не лежащим на столе.
+*/
+.spread::before,
+.spread::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.spread::after {
+  inset: 0;
+  z-index: 0;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 22% 12%, rgb(255 226 170 / 34%) 0%, transparent 70%),
+    radial-gradient(ellipse 90% 80% at 78% 96%, rgb(60 40 18 / 26%) 0%, transparent 66%);
+}
+
+// Содержимое страниц лежит поверх отсвета, иначе текст выцветает под пятном.
+.spread > * {
+  position: relative;
+  z-index: 1;
 }
 
 // Сгиб между страницами: тёмная линия и притенение по обе стороны от неё —
 // именно оно читается как «две страницы», а не один лист.
 .spread::before {
-  content: '';
-  position: absolute;
+  z-index: 2;
   top: px(4);
   bottom: px(4);
   left: 50%;
-  width: px(14);
+  width: px(26);
   transform: translateX(-50%);
   background-image: linear-gradient(
     to right,
     transparent 0%,
-    color-mix(in srgb, var(--color-ink) 22%, transparent) 42%,
-    color-mix(in srgb, var(--color-ink) 55%, transparent) 50%,
-    color-mix(in srgb, var(--color-ink) 22%, transparent) 58%,
+    color-mix(in srgb, var(--color-ink) 10%, transparent) 22%,
+    color-mix(in srgb, var(--color-ink) 34%, transparent) 42%,
+    color-mix(in srgb, var(--color-ink) 72%, transparent) 50%,
+    color-mix(in srgb, var(--color-ink) 34%, transparent) 58%,
+    color-mix(in srgb, var(--color-ink) 10%, transparent) 78%,
     transparent 100%
   );
   pointer-events: none;
-}
-
-// Торцы стопки страниц у внешних краёв разворота.
-.spread::after {
-  content: '';
-  position: absolute;
-  inset: px(2);
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, color-mix(in srgb, var(--color-ink) 30%, transparent) 0 px(1), transparent px(1) px(3),
-      color-mix(in srgb, var(--color-ink) 18%, transparent) px(3) px(4), transparent px(4)),
-    linear-gradient(to left, color-mix(in srgb, var(--color-ink) 30%, transparent) 0 px(1), transparent px(1) px(3),
-      color-mix(in srgb, var(--color-ink) 18%, transparent) px(3) px(4), transparent px(4));
 }
 
 @media (max-width: 900px) {
@@ -231,6 +314,19 @@
 .bl { bottom: px(16); left: px(22); }
 .br { bottom: px(10); right: px(16); }
 
+// На широком экране предметы уходят к самому краю стола и вниз: они обрамляют
+// книгу, а не лежат на ней. Наезжает только край — компас углом на нижнюю
+// страницу, часы цепочкой на правую, ровно как в референсе.
+@include up('lg') {
+  .tl { top: px(2); left: px(4); }
+  .tr { top: px(0); right: px(6); }
+
+  // Компас и часы заходят на книгу только краем: дальше начинается текст,
+  // а вещь, лежащая на строчках, читается не как вещь, а как заслонка.
+  .bl { bottom: px(0); left: px(-6); }
+  .br { bottom: px(0); right: px(-6); }
+}
+
 /* ---------- нижняя полоса ---------- */
 
 .footer {
@@ -242,7 +338,7 @@
   background-color: color-mix(in srgb, var(--color-panel-lo) 92%, transparent);
   color: var(--color-text-dim);
   font-size: px(5);
-  letter-spacing: 0.14em;
+  letter-spacing: px(1);
 }
 
 .footerSide {
@@ -280,7 +376,7 @@
   color: var(--color-gold-dim);
   font-family: inherit;
   font-size: px(5);
-  letter-spacing: 0.08em;
+  letter-spacing: px(1);
 
   &:hover {
     border-color: var(--color-gold-dim);

@@ -7,7 +7,7 @@
 .title {
   color: var(--color-ink);
   font-size: px(12);
-  letter-spacing: 0.14em;
+  letter-spacing: px(2);
   text-transform: uppercase;
 }
 
@@ -20,6 +20,22 @@
   flex-direction: column;
   gap: px(5);
   list-style: none;
+
+  /*
+    Разворот — это две страницы, и запись не может лежать на обеих сразу:
+    строка, пересекающая корешок, — первое, по чему видно, что книга нарисована.
+    Поэтому лента раскладывается в две колонки с промежутком шире самого сгиба.
+
+    Колонки сетки, а не `column-count`: тот режет содержимое по высоте и ломает
+    прокрутку, а здесь каждая запись остаётся целой и просто ложится на свою
+    страницу — слева направо, как читают.
+  */
+  @include up('lg') {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: px(34);
+    align-content: start;
+  }
 }
 
 // Дата слева колонкой: лента читается по времени, а не по заголовкам.
@@ -29,6 +45,15 @@
   gap: px(6);
   padding-bottom: px(4);
   border-bottom: px(1) dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
+
+  // На странице дата уходит наверх: столбец с датой сбоку съедал треть ширины,
+  // и текст рвался по два слова в строку. Над записью она к тому же честнее —
+  // так пишут в дневнике, а не в таблице.
+  @include up('lg') {
+    flex-direction: column;
+    align-items: stretch;
+    gap: px(1);
+  }
 }
 
 .date {
@@ -36,6 +61,10 @@
   width: px(38);
   color: var(--color-ink-dim);
   font-size: px(5);
+
+  @include up('lg') {
+    width: auto;
+  }
 }
 
 .body {
@@ -54,7 +83,7 @@
 
 .name {
   color: var(--color-ink);
-  letter-spacing: 0.04em;
+  letter-spacing: px(1);
 }
 
 .kind {
@@ -62,7 +91,7 @@
   border: px(1) solid color-mix(in srgb, var(--color-ink) 30%, transparent);
   color: var(--color-ink-dim);
   font-size: px(4);
-  letter-spacing: 0.1em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
@@ -75,7 +104,6 @@
 // и решать за него, где строка кончается, мы не будем.
 .text {
   margin-top: px(3);
-  max-width: px(180);
   color: var(--color-ink);
   white-space: pre-wrap;
 }

@@ -80,12 +80,65 @@ panel = frame(48, 12, WOOD, WOOD_D, WOOD_L, BRASS, BRASS_L, fill=(30, 24, 17, 23
 write_png('public/assets/frame-panel.png', panel)
 print('frame-panel.png 48×48, углы 12')
 
-book = frame(96, 24, LEATHER, LEATHER_D, LEATHER_L, BRASS, BRASS_L, fill=NONE, stitch=True)
+# Бумага и её торцы. Снято с paper-tile.png и с референса: стопка на срезе
+# не однотонная — она полосатая, и именно полосы читаются как «много страниц».
+PAPER = (226, 212, 180, 255)
+PAPER_D = (196, 178, 142, 255)
+PAGE_SHADE = (150, 130, 98, 255)
+COVER_SHADE = (18, 12, 7, 255)
+
+
+def book_frame(size, corner):
+    """Рамка книги: тонкий переплёт снаружи, торец стопки страниц внутри.
+
+    Обычная рамка с латунными уголками читается как плакат на кнопках: уголок —
+    это крепление к чему-то, а книга ни к чему не крепится. На референсе край
+    книги устроен иначе — узкая тёмная кромка переплёта, а за ней светлый срез
+    стопки в полоску.
+
+    Кант нарочно узкий. Толстый кант из тех же полос превращается в багет
+    картины: концентрические рамки глаз читает как раму, а не как торец бумаги.
+    Толщина здесь — четверть от прежней, и в ней ровно четыре страничные полосы.
+    """
+    px = [[list(NONE) for _ in range(size)] for _ in range(size)]
+
+    for y in range(size):
+        for x in range(size):
+            d = min(x, y, size - 1 - x, size - 1 - y)
+            if d >= corner:
+                continue
+
+            # Скруглённый угол: стопка бумаги острых углов не держит. Углы
+            # девяти слоёв не растягиваются, поэтому рисовать их можно свободно.
+            cx = min(x, size - 1 - x)
+            cy = min(y, size - 1 - y)
+            if cx < 2 and cy < 2:
+                continue
+
+            top_left = (x <= y and x <= size - 1 - y) or (y <= x and y <= size - 1 - x)
+
+            if d < 1:
+                c = COVER_SHADE                       # кромка переплёта
+            elif d < 3:
+                c = LEATHER if top_left else LEATHER_D # сам переплёт
+            elif d < 4:
+                c = PAGE_SHADE                         # тень переплёта на срезе
+            else:
+                # Срез стопки: полосы через одну. Их всего четыре — больше
+                # читается уже как рама, а не как край книги.
+                c = PAPER if (d % 2) else PAPER_D
+
+            px[y][x] = list(c)
+
+    return px
+
+
+book = book_frame(40, 10)
 write_png('public/assets/frame-book.png', book)
-print('frame-book.png 96×96, углы 24')
+print('frame-book.png 40×40, углы 10 — переплёт и срез страниц')
 
 # Предпросмотр: рамка растянута под разное содержимое
-for name, src, corner in (('panel', panel, 12), ('book', book, 24)):
+for name, src, corner in (('panel', panel, 12), ('book', book, 10)):
     W, H = 200, 90
     out = [[list((36, 26, 16, 255)) for _ in range(W)] for _ in range(H)]
     n = len(src)

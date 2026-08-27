@@ -17,7 +17,7 @@ $u: 1px;
 $tile-wood: 512px;
 $tile-paper: 32px;
 $frame-panel-slice: 12px;
-$frame-book-slice: 24px;
+$frame-book-slice: 10px;
 
 // Масштаб — целое число, считается в рантайме и живёт в CSS-переменной --s.
 // Дробный масштаб запрещён: пиксель-арт от него мылится.

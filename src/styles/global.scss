@@ -61,7 +61,15 @@ body {
   @include tile('wood-tile.png', $tile-wood);
 
   min-height: 100dvh;
-  background-color: var(--color-wood);
+
+  /*
+    Тайл дерева нарисован светлее, чем стол на референсе, и в упор с ним не сходится:
+    доски читаются как стена, а не как тёмная столешница под лампой. Умножение на
+    тёплый средний тон гасит их, не трогая самого файла, — и остаётся одной строкой,
+    если тайл однажды перерисуют.
+  */
+  background-color: #8a6640;
+  background-blend-mode: multiply;
   color: var(--color-text);
   font-family: 'Monocraft', ui-monospace, monospace;
   font-size: px(6);
@@ -84,9 +92,13 @@ body::after {
   z-index: 100;
   pointer-events: none;
   background:
-    radial-gradient(circle 260px at 26% 16%, rgb(255 198 120 / 22%) 0%, transparent 70%),
-    radial-gradient(ellipse 110% 80% at 18% -10%, rgb(255 214 150 / 16%) 0%, transparent 55%),
-    radial-gradient(ellipse 120% 110% at 50% 45%, transparent 40%, rgb(8 5 3 / 55%) 100%);
+    // Пятно от лампы: она стоит слева над книгой и светит ярче всего.
+    radial-gradient(circle 320px at 24% 14%, rgb(255 198 120 / 30%) 0%, transparent 72%),
+    // Отсвет на самом развороте — ради него сцена и держится вместе.
+    radial-gradient(circle 460px at 50% 40%, rgb(255 206 140 / 24%) 0%, transparent 74%),
+    // Затемнение к краям. На референсе углы почти чёрные: именно перепад делает
+    // из плоского тайла стол, на который падает свет.
+    radial-gradient(ellipse 96% 88% at 50% 42%, transparent 26%, rgb(6 3 1 / 86%) 100%);
 }
 
 img,
@@ -117,7 +129,7 @@ h2,
 h3 {
   font-weight: 400;
   line-height: 1.2;
-  letter-spacing: 0.08em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
