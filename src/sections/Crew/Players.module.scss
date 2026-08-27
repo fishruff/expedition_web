@@ -7,7 +7,7 @@
 .title {
   color: var(--color-ink);
   font-size: px(9);
-  letter-spacing: 0.16em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
@@ -57,20 +57,20 @@
 
 .nick {
   font-size: px(6);
-  letter-spacing: 0.08em;
+  letter-spacing: px(1);
 }
 
 .role {
   color: var(--color-ink-dim);
   font-size: px(5);
-  letter-spacing: 0.1em;
+  letter-spacing: px(1);
   text-align: center;
 }
 
 .status {
   color: var(--color-ink-dim);
   font-size: px(5);
-  letter-spacing: 0.1em;
+  letter-spacing: px(1);
 }
 
 .status[data-online='true'] {
@@ -83,7 +83,7 @@
 .unlisted {
   color: var(--color-ink-dim);
   font-size: px(5);
-  letter-spacing: 0.1em;
+  letter-spacing: px(1);
   text-align: center;
   opacity: 0.75;
 }

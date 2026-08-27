@@ -10,7 +10,7 @@
 .title {
   color: var(--color-ink);
   font-size: px(12);
-  letter-spacing: 0.14em;
+  letter-spacing: px(2);
   text-transform: uppercase;
 }
 
@@ -38,19 +38,19 @@
 .value {
   color: var(--color-ink);
   font-size: px(18);
-  letter-spacing: 0.04em;
+  letter-spacing: px(1);
 }
 
 .label {
   color: var(--color-ink-dim);
   font-size: px(4);
-  letter-spacing: 0.12em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
 .caption {
   color: var(--color-ink-dim);
-  letter-spacing: 0.1em;
+  letter-spacing: px(1);
 }
 
 .dates {

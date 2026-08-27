@@ -7,7 +7,7 @@
 .title {
   color: var(--color-ink);
   font-size: px(12);
-  letter-spacing: 0.14em;
+  letter-spacing: px(2);
   text-transform: uppercase;
 }
 
@@ -54,7 +54,7 @@
 .cardTitle {
   color: var(--color-ink);
   font-size: px(7);
-  letter-spacing: 0.1em;
+  letter-spacing: px(1);
 }
 
 .cardText {

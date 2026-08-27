@@ -21,7 +21,7 @@
 .nick {
   color: var(--color-text);
   font-size: px(5);
-  letter-spacing: 0.06em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 
   &:hover {
@@ -53,7 +53,7 @@
   border: px(1) solid var(--color-panel-hi);
   color: var(--color-text-dim);
   font-size: px(4);
-  letter-spacing: 0.14em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 
   &:hover {

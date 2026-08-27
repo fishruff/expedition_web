@@ -7,14 +7,14 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: px(4);
+  gap: px(5);
   list-style: none;
 }
 
 .item {
   display: flex;
   align-items: flex-start;
-  gap: px(3);
+  gap: px(4);
 }
 
 // Значок вида: квадрат с двумя буквами, пока не нарисованы иконки.
@@ -23,31 +23,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: px(12);
-  height: px(12);
+  width: px(14);
+  height: px(14);
   border: px(1) solid var(--color-panel-hi);
   background-color: var(--color-panel-lo);
   color: var(--color-gold-dim);
   font-size: px(4);
-  letter-spacing: 0.04em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
 .body {
   display: flex;
   flex-direction: column;
-  gap: px(1);
+  gap: px(2);
   min-width: 0;
 }
 
 .title {
   color: var(--color-text);
   font-size: px(5);
-  letter-spacing: 0.06em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
+// Подпись у события длинная — «fish_ruff · найдена запись». В узкой панели она
+// рвётся на три строки и превращает список в стену; двух хватает, дальше многоточие.
 .subtitle {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   color: var(--color-text-dim);
   font-size: px(4);
 }
@@ -66,7 +72,7 @@
   border: px(1) solid var(--color-panel-hi);
   color: var(--color-text-dim);
   font-size: px(4);
-  letter-spacing: 0.14em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 
   &:hover {

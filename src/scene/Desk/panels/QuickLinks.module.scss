@@ -12,7 +12,7 @@
   background-color: color-mix(in srgb, var(--color-panel-lo) 60%, transparent);
   color: var(--color-text-dim);
   font-size: px(5);
-  letter-spacing: 0.12em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 
   &:hover {

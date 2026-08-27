@@ -7,7 +7,7 @@
 .title {
   color: var(--color-ink);
   font-size: px(12);
-  letter-spacing: 0.14em;
+  letter-spacing: px(2);
   text-transform: uppercase;
 }
 
@@ -27,7 +27,7 @@
   gap: px(4);
   color: var(--color-ink-dim);
   font-size: px(6);
-  letter-spacing: 0.18em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 

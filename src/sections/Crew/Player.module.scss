@@ -73,7 +73,7 @@
 .name {
   color: var(--color-ink);
   font-size: px(16);
-  letter-spacing: 0.1em;
+  letter-spacing: px(2);
   text-transform: uppercase;
 }
 
@@ -81,7 +81,7 @@
 .person {
   color: var(--color-ink-dim);
   font-size: px(7);
-  letter-spacing: 0.06em;
+  letter-spacing: px(1);
 }
 
 // Плашка под именем: тонкая рамка чернилами, без заливки.
@@ -91,7 +91,7 @@
   border: px(1) solid color-mix(in srgb, var(--color-ink) 35%, transparent);
   color: var(--color-ink-dim);
   font-size: px(5);
-  letter-spacing: 0.14em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
@@ -108,7 +108,7 @@
   gap: px(4);
   color: var(--color-ink-dim);
   font-size: px(5);
-  letter-spacing: 0.18em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
@@ -122,7 +122,7 @@
 .rank {
   color: var(--color-ink);
   font-size: px(7);
-  letter-spacing: 0.1em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
@@ -166,7 +166,7 @@
   padding: px(3) px(4);
   border: px(1) solid color-mix(in srgb, var(--color-ink) 30%, transparent);
   color: var(--color-ink);
-  letter-spacing: 0.06em;
+  letter-spacing: px(1);
 
   &:hover {
     background-color: color-mix(in srgb, var(--color-ink) 8%, transparent);
@@ -194,13 +194,13 @@
 .cardValue {
   color: var(--color-ink);
   font-size: px(7);
-  letter-spacing: 0.04em;
+  letter-spacing: px(1);
 }
 
 .cardLabel {
   color: var(--color-ink-dim);
   font-size: px(4);
-  letter-spacing: 0.08em;
+  letter-spacing: px(1);
   text-transform: uppercase;
   line-height: 1.4;
 }
@@ -278,7 +278,7 @@
 .title {
   color: var(--color-ink);
   font-size: px(12);
-  letter-spacing: 0.12em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
@@ -322,7 +322,7 @@
 
 .noteTitle {
   color: var(--color-ink);
-  letter-spacing: 0.04em;
+  letter-spacing: px(1);
 }
 
 .noteDate {

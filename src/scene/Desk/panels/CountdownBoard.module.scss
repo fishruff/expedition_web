@@ -30,13 +30,13 @@
   position: relative;
   color: var(--color-text);
   font-size: px(11);
-  letter-spacing: 0.04em;
+  letter-spacing: px(1);
 }
 
 .label {
   color: var(--color-text-dim);
   font-size: px(4);
-  letter-spacing: 0.1em;
+  letter-spacing: px(1);
 }
 
 .event {

@@ -9,7 +9,7 @@
 .title {
   color: var(--color-ink);
   font-size: px(9);
-  letter-spacing: 0.16em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
@@ -30,5 +30,5 @@
 .note {
   color: var(--color-ink-dim);
   font-size: px(5);
-  letter-spacing: 0.12em;
+  letter-spacing: px(1);
 }

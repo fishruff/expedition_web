@@ -1,17 +1,17 @@
 .panel {
-  padding: px(5) px(5) px(6);
+  padding: px(6) px(6) px(7);
   border: px(1) solid var(--color-panel-hi);
   background-color: color-mix(in srgb, var(--color-panel) 92%, transparent);
   min-width: 0;
 }
 
 .title {
-  margin-bottom: px(4);
-  padding-bottom: px(3);
+  margin-bottom: px(5);
+  padding-bottom: px(4);
   border-bottom: px(1) solid var(--color-panel-hi);
   color: var(--color-text-dim);
   font-size: px(5);
-  letter-spacing: 0.18em;
+  letter-spacing: px(1);
   text-transform: uppercase;
 }
 
