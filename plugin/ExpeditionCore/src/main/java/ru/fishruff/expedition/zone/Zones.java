@@ -40,13 +40,31 @@ public final class Zones {
     }
 
     private final Map<String, Box> boxes;
+    private final Map<String, String> titles;
 
     public Zones(Map<String, Box> boxes) {
+        this(boxes, Map.of());
+    }
+
+    public Zones(Map<String, Box> boxes, Map<String, String> titles) {
         this.boxes = new LinkedHashMap<>(boxes);
+        this.titles = new LinkedHashMap<>(titles);
     }
 
     public static Zones empty() {
         return new Zones(Map.of());
+    }
+
+    /**
+     * Как зона называется на экране вошедшего.
+     *
+     * Номер зоны — это id из `places.json`, и он не всегда годится в дело: `south_beach`
+     * читается плохо, а `храм-2` ещё хуже. Настоящее название берётся из настройки,
+     * а без него показывается сам номер: некрасиво, но честно, и всяко лучше пустого
+     * экрана или молчания.
+     */
+    public String title(String id) {
+        return titles.getOrDefault(id, id);
     }
 
     /**

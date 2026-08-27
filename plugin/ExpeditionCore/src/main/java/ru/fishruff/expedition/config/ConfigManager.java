@@ -50,6 +50,7 @@ public final class ConfigManager {
         if (section == null) return Zones.empty();
 
         Map<String, Zones.Box> boxes = new LinkedHashMap<>();
+        Map<String, String> titles = new LinkedHashMap<>();
 
         for (String id : section.getKeys(false)) {
             ConfigurationSection box = section.getConfigurationSection(id);
@@ -64,8 +65,14 @@ public final class ConfigManager {
 
             boxes.put(id, new Zones.Box(
                     box.getInt("x1"), box.getInt("x2"), box.getInt("z1"), box.getInt("z2")));
+
+            // Название необязательно: без него на экране покажется сам номер зоны.
+            // Не включаться из-за отсутствия надписи было бы слишком — координаты
+            // важнее, а надпись всегда можно дописать посреди сезона.
+            String title = box.getString("title");
+            if (title != null && !title.isBlank()) titles.put(id, title);
         }
 
-        return new Zones(boxes);
+        return new Zones(boxes, titles);
     }
 }

@@ -56,6 +56,21 @@ class ZonesTest {
     }
 
     @Test
+    void названиеДляЭкрана() {
+        Map<String, Box> boxes = new LinkedHashMap<>();
+        boxes.put("south_beach", new Box(-420, -180, 640, 900));
+        boxes.put("colossus", new Box(1200, 1460, -80, 180));
+
+        Zones zones = new Zones(boxes, Map.of("south_beach", "Южный берег"));
+
+        assertEquals("Южный берег", zones.title("south_beach"));
+
+        // Без названия в настройке показывается сам номер: некрасиво, но честно.
+        // Промолчать хуже — игрок не поймёт, куда пришёл.
+        assertEquals("colossus", zones.title("colossus"));
+    }
+
+    @Test
     void безЗонНичегоНеОткрывается() {
         assertNull(Zones.empty().at(0, 0));
         assertEquals(0, Zones.empty().size());
