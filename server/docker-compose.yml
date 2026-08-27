@@ -1,0 +1,68 @@
+# Сервер сезона: игра и приёмник событий в одной сети.
+#
+# Плагин шлёт события по имени `api` — оно разрешается внутри сети докера,
+# и наружу этот обмен не выходит вовсе. Ключ один на обе стороны и берётся
+# из `.env` рядом с этим файлом; в репозитории его нет и быть не должно.
+services:
+  api:
+    build:
+      # Собирается из корня репозитория: `api` берёт два файла из `src/`.
+      context: ..
+      dockerfile: api/Dockerfile
+
+    container_name: expedition-api
+
+    environment:
+      EXPEDITION_KEY: ${EXPEDITION_KEY:?не задан EXPEDITION_KEY — скопируйте .env.example в .env}
+      SEASON_STARTS_AT: ${SEASON_STARTS_AT:-}
+      SEASON_STORY_ENDS_AT: ${SEASON_STORY_ENDS_AT:-}
+
+    volumes:
+      # Снимки: api пишет, сайт читает. Тот же каталог, что и при разработке,
+      # поэтому `npm run dev` показывает настоящий сезон без единой настройки.
+      - ../public/data:/snapshots
+      # Журнал событий — данные сезона. Переживает пересборку образа.
+      - ../data:/journal
+
+    # Только на петлю: снаружи приёмник не нужен никому, а `curl localhost:4000/health`
+    # с машины владельца остаётся рабочим.
+    ports:
+      - "127.0.0.1:4000:4000"
+
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+    restart: unless-stopped
+
+  minecraft:
+    image: itzg/minecraft-server:java21
+
+    container_name: expedition-server
+
+    ports:
+      - "25565:25565"
+
+    environment:
+      EULA: "TRUE"
+      TYPE: PAPER
+      VERSION: "1.21"
+      MEMORY: "4G"
+      JAVA_VERSION: "21"
+      ENABLE_SPARK: "false"
+      EXPEDITION_KEY: ${EXPEDITION_KEY:?не задан EXPEDITION_KEY — скопируйте .env.example в .env}
+
+    volumes:
+      - ./data:/data
+      - ./plugins:/plugins
+
+    # Ждём приёмник, чтобы первые события сезона уехали сразу, а не через отсрочку
+    # очереди. Потеряться они не могут и без этого — очередь на диске переживает
+    # и падение api, и падение сервера.
+    depends_on:
+      api:
+        condition: service_healthy
+
+    restart: unless-stopped

@@ -40,3 +40,10 @@ data/
 # Сборка плагина. Обёртка gradle в репозитории нужна, результат сборки — нет.
 plugin/*/build/
 plugin/*/.gradle/
+
+# Сервер. Под версией только docker-compose.yml, README и образец окружения:
+# мир не исходник, чужие jar не наши, а ключ секрет.
+server/data/
+server/plugins/
+server/plugins-old/
+server/.env
