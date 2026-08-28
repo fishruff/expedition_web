@@ -39,6 +39,20 @@ export function assetUrl(def: AssetDef): string {
 }
 
 /**
+ * Значок записи архива. Как и арт участников, вне реестра: файлов столько же,
+ * сколько записей в сюжете, и заводить строку под каждую — переписывать реестр
+ * при каждой главе.
+ */
+export function recordIcon(name: string, version?: number): AssetDef {
+  return {
+    file: `records/${name}.png`,
+    width: 24,
+    height: 24,
+    version,
+  }
+}
+
+/**
  * Арт участника лежит вне реестра: файлов столько же, сколько игроков,
  * и владелец меняет их почти ежедневно.
  */

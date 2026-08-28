@@ -52,6 +52,8 @@ export interface StoryRecord {
   opens: string[]
   /** Какой раздел включает. Пустая строка — ничего. */
   unlocks: string
+  /** Имя значка в `public/assets/records`. Пустая строка — значка нет. */
+  icon: string
 }
 
 /** Раздел устава: заголовок и пункты. */

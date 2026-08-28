@@ -102,7 +102,7 @@ describe('parseStory', () => {
     const result = parseStory([{ id: 'храм-1', title: 'Первая табличка' }])
 
     expect(result).toEqual([
-      { id: 'храм-1', title: 'Первая табличка', chapter: 0, text: '', opens: [], unlocks: '' },
+      { id: 'храм-1', title: 'Первая табличка', chapter: 0, text: '', opens: [], unlocks: '', icon: '' },
     ])
   })
 

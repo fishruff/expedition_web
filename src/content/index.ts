@@ -119,6 +119,7 @@ export function parseStory(raw: unknown): StoryRecord[] {
       text: text(item.text),
       opens: Array.isArray(item.opens) ? item.opens.filter((o): o is string => typeof o === 'string') : [],
       unlocks: text(item.unlocks),
+      icon: text(item.icon),
     }))
 }
 

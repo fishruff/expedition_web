@@ -1,9 +1,19 @@
+// Сетка записей на левой странице, открытая запись на правой.
 .archive {
   display: flex;
   flex-direction: column;
-  gap: px(8);
+  gap: px(6);
 
   @include pages;
+}
+
+.heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: px(6);
+
+  @include across-pages;
 }
 
 .title {
@@ -11,39 +21,154 @@
   font-size: px(12);
   letter-spacing: px(2);
   text-transform: uppercase;
-
-  @include across-pages;
 }
 
-.empty {
+// Счётчик рядом с заголовком: сколько всего записей — часть обещания.
+.counter {
   color: var(--color-ink-dim);
-
-  @include across-pages;
+  font-size: px(5);
+  letter-spacing: px(1);
+  text-transform: uppercase;
 }
 
-.record {
+// Колонок ровно столько, сколько задано. `auto-fill` с минимумом на масштабе
+// сложился в одну колонку во всю страницу — минимум в нём должен быть длиной,
+// а не выражением, которое зависит от переменной.
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: px(4);
+  list-style: none;
+  align-content: start;
+
+  // На странице разворота помещаются две: страница вдвое у́же экрана.
+  @include up('lg') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/*
+  Карточка записи. Запертая показывается наравне с найденной: пустое место
+  ничего не обещает, а ряд закрытых номеров обещает продолжение.
+*/
+.card {
   display: flex;
   flex-direction: column;
-  gap: px(2);
-  padding-bottom: px(5);
-  border-bottom: px(1) dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
+  align-items: center;
+  gap: px(3);
+  width: 100%;
+  padding: px(4) px(2);
+  border: px(1) solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+  background-color: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  color: var(--color-ink-dim);
+  font: inherit;
+  text-align: center;
 }
 
-.recordTitle {
+.card[data-found='true'] {
+  border-color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  background-color: color-mix(in srgb, var(--color-ink) 8%, transparent);
   color: var(--color-ink);
-  font-size: px(8);
+  cursor: pointer;
+}
+
+.card[data-found='true']:hover {
+  background-color: color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+// Открытая карточка помечена жирной кромкой: видно, что читаешь справа.
+.card[data-open='true'] {
+  border-color: var(--color-ink);
+  border-width: px(2);
+  padding: px(2) px(1);
+}
+
+.cardNumber {
+  font-size: px(5);
   letter-spacing: px(1);
 }
 
-.meta {
+/*
+  Знак состояния вместо рисунка: у найденной — засечка, у запертой — скоба замка.
+  Оба нарисованы бордюрами, потому что своего арта у записей ещё нет, а держать
+  тут пустой прямоугольник значит показывать недоделку как оформление.
+*/
+.cardMark {
+  width: px(10);
+  height: px(10);
+  border: px(1) solid currentcolor;
+  opacity: 0.55;
+}
+
+// Значок найденной записи. Галочку он заменяет собой: состояние и так видно
+// по тому, что вместо вопроса стоит рисунок.
+.cardIcon {
+  opacity: 0.85;
+}
+
+.card[data-found='true'] .cardMark {
+  width: px(5);
+  height: px(9);
+  border-width: 0 px(2) px(2) 0;
+  border-color: var(--color-ink);
+  transform: rotate(38deg);
+  opacity: 1;
+}
+
+// У запертой карточки вместо имени вопрос: место занято, содержимое неизвестно.
+.cardHint {
+  min-height: px(6);
+  font-size: px(6);
+  line-height: 1;
+}
+
+/* ---------- открытая запись ---------- */
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: px(3);
+}
+
+.sheetNumber {
+  color: var(--color-ink-dim);
+  font-size: px(5);
+  letter-spacing: px(1);
+}
+
+.sheetTitle {
+  color: var(--color-ink);
+  font-size: px(9);
+  letter-spacing: px(1);
+}
+
+.sheetChapter {
   color: var(--color-ink-dim);
   font-size: px(5);
 }
 
-// Текст записи — самое ценное на странице, поэтому шире и свободнее.
-.text {
+// Значок в открытой записи: на референсе здесь гравюра во всю ширину страницы.
+// Пока он тот же, что на карточке, и просто стоит крупнее — над текстом.
+.sheetIcon {
+  margin: px(2) 0;
+}
+
+// Текст записи — самое ценное на странице, поэтому свободнее остального.
+.sheetText {
   margin-top: px(2);
-  max-width: 60ch;
   color: var(--color-ink);
   line-height: 1.7;
+}
+
+// Кто нашёл первым — внизу страницы, как подпись под документом.
+.sheetFooter {
+  margin-top: auto;
+  padding-top: px(4);
+  border-top: px(1) dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
+  color: var(--color-ink-dim);
+  font-size: px(5);
+}
+
+.empty {
+  color: var(--color-ink-dim);
 }
