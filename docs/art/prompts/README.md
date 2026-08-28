@@ -67,6 +67,7 @@ No text, no numbers, no letters, no watermark, no border.
 
 | Файл | Что в нём |
 | --- | --- |
+| [`scene.md`](./scene.md) | референс всей сцены — единственный промпт, которому перспектива нужна |
 | [`props.md`](./props.md) | оглавление предметов; сами промпты — по файлу на предмет в [`props/`](./props/) |
 | [`tiles.md`](./tiles.md) | дерево стола, бумага |
 | [`frames.md`](./frames.md) | панель и переплёт книги |
