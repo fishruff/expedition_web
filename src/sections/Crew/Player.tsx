@@ -52,11 +52,6 @@ export function Player() {
   )
   const progress = story.length > 0 ? Math.round((found.length / story.length) * 100) : null
 
-  // Записи склеиваются по uuid, как и всё игровое: ник в адресе набирают как придётся.
-  const notes = snapshots.notes.notes
-    .filter((note) => note.author.uuid === member.uuid)
-    .sort((a, b) => Date.parse(b.at) - Date.parse(a.at))
-
   return (
     <article className={styles.member}>
       <div className={styles.page}>
@@ -87,33 +82,6 @@ export function Player() {
             <p className={styles.bio}>{member.bio}</p>
           </section>
         )}
-
-        <section className={styles.block}>
-          <h2 className={styles.blockTitle}>Его записи</h2>
-
-          {notes.length === 0 && <p className={styles.note}>ещё ничего не писал</p>}
-
-          <ul className={styles.notes}>
-            {notes.map((note) => (
-              <li key={note.id} className={styles.noteItem}>
-                <span className={styles.noteHead}>
-                  <span className={styles.noteTitle}>{note.title || 'Без названия'}</span>
-                  <span className={styles.noteDate}>{formatDay(note.at)}</span>
-                </span>
-
-                {/* Абзац — это страница книги: в игре они делятся по месту, а не по смыслу. */}
-                {note.pages
-                  .map((page) => page.trim())
-                  .filter((page) => page !== '')
-                  .map((page, index) => (
-                    <span key={index} className={styles.notePage}>
-                      {page}
-                    </span>
-                  ))}
-              </li>
-            ))}
-          </ul>
-        </section>
       </div>
 
       <div className={styles.page}>

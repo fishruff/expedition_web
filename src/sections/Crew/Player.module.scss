@@ -70,7 +70,11 @@
   overflow: hidden;
 }
 
+// Ник в игре бывает до шестнадцати знаков, и одним словом. Переносить его
+// некуда, поэтому разрешаем разрыв по буквам: лучше ник в две строки, чем ник,
+// уехавший на соседнюю страницу через сгиб.
 .name {
+  overflow-wrap: anywhere;
   color: var(--color-ink);
   font-size: px(16);
   letter-spacing: px(2);
@@ -287,54 +291,3 @@
   text-decoration: underline;
 }
 
-// Записи игрока: то, что он писал книгой в игре.
-// За сезон их набежит много, поэтому блок прокручивается, а не растёт бесконечно:
-// иначе левая страница разворота уедет вниз на два экрана.
-.notes {
-  display: flex;
-  flex-direction: column;
-  gap: px(7);
-  max-height: px(200);
-  padding-right: px(4);
-  overflow-y: auto;
-  list-style: none;
-}
-
-.noteItem {
-  display: flex;
-  flex-direction: column;
-  gap: px(2);
-  padding-bottom: px(5);
-  border-bottom: px(1) dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
-
-  &:last-child {
-    padding-bottom: 0;
-    border-bottom: 0;
-  }
-}
-
-.noteHead {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: px(4);
-}
-
-.noteTitle {
-  color: var(--color-ink);
-  letter-spacing: px(1);
-}
-
-.noteDate {
-  flex: none;
-  color: var(--color-ink-dim);
-  font-size: px(5);
-}
-
-// Переносы автора сохраняются: он писал книгу руками, и решать за него,
-// где кончается строка, мы не будем.
-.notePage {
-  margin-top: px(2);
-  color: var(--color-ink);
-  white-space: pre-wrap;
-}
