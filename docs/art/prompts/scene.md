@@ -16,8 +16,15 @@
 
 ## Промпт
 
+Эталон стиля прикладывается картинкой, как и к предметным промптам: без него генератор
+уводит сцену в свой обычный рендер, и предметы на ней окажутся другой плотности,
+чем те, что уже нарисованы.
+
 ```
 A top-down slightly angled view of a dark wooden desk lit by a single oil lamp.
+
+Style reference: match the attached image — same pixel density, same palette, same
+hand-drawn look. Keep the compass and the pocket watch exactly as they are drawn there.
 
 In the center, a large open leather-bound journal: two aged cream pages, both blank,
 the paper gently curved so the inner edges dip into the spine and the outer edges lift.
@@ -55,6 +62,8 @@ buttons, no watermark, no border, no people, no hands.
 - **Свет один.** Два источника — брак: по референсу потом рисуют предметы, и каждый
   унесёт свою тень не в ту сторону.
 - **Углы кадра тёмные.** Именно перепад делает из плоской заливки стол.
+- **Компас и часы совпадают с уже нарисованными.** Они лежат в проекте, и если на
+  референсе они другие, сверять по нему остальное бессмысленно.
 - Ни панелей, ни кнопок: интерфейс рисует сайт, а не генератор.
 
 ## Чего не просить
