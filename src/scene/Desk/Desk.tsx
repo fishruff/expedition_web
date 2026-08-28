@@ -3,11 +3,6 @@ import { Link, NavLink, Outlet, useMatches } from 'react-router'
 import { useScale } from '@/scene/useScale'
 import { PROPS } from '@/scene/props'
 import { Prop } from '@/scene/Prop/Prop'
-import { Panel } from '@/ui/Panel/Panel'
-import { CountdownBoard } from '@/scene/Desk/panels/CountdownBoard'
-import { FeedPanel } from '@/scene/Desk/panels/FeedPanel'
-import { CrewPanel } from '@/scene/Desk/panels/CrewPanel'
-import { QuickLinks } from '@/scene/Desk/panels/QuickLinks'
 import { NAV_ITEMS, ROUTES } from '@/app/routes'
 import { crew } from '@/content'
 import { useSnapshots } from '@/data/useSnapshots'
@@ -73,24 +68,6 @@ export function Desk() {
       </header>
 
       <div className={`${styles.stage} ${wide ? styles.stageWide : ''}`}>
-        {/* В широком режиме панели не прячутся, а не рендерятся: скрытый flex
-            всё равно занимает место в сетке. */}
-        {!wide && (
-          <aside className={styles.side}>
-            <Panel title="До конца сезона">
-              <CountdownBoard />
-            </Panel>
-
-            <Panel title="Последние записи">
-              <FeedPanel limit={3} to={ROUTES.home} action="Смотреть все" />
-            </Panel>
-
-            <Panel title="Быстрый доступ">
-              <QuickLinks />
-            </Panel>
-          </aside>
-        )}
-
         <main className={styles.center}>
           {/* Стол: разворот книги в середине, предметы вокруг него по углам. */}
           <div className={styles.scene}>
@@ -111,17 +88,6 @@ export function Desk() {
           </div>
         </main>
 
-        {!wide && (
-          <aside className={styles.side}>
-            <Panel title="Уведомления">
-              <FeedPanel limit={3} to={ROUTES.home} action="Все уведомления" />
-            </Panel>
-
-            <Panel title="Участники">
-              <CrewPanel />
-            </Panel>
-          </aside>
-        )}
       </div>
 
       <footer className={styles.footer}>

@@ -5,20 +5,42 @@
   flex: none;
 }
 
+/*
+  Тень лесенкой: жёсткие смещения вместо размытия — размытая тень выдаёт
+  непиксельность. Две ступени вместо одной: одна читается приклеенной плёнкой,
+  и предмет от неё не начинает лежать.
+
+  У предмета, который можно взять, тень глубже, чем у обстановки. Это и есть
+  объём: компас и часы приподняты над столом, лампа и сундук стоят на нём.
+*/
+$prop-shadow:
+  drop-shadow(calc(2px * var(--s)) calc(3px * var(--s)) 0 rgb(8 4 2 / 60%))
+  drop-shadow(calc(6px * var(--s)) calc(9px * var(--s)) 0 rgb(8 4 2 / 34%));
+
+$decor-shadow: drop-shadow(calc(2px * var(--s)) calc(3px * var(--s)) 0 rgb(8 4 2 / 42%));
+
 .image {
   width: 100%;
   height: auto;
+  filter: $prop-shadow;
   transition: filter $duration-fast $steps-fast, transform $duration-fast $steps-fast;
 }
 
 .prop:hover .image,
 .prop:focus-visible .image {
-  filter: brightness(1.25);
-  transform: translateY(px(-2));
+  filter: $prop-shadow brightness(1.25);
+  // Поднимается выше, чем раньше: вместе с глубокой тенью это читается как
+  // «предмет взяли со стола», а не как подсветка.
+  transform: translateY(px(-3));
 }
 
+// Обстановка лежит на столе, а не над ним: тень одной короткой ступенью.
 .prop[data-decorative='true'] {
   cursor: default;
+
+  .image {
+    filter: $decor-shadow;
+  }
 }
 
 // Запертый предмет виден, но обесцвечен и притемнён — понятно, что он есть,
@@ -27,7 +49,7 @@
   cursor: default;
 
   .image {
-    filter: grayscale(1) brightness(0.45);
+    filter: $decor-shadow grayscale(1) brightness(0.45);
   }
 
   .label {
