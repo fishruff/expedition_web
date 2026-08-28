@@ -1,3 +1,5 @@
+// Табло с отсчётом занимает левую страницу, даты сезона — правую. Табло во весь
+// разворот встало бы серединой на сгиб, а это единственное, на что тут смотрят.
 .chronometer {
   display: flex;
   flex-direction: column;
@@ -5,6 +7,8 @@
   gap: px(6);
   padding-block: px(8);
   text-align: center;
+
+  @include pages;
 }
 
 .title {
@@ -12,6 +16,8 @@
   font-size: px(12);
   letter-spacing: px(2);
   text-transform: uppercase;
+
+  @include across-pages;
 }
 
 .empty {
@@ -22,6 +28,17 @@
 .board {
   display: flex;
   gap: px(8);
+}
+
+// На развороте табло встаёт в два ряда: в строку четыре ячейки требуют втрое
+// больше, чем есть у страницы, и либо вылезли бы на сгиб, либо ужались до
+// нечитаемого. Дни с часами сверху, минуты с секундами снизу.
+@include up('lg') {
+  .board {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: center;
+  }
 }
 
 .cell {
@@ -58,6 +75,12 @@
   flex-direction: column;
   gap: px(2);
   min-width: px(120);
+
+  // На странице разворота ширины на «подпись слева, дата справа» не хватает —
+  // год уезжает за край. Значит дата встаёт под подписью, а не рядом с ней.
+  @include up('lg') {
+    min-width: 0;
+  }
 }
 
 .row {
@@ -65,11 +88,40 @@
   justify-content: space-between;
   gap: px(6);
 
+  @include up('lg') {
+    flex-direction: column;
+    gap: 0;
+  }
+
   dt {
     color: var(--color-ink-dim);
   }
 
   dd {
     color: var(--color-ink);
+  }
+}
+
+@include up('lg') {
+  // Раздел центрирован целиком, и на развороте это ставит заголовок ровно
+  // на сгиб. Центровка остаётся у табло — оно центрируется на своей странице.
+  .chronometer {
+    text-align: left;
+  }
+
+  .board,
+  .caption {
+    grid-column: 1;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .dates {
+    grid-column: 2;
+    align-self: center;
+  }
+
+  .empty {
+    grid-column: 1;
   }
 }

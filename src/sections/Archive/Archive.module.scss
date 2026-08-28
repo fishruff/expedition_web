@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: px(8);
+
+  @include pages;
 }
 
 .title {
@@ -9,10 +11,14 @@
   font-size: px(12);
   letter-spacing: px(2);
   text-transform: uppercase;
+
+  @include across-pages;
 }
 
 .empty {
   color: var(--color-ink-dim);
+
+  @include across-pages;
 }
 
 .record {

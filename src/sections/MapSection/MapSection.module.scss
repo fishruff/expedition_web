@@ -1,7 +1,11 @@
+// Лист карты лежит на левой странице, рассказ об открытом месте — на правой.
+// Карта во весь разворот была бы красивее, но корешок прошёл бы ровно по острову.
 .map {
   display: flex;
   flex-direction: column;
   gap: px(6);
+
+  @include pages;
 }
 
 .title {
@@ -9,6 +13,8 @@
   font-size: px(12);
   letter-spacing: px(2);
   text-transform: uppercase;
+
+  @include across-pages;
 }
 
 .empty {
@@ -60,4 +66,18 @@
 .cardText {
   max-width: 60ch;
   color: var(--color-ink);
+}
+
+// Расстановка по страницам разворота. Ниже него страницы одна, и делить нечего.
+@include up('lg') {
+  .sheet {
+    grid-column: 1;
+    max-width: 100%;
+  }
+
+  .card,
+  .empty {
+    grid-column: 2;
+    align-self: start;
+  }
 }

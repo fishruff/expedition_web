@@ -31,7 +31,12 @@ export function Sprite({ def, alt, className, illustration = false }: SpriteProp
   if (failed) {
     return (
       <span
-        className={[styles.placeholder, className].filter(Boolean).join(' ')}
+        // Иллюстрации размер задаёт рамка, а не ассет: силуэт обязан слушаться
+        // того же правила. Иначе карта 320×240 требует 640 точек при масштабе 2
+        // и вылезает за страницу — раскладка едет ровно там, где силуэт её беречь.
+        className={[styles.placeholder, illustration ? styles.illustration : '', className]
+          .filter(Boolean)
+          .join(' ')}
         style={size}
         role="img"
         aria-label={`${alt} — изображение ещё не готово`}

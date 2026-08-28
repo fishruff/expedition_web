@@ -242,9 +242,17 @@
 .spread::after {
   inset: 0;
   z-index: 0;
-  background-image:
-    radial-gradient(ellipse 70% 60% at 22% 12%, rgb(255 226 170 / 34%) 0%, transparent 70%),
-    radial-gradient(ellipse 90% 80% at 78% 96%, rgb(60 40 18 / 26%) 0%, transparent 66%);
+  background-image: radial-gradient(ellipse 80% 70% at 50% 8%, rgb(255 226 170 / 24%) 0%, transparent 74%);
+}
+
+// На столе свет падает от лампы слева, и к дальнему углу бумага уходит в тень.
+// В руке блокнот освещён ровно — светить на него сбоку было бы выдумкой.
+@include up('lg') {
+  .spread::after {
+    background-image:
+      radial-gradient(ellipse 70% 60% at 22% 12%, rgb(255 226 170 / 34%) 0%, transparent 70%),
+      radial-gradient(ellipse 90% 80% at 78% 96%, rgb(60 40 18 / 26%) 0%, transparent 66%);
+  }
 }
 
 // Содержимое страниц лежит поверх отсвета, иначе текст выцветает под пятном.
@@ -255,7 +263,10 @@
 
 // Сгиб между страницами: тёмная линия и притенение по обе стороны от неё —
 // именно оно читается как «две страницы», а не один лист.
+// Сгиб есть только на развороте. Ниже него страница одна — это блокнот, и линия
+// посреди него означала бы книгу, которой там нет.
 .spread::before {
+  display: none;
   z-index: 2;
   top: px(4);
   bottom: px(4);
@@ -275,14 +286,21 @@
   pointer-events: none;
 }
 
+@include up('lg') {
+  .spread::before {
+    display: block;
+  }
+}
+
 @media (max-width: 900px) {
-  // Телефон: разворот занимает всё поле, предметы всё равно скрыты.
+  // Телефон: страница занимает всё поле, предметы всё равно скрыты.
   .scene {
     padding: 0;
   }
 
-  .spread::before {
-    display: none;
+  // Блокнот держат в руке, а не кладут на стол: поля у́же, строк на экране больше.
+  .spread {
+    padding: px(8) px(8);
   }
 }
 

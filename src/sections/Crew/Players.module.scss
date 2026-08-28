@@ -15,12 +15,21 @@
   color: var(--color-ink-dim);
 }
 
+// На развороте по карточке на страницу. Четыре в ряд не влезают: промежуток
+// у разворота шириной в сгиб, и на четырёх колонках он съедает почти половину
+// ширины — карточки ужимаются до полусотни точек, у́же собственного арта.
 .list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(px(60), 1fr));
   gap: px(6);
   list-style: none;
   align-items: stretch;
+
+  @include pages;
+
+  @include up('lg') {
+    row-gap: px(6);
+  }
 }
 
 .list > li {
