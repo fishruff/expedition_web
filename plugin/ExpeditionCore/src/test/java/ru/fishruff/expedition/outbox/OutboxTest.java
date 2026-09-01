@@ -280,6 +280,50 @@ class OutboxTest {
         assertTrue(sender.batches.get(0).contains("прощальный"));
     }
 
+    private static String heartbeat(String id) {
+        return "{\"id\":\"" + id + "\",\"v\":1,\"type\":\"server.heartbeat\","
+                + "\"at\":\"2026-10-16T21:47:03Z\",\"online\":[]}";
+    }
+
+    private static String found(String id) {
+        return "{\"id\":\"" + id + "\",\"v\":1,\"type\":\"record.found\","
+                + "\"at\":\"2026-10-16T21:47:03Z\",\"recordId\":\"храм-1\"}";
+    }
+
+    /**
+     * До потолка дело доходит только при очень долгом молчании api. Тогда очередь
+     * перестаёт расти, но теряет при этом только телеметрию.
+     */
+    @Test
+    void очередьНеРастётВышеПотолкаИТеряетТолькоТелеметрию() {
+        FakeSender sender = new FakeSender();
+
+        try (Outbox outbox = outbox(sender)) {
+            outbox.offer(found("находка"));
+
+            for (int i = 0; i < 60_000; i++) outbox.offer(heartbeat("h" + i));
+
+            assertEquals(50_000, outbox.pending());
+
+            // Находка на месте: она ушла бы первой, если бы выбрасывалось всё подряд.
+            outbox.pumpOnce();
+            assertTrue(sender.batches.get(0).contains("находка"));
+        }
+    }
+
+    /** Очередь из одних находок не режется вовсе: находка дороже памяти. */
+    @Test
+    void очередьИзНаходокРастётВышеПотолка() {
+        FakeSender sender = new FakeSender();
+        sender.failure = new IOException("сети нет");
+
+        try (Outbox outbox = outbox(sender)) {
+            for (int i = 0; i < 50_100; i++) outbox.offer(found("f" + i));
+
+            assertEquals(50_100, outbox.pending());
+        }
+    }
+
     /** Отправка на остановке не удалась — событие обязано остаться на диске. */
     @Test
     void неудачнаяОтправкаНаОстановкеОставляетСобытиеВОчереди() throws IOException {
