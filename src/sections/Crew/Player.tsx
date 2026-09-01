@@ -137,9 +137,11 @@ export function Player() {
           </section>
         )}
 
+        {/* Не «прогресс по сюжету»: формула считает долю записей, которые этот
+            человек нашёл первым. Сюжет пройден экипажем, а полоска — про вклад. */}
         {progress !== null && (
           <section className={styles.block}>
-            <h2 className={styles.blockTitle}>Прогресс по сюжету</h2>
+            <h2 className={styles.blockTitle}>Личный вклад в сюжет</h2>
 
             <div className={styles.progress}>
               <span className={styles.bar} role="presentation">

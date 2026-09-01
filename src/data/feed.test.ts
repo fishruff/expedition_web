@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { emptySnapshots } from '@/data/empty'
 import { buildFeed } from '@/data/feed'
-import type { GameEvent } from '@/content/types'
+import type { GameEvent, StoryRecord } from '@/content/types'
 
 const EVENTS: GameEvent[] = [
   { title: 'Гонка за артефактом', startsAt: '2026-10-18T18:00:00Z', endsAt: '2026-10-19T23:59:00Z' },
@@ -91,6 +91,53 @@ describe('лента событий', () => {
       'Вышли к обрыву.\nВнизу долина.',
       'За ночь вода поднялась.',
     ])
+  })
+
+  // Без сюжета в ленту уезжал сам номер записи: «храм-1» вместо названия.
+  it('берёт заголовок находки из сюжета владельца', () => {
+    const snapshots = emptySnapshots()
+    snapshots.records.found = [
+      {
+        recordId: 'храм-1',
+        foundBy: { uuid: 'u1', name: 'Arsen' },
+        foundAt: '2026-10-16T21:47:03Z',
+        readBy: 0,
+      },
+    ]
+
+    const story: StoryRecord[] = [
+      { id: 'храм-1', title: 'Первая табличка', chapter: 1, text: '', opens: [], unlocks: '', icon: '' },
+    ]
+
+    expect(buildFeed(snapshots, [], 20, story)[0].title).toBe('Первая табличка')
+  })
+
+  // Опечатка в номере не должна выглядеть пустотой: голый номер честнее.
+  it('находку, которой нет в сюжете, показывает её номером', () => {
+    const snapshots = emptySnapshots()
+    snapshots.records.found = [
+      {
+        recordId: 'храм-9',
+        foundBy: { uuid: 'u1', name: 'Arsen' },
+        foundAt: '2026-10-16T21:47:03Z',
+        readBy: 0,
+      },
+    ]
+
+    expect(buildFeed(snapshots, [], 20, [])[0].title).toBe('храм-9')
+  })
+
+  // Два одинаково названных события сезона — обычное дело, а ключи React
+  // обязаны различаться, иначе он путает элементы при пересортировке.
+  it('даёт одинаково названным событиям разные ключи', () => {
+    const twice: GameEvent[] = [
+      { title: 'Гонка', startsAt: '2026-10-18T18:00:00Z', endsAt: '2026-10-19T23:59:00Z' },
+      { title: 'Гонка', startsAt: '2026-10-25T18:00:00Z', endsAt: '2026-10-26T23:59:00Z' },
+    ]
+
+    const ids = buildFeed(emptySnapshots(), twice).map((item) => item.id)
+
+    expect(new Set(ids).size).toBe(2)
   })
 
   it('у находок и событий текста нет', () => {

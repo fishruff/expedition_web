@@ -1,4 +1,4 @@
-import type { GameEvent } from '@/content/types'
+import type { GameEvent, StoryRecord } from '@/content/types'
 import type { Snapshots } from '@/data/types'
 
 export type FeedKind = 'note' | 'record' | 'event'
@@ -27,8 +27,17 @@ export interface FeedItem {
  * Источники разные, но игроку они одинаково интересны как «что нового», поэтому
  * складываются вместе и сортируются по времени. Свежее сверху.
  */
-export function buildFeed(snapshots: Snapshots, events: GameEvent[], limit = 20): FeedItem[] {
+export function buildFeed(
+  snapshots: Snapshots,
+  events: GameEvent[],
+  limit = 20,
+  story: StoryRecord[] = [],
+): FeedItem[] {
   const items: FeedItem[] = []
+
+  // Заголовки находок живут в сюжете владельца, а в снимке лежит только номер.
+  // Без этой сверки в ленту попадал сам номер — «храм-1» вместо «Первой таблички».
+  const titles = new Map(story.map((record) => [record.id, record.title]))
 
   for (const note of snapshots.notes.notes) {
     items.push({
@@ -46,21 +55,23 @@ export function buildFeed(snapshots: Snapshots, events: GameEvent[], limit = 20)
     items.push({
       id: `record-${record.recordId}`,
       kind: 'record',
-      title: record.recordId,
+      title: titles.get(record.recordId) ?? record.recordId,
       subtitle: `${record.foundBy.name} · найдена запись`,
       at: record.foundAt,
     })
   }
 
-  for (const event of events) {
+  // Номер по месту в списке, а не по заголовку: два одинаково названных события
+  // сезона — вещь обычная, а одинаковые ключи React путает между собой.
+  events.forEach((event, index) => {
     items.push({
-      id: `event-${event.title}`,
+      id: `event-${index}`,
       kind: 'event',
       title: event.title,
       subtitle: 'событие сезона',
       at: event.startsAt,
     })
-  }
+  })
 
   return items.sort((a, b) => Date.parse(b.at) - Date.parse(a.at)).slice(0, limit)
 }

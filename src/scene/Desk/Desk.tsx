@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useMatches } from 'react-router'
 import { useScale } from '@/scene/useScale'
 import { PROPS } from '@/scene/props'
@@ -33,11 +33,23 @@ export function Desk() {
     try {
       await navigator.clipboard.writeText(SERVER_ADDRESS)
     } catch {
-      // Буфер может быть недоступен без https — адрес виден рядом, переживём молча.
+      // Буфер недоступен без https. Адрес виден рядом, поэтому переживём молча —
+      // но именно молча: сказать «скопировано», когда не скопировалось, значит
+      // отправить человека вставлять в лаунчер пустоту.
+      return
     }
+
     setCopied(true)
-    setTimeout(() => setCopied(false), 1600)
   }
+
+  // Надпись держится полторы секунды и снимается сама. Таймер живёт в эффекте,
+  // а не в обработчике: уход со страницы за это время оставлял его висеть.
+  useEffect(() => {
+    if (!copied) return
+
+    const id = setTimeout(() => setCopied(false), 1600)
+    return () => clearTimeout(id)
+  }, [copied])
 
   return (
     <div className={styles.desk} data-testid="desk">

@@ -15,33 +15,29 @@ export function formatPlaytime(minutes: number): string {
   return rest === 0 ? head : `${head} ${rest} ${plural(rest, MINUTES)}`
 }
 
-/** Ваниль считает расстояние сантиметрами, игроку интересны километры. */
+/**
+ * Ваниль считает расстояние сантиметрами, игроку интересны километры.
+ *
+ * Ниже сотни километров — с десятой долей. Округление до целых съедало почти
+ * полкилометра: 1500 метров показывались как «2 км», и два человека, между
+ * которыми на самом деле километр, видели одно и то же число. Для звания
+ * «Ходок» это разница между первым местом и вторым.
+ *
+ * Выше сотни доля уже ничего не решает, а строку удлиняет.
+ */
 export function formatDistance(cm: number): string {
   const metres = Math.round(cm / 100)
+  if (metres < 1000) return `${metres} м`
 
-  return metres < 1000 ? `${metres} м` : `${Math.round(metres / 1000)} км`
+  const km = metres / 1000
+
+  return km < 100 ? `${km.toFixed(1).replace('.', ',')} км` : `${Math.round(km)} км`
 }
 
 /** Разряды через неразрывный пробел: без них шестизначное число не прочитать. */
 export function formatCount(value: number): string {
   return value.toLocaleString('ru-RU').replace(/\s/g, '\u00a0')
 }
-
-export interface StatRow {
-  key: string
-  label: string
-  format: (stats: PlayerStats) => string
-}
-
-/** Порядок строк в карточке участника. Задаётся здесь, а не в разметке. */
-export const STAT_ROWS: StatRow[] = [
-  { key: 'playtime', label: 'Время в игре', format: (s) => formatPlaytime(s.playtimeMinutes) },
-  { key: 'distance', label: 'Пройдено', format: (s) => formatDistance(s.distanceCm) },
-  { key: 'mined', label: 'Добыто блоков', format: (s) => formatCount(s.blocksMined) },
-  { key: 'placed', label: 'Поставлено блоков', format: (s) => formatCount(s.blocksPlaced) },
-  { key: 'mobs', label: 'Побеждено мобов', format: (s) => formatCount(s.mobsKilled) },
-  { key: 'deaths', label: 'Смертей', format: (s) => formatCount(s.deaths) },
-]
 
 export interface StatCard {
   key: string

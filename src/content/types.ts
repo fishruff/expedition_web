@@ -16,14 +16,6 @@ export interface CrewMember {
   socials: Socials
 }
 
-export interface NewsItem {
-  id: string
-  date: string
-  title: string
-  text: string
-  author: string | null
-}
-
 export interface GameEvent {
   title: string
   startsAt: string

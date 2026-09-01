@@ -30,6 +30,20 @@ describe('Sprite', () => {
     expect(screen.getByTestId('sprite-placeholder')).toBeTruthy()
     expect(screen.getByRole('img', { name: /изображение ещё не готово/ })).toBeTruthy()
   })
+
+  // Силуэт держался за компонентом, а не за файлом: соседний участник в той же
+  // ячейке списка наследовал чужую неудачу и оставался силуэтом навсегда.
+  it('на новый ассет пробует снова, а не наследует прошлую неудачу', () => {
+    const { rerender } = render(<Sprite def={crewArt('Arsen')} alt="Arsen" />)
+
+    fireEvent.error(screen.getByRole('img', { name: 'Arsen' }))
+    expect(screen.getByTestId('sprite-placeholder')).toBeTruthy()
+
+    rerender(<Sprite def={crewArt('Kira')} alt="Kira" />)
+
+    expect(screen.queryByTestId('sprite-placeholder')).toBeNull()
+    expect(screen.getByRole('img', { name: 'Kira' })).toBeTruthy()
+  })
 })
 
 describe('assetUrl', () => {

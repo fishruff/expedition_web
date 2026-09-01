@@ -21,7 +21,17 @@ interface SpriteProps {
  * собирать до того, как арт нарисован.
  */
 export function Sprite({ def, alt, className, illustration = false }: SpriteProps) {
-  const [failed, setFailed] = useState(false)
+  const url = assetUrl(def)
+
+  /*
+    Помним не «сломалось», а что именно сломалось.
+
+    Компонент переиспользуется на месте: соседний участник в той же ячейке
+    списка, тот же файл с новым номером версии. Флаг без адреса оставлял силуэт
+    там, где картинка уже есть, и снять его можно было только перезагрузкой.
+  */
+  const [failedUrl, setFailedUrl] = useState('')
+  const failed = failedUrl === url
 
   const size = {
     '--sprite-w': def.width,
@@ -51,11 +61,11 @@ export function Sprite({ def, alt, className, illustration = false }: SpriteProp
         .filter(Boolean)
         .join(' ')}
       style={size}
-      src={assetUrl(def)}
+      src={url}
       width={def.width}
       height={def.height}
       alt={alt}
-      onError={() => setFailed(true)}
+      onError={() => setFailedUrl(url)}
     />
   )
 }

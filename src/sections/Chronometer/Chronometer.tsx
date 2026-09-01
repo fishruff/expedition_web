@@ -32,23 +32,41 @@ export function Chronometer() {
     )
   }
 
-  const left = splitCountdown(Date.parse(target) - now.getTime())
+  const leftMs = Date.parse(target) - now.getTime()
+  const left = splitCountdown(leftMs)
   const parts = [left.days, left.hours, left.minutes, left.seconds]
+
+  /*
+    Срок вышел — табло убирается совсем.
+
+    Раньше `splitCountdown` прижимал остаток к нулю, и раздел про время
+    навсегда застывал на «00 00 00 00» с подписью «до конца сюжетной части».
+    Самый интересный момент сезона выглядел поломкой вёрстки.
+  */
+  const over = leftMs <= 0
 
   return (
     <section className={styles.chronometer}>
       <h1 className={styles.title}>Хронометр</h1>
 
-      <div className={styles.board}>
-        {parts.map((value, index) => (
-          <span key={LABELS[index]} className={styles.cell}>
-            <span className={styles.value}>{formatPart(value)}</span>
-            <span className={styles.label}>{LABELS[index]}</span>
-          </span>
-        ))}
-      </div>
+      {over ? (
+        <p className={styles.empty}>
+          {season ? 'Сюжетная часть закончена.' : 'Событие уже прошло.'}
+        </p>
+      ) : (
+        <>
+          <div className={styles.board}>
+            {parts.map((value, index) => (
+              <span key={LABELS[index]} className={styles.cell}>
+                <span className={styles.value}>{formatPart(value)}</span>
+                <span className={styles.label}>{LABELS[index]}</span>
+              </span>
+            ))}
+          </div>
 
-      <p className={styles.caption}>{caption}</p>
+          <p className={styles.caption}>{caption}</p>
+        </>
+      )}
 
       {season && (
         <dl className={styles.dates}>

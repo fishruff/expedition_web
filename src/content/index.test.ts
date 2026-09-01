@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
   parseCrew,
-  parseNews,
   parseEvents,
   parseTitles,
   parseStory,
@@ -34,28 +33,6 @@ describe('parseCrew', () => {
 
   it('возвращает пустой массив, если пришёл не массив', () => {
     expect(parseCrew(null)).toEqual([])
-  })
-})
-
-describe('parseNews', () => {
-  it('отбрасывает записи без id или с некорректной датой', () => {
-    const result = parseNews([
-      { id: 'a', date: '2026-08-10' },
-      { date: '2026-08-11' },
-      { id: 'c', date: 'позавчера' },
-    ])
-
-    expect(result.map((item) => item.id)).toEqual(['a'])
-  })
-
-  it('сортирует новости по дате, свежие первыми', () => {
-    const result = parseNews([
-      { id: 'старая', date: '2026-01-01' },
-      { id: 'свежая', date: '2026-08-10' },
-      { id: 'средняя', date: '2026-05-05' },
-    ])
-
-    expect(result.map((item) => item.id)).toEqual(['свежая', 'средняя', 'старая'])
   })
 })
 

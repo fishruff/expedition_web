@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatCount, formatDistance, formatPlaytime, statCards, STAT_ROWS } from '@/shared/lib/stats'
+import { formatCount, formatDistance, formatPlaytime, statCards } from '@/shared/lib/stats'
 
 describe('formatPlaytime', () => {
   it('до часа считает минутами', () => {
@@ -30,30 +30,23 @@ describe('formatDistance', () => {
   it('ноль остаётся нулём, а не превращается в прочерк', () => {
     expect(formatDistance(0)).toBe('0 м')
   })
+
+  // Округление до целых километров теряло почти полкилометра: полтора
+  // километра показывались как два, и разница между людьми пропадала.
+  it('до сотни километров считает с десятой долей', () => {
+    expect(formatDistance(150_000)).toBe('1,5 км')
+    expect(formatDistance(4_740_000)).toBe('47,4 км')
+  })
+
+  it('дальше сотни доля не нужна — она только удлиняет строку', () => {
+    expect(formatDistance(12_345_600)).toBe('123 км')
+  })
 })
 
 describe('formatCount', () => {
   it('разбивает большие числа на разряды — иначе их не прочитать', () => {
     expect(formatCount(184902)).toBe('184\u00a0902')
     expect(formatCount(37)).toBe('37')
-  })
-})
-
-describe('STAT_ROWS', () => {
-  it('описывает каждый показатель из снимка', () => {
-    const stats = {
-      playtimeMinutes: 412,
-      distanceCm: 120_400_000,
-      blocksMined: 184_902,
-      blocksPlaced: 63_120,
-      mobsKilled: 1042,
-      deaths: 37,
-    }
-
-    for (const row of STAT_ROWS) {
-      expect(row.label.length).toBeGreaterThan(0)
-      expect(row.format(stats).length).toBeGreaterThan(0)
-    }
   })
 })
 

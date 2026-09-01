@@ -2,13 +2,11 @@ import type {
   CharterSection,
   CrewMember,
   GameEvent,
-  NewsItem,
   Place,
   StoryRecord,
   TitleRule,
 } from '@/content/types'
 import crewRaw from '@/content/crew.json'
-import newsRaw from '@/content/news.json'
 import eventsRaw from '@/content/events.json'
 import titlesRaw from '@/content/titles.json'
 import storyRaw from '@/content/story.json'
@@ -60,19 +58,6 @@ export function parseCrew(raw: unknown): CrewMember[] {
       joinedAt: text(item.joinedAt),
       socials: socials(item.socials),
     }))
-}
-
-export function parseNews(raw: unknown): NewsItem[] {
-  return toArray(raw)
-    .filter((item) => text(item.id) !== '' && isValidDate(item.date))
-    .map((item) => ({
-      id: text(item.id),
-      date: text(item.date),
-      title: text(item.title),
-      text: text(item.text),
-      author: optionalText(item.author),
-    }))
-    .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
 }
 
 export function parseEvents(raw: unknown): GameEvent[] {
@@ -155,7 +140,6 @@ export function parsePlaces(raw: unknown): Place[] {
 }
 
 export const crew = parseCrew(crewRaw)
-export const news = parseNews(newsRaw)
 export const events = parseEvents(eventsRaw)
 export const titles = parseTitles(titlesRaw)
 export const story = parseStory(storyRaw)

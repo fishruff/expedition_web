@@ -1,4 +1,4 @@
-import { events } from '@/content'
+import { events, story } from '@/content'
 import { buildFeed } from '@/data/feed'
 import { useSnapshots } from '@/data/useSnapshots'
 import { formatDay } from '@/shared/lib/dates'
@@ -13,7 +13,7 @@ const KIND_LABEL = {
 /** Дневник: всё, что случилось в экспедиции, одной лентой. */
 export function Log() {
   const snapshots = useSnapshots()
-  const feed = buildFeed(snapshots, events, 40)
+  const feed = buildFeed(snapshots, events, 40, story)
 
   return (
     <section className={styles.log}>
