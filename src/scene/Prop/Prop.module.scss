@@ -23,16 +23,10 @@ $decor-shadow: drop-shadow(calc(2px * var(--s)) calc(3px * var(--s)) 0 rgb(8 4 2
   width: 100%;
   height: auto;
   filter: $prop-shadow;
-  transition: filter $duration-fast $steps-fast, transform $duration-fast $steps-fast;
 }
 
-.prop:hover .image,
-.prop:focus-visible .image {
-  filter: $prop-shadow brightness(1.25);
-  // Поднимается выше, чем раньше: вместе с глубокой тенью это читается как
-  // «предмет взяли со стола», а не как подсветка.
-  transform: translateY(px(-3));
-}
+// На наведении сам предмет не меняется вовсе: ни подъёма, ни подсветки,
+// ни обводки. Всё, что происходит, — под предметом появляется подпись.
 
 // Обстановка лежит на столе, а не над ним: тень одной короткой ступенью.
 .prop[data-decorative='true'] {
