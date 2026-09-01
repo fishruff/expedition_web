@@ -1,21 +1,11 @@
 /**
- * Формы снимков из игры. Соответствуют docs/contract/api-v1.md.
- * Меняются только вместе с контрактом.
+ * Снимки, которые приёмник пересобирает раз в минуту, а сайт читает.
+ * Соответствуют части 3 контракта `docs/contract/api-v1.md` и меняются только
+ * вместе с ним.
  */
+import type { PlayerRef, PlayerStats } from './player.ts'
 
-export interface PlayerRef {
-  uuid: string
-  name: string
-}
-
-export interface PlayerStats {
-  playtimeMinutes: number
-  distanceCm: number
-  blocksMined: number
-  blocksPlaced: number
-  mobsKilled: number
-  deaths: number
-}
+export type { PlayerRef, PlayerStats }
 
 export interface StatusSnapshot {
   updatedAt: string

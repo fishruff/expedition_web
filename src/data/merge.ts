@@ -1,5 +1,11 @@
 import type { CrewMember } from '@/content/types'
-import type { CrewEntry, CrewSnapshot, PlayerRef, PlayerStats, UnlocksSnapshot } from '@/data/types'
+import type {
+  CrewEntry,
+  CrewSnapshot,
+  PlayerRef,
+  PlayerStats,
+  UnlocksSnapshot,
+} from '@contract/snapshots'
 
 /** Участник таким, каким его видит интерфейс: авторское плюс игровое. */
 export interface CrewView {

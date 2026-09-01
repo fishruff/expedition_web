@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, it, expect } from 'vitest'
-import { emptySnapshots } from '../../src/data/empty.ts'
+import { emptySnapshots } from '../../contract/empty.ts'
 import { snapshotFiles } from './files.ts'
 
 describe('раскладка снимков по файлам', () => {

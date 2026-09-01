@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, it, expect } from 'vitest'
 import { applyEvents } from './apply.ts'
-import type { ExpeditionEvent, PlayerRef } from './events.ts'
+import type { ExpeditionEvent, PlayerRef } from '../../contract/events.ts'
 import { WorkingSet } from './working-set.ts'
 
 const PLAYERS: PlayerRef[] = [

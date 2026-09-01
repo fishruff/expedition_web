@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { emptySnapshots } from '@/data/empty'
+import { emptySnapshots } from '@contract/empty'
 import { putSnapshot } from '@/data/parse'
 
 /**

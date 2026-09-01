@@ -1,5 +1,5 @@
 import type { GameEvent, StoryRecord } from '@/content/types'
-import type { Snapshots } from '@/data/types'
+import type { Snapshots } from '@contract/snapshots'
 
 export type FeedKind = 'note' | 'record' | 'event'
 

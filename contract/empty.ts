@@ -1,4 +1,4 @@
-import type { Snapshots } from '@/data/types'
+import type { Snapshots } from './snapshots.ts'
 
 /**
  * Состояние «игровых данных ещё нет».

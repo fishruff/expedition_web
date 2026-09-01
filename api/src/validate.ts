@@ -1,4 +1,4 @@
-import type { ExpeditionEvent, PlayerRef } from './events.ts'
+import type { ExpeditionEvent, PlayerRef } from '../../contract/events.ts'
 
 /**
  * Проверка формы события — единственное место, где приёмник перестаёт верить

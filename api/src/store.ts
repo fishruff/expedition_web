@@ -1,7 +1,7 @@
 import { appendFileSync, closeSync, existsSync, mkdirSync, openSync, readSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { StringDecoder } from 'node:string_decoder'
-import type { ExpeditionEvent } from './events.ts'
+import type { ExpeditionEvent } from '../../contract/events.ts'
 import { WorkingSet } from './working-set.ts'
 
 /**

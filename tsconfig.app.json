@@ -6,7 +6,8 @@
     "module": "esnext",
     "types": ["vite/client"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@contract/*": ["./contract/*"]
     },
     "allowArbitraryExtensions": true,
     "resolveJsonModule": true,
@@ -26,5 +27,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src", "contract"]
 }

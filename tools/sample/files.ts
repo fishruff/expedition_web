@@ -1,4 +1,4 @@
-import type { Snapshots } from '../../src/data/types.ts'
+import type { Snapshots } from '../../contract/snapshots.ts'
 
 /** Имя файла → его содержимое, ровно как в части 3 контракта. */
 export function snapshotFiles(snapshots: Snapshots): Record<string, object> {

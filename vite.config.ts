@@ -5,6 +5,7 @@ import babel from '@rolldown/plugin-babel'
 import { fileURLToPath } from 'node:url'
 
 const src = fileURLToPath(new URL('./src', import.meta.url))
+const contract = fileURLToPath(new URL('./contract', import.meta.url))
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -24,6 +25,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': src,
+      // Формы обмена: их знают сайт, приёмник и плагин. Лежат вне `src`, потому
+      // что приёмник не должен зависеть от каталога сайта, чтобы собраться.
+      '@contract': contract,
     },
   },
   css: {

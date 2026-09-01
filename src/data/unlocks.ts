@@ -1,5 +1,5 @@
 import { isUnlocked } from '@/data/merge'
-import type { Snapshots } from '@/data/types'
+import type { Snapshots } from '@contract/snapshots'
 
 export type SectionName = 'home' | 'log' | 'crew' | 'archive' | 'map' | 'chronometer' | 'charter'
 

@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { SnapshotsContext } from '@/data/context'
-import { emptySnapshots } from '@/data/empty'
-import type { Snapshots } from '@/data/types'
+import { emptySnapshots } from '@contract/empty'
+import type { Snapshots } from '@contract/snapshots'
 import { Chronometer } from '@/sections/Chronometer/Chronometer'
 
 function withSeason(startsAt: string, storyEndsAt: string): Snapshots {

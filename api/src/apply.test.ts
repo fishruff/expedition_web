@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, it, expect } from 'vitest'
 import { applyEvents } from './apply.ts'
-import type { ExpeditionEvent, PlayerRef } from './events.ts'
+import type { ExpeditionEvent, PlayerRef } from '../../contract/events.ts'
 
 const ARSEN: PlayerRef = { uuid: '069a79f4-44e9-4726-a5be-fca90e38aaf5', name: 'Arsen' }
 const KIRA: PlayerRef = { uuid: 'b2c1a0d4-1f77-4a9e-9d3b-2f5c8e7a1b02', name: 'Kira' }

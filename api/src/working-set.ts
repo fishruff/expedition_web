@@ -1,4 +1,4 @@
-import type { ExpeditionEvent, PlayerRef } from './events.ts'
+import type { ExpeditionEvent, PlayerRef } from '../../contract/events.ts'
 
 /**
  * Рабочий набор журнала: те события, которые ещё способны изменить снимки.

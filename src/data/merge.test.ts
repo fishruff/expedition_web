@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { isServerLive, isUnlocked, mergeCrew, snapshotAgeMinutes } from '@/data/merge'
-import { emptySnapshots } from '@/data/empty'
+import { emptySnapshots } from '@contract/empty'
 import type { CrewMember } from '@/content/types'
-import type { CrewEntry, CrewSnapshot } from '@/data/types'
+import type { CrewEntry, CrewSnapshot } from '@contract/snapshots'
 
 const NO_SOCIALS = { telegram: null, youtube: null, twitch: null }
 

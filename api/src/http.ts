@@ -1,5 +1,5 @@
 import { createHash, timingSafeEqual } from 'node:crypto'
-import type { ExpeditionEvent } from './events.ts'
+import type { ExpeditionEvent } from '../../contract/events.ts'
 import { BATCH_LIMIT, MAX_NOTES_PER_DAY, eventProblem, isEvent } from './validate.ts'
 
 export interface RequestLike {

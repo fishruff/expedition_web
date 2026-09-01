@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { SnapshotsContext } from '@/data/context'
-import { emptySnapshots } from '@/data/empty'
-import type { CrewEntry, Snapshots } from '@/data/types'
+import { emptySnapshots } from '@contract/empty'
+import type { CrewEntry, Snapshots } from '@contract/snapshots'
 import { Players } from '@/sections/Crew/Players'
 
 function entry(name: string, patch: Partial<CrewEntry> = {}): CrewEntry {

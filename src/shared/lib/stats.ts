@@ -1,4 +1,4 @@
-import type { PlayerStats } from '@/data/types'
+import type { PlayerStats } from '@contract/snapshots'
 import { plural } from '@/shared/lib/plural'
 
 const HOURS: [string, string, string] = ['час', 'часа', 'часов']

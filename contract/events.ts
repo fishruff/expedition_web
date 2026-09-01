@@ -1,24 +1,14 @@
 /**
  * События плагина ExpeditionCore ровно в том виде, в каком он шлёт их в api.
- * Соответствуют части 2 контракта `docs/contract/api-v1.md` и меняются только вместе с ним.
+ * Соответствуют части 2 контракта `docs/contract/api-v1.md` и меняются только
+ * вместе с ним.
  *
- * Типы живут здесь, а не в `src/data`, потому что сайт события не видит: он читает
- * только готовые снимки. Их знают две стороны — плагин и api.
+ * Сайт события не видит: он читает готовые снимки. Эти формы знают две стороны —
+ * плагин и приёмник.
  */
+import type { PlayerRef, PlayerStats } from './player.ts'
 
-export interface PlayerRef {
-  uuid: string
-  name: string
-}
-
-export interface EventStats {
-  playtimeMinutes: number
-  distanceCm: number
-  blocksMined: number
-  blocksPlaced: number
-  mobsKilled: number
-  deaths: number
-}
+export type { PlayerRef, PlayerStats }
 
 /** Четыре поля есть у любого события: номер, версия контракта, тип и время в UTC. */
 interface EventBase {
@@ -69,7 +59,7 @@ export interface NotePublishedEvent extends EventBase {
 export interface StatsSnapshotEvent extends EventBase {
   type: 'stats.snapshot'
   player: PlayerRef
-  stats: EventStats
+  stats: PlayerStats
 }
 
 export interface PlaceRevealedEvent extends EventBase {

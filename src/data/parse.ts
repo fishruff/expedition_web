@@ -10,7 +10,7 @@ import type {
   Snapshots,
   StatusSnapshot,
   UnlocksSnapshot,
-} from '@/data/types'
+} from '@contract/snapshots'
 
 /**
  * Разбор снимков, пришедших по сети.

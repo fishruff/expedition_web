@@ -1,8 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { SnapshotsContext } from '@/data/context'
-import { emptySnapshots } from '@/data/empty'
+import { emptySnapshots } from '@contract/empty'
 import { SNAPSHOT_NAMES, putSnapshot } from '@/data/parse'
-import type { Snapshots } from '@/data/types'
+import type { Snapshots } from '@contract/snapshots'
 
 /** Как часто перечитываем снимки. Сервис обновляет их раз в минуту. */
 const REFRESH_MS = 60_000

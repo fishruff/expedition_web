@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, it, expect } from 'vitest'
 import { handle, type RequestLike } from './http.ts'
-import type { ExpeditionEvent } from './events.ts'
+import type { ExpeditionEvent } from '../../contract/events.ts'
 
 const KEY = 'секрет'
 

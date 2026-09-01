@@ -1,6 +1,6 @@
-import { emptySnapshots } from '../../src/data/empty.ts'
-import type { CrewEntry, Snapshots, StatusSnapshot } from '../../src/data/types.ts'
-import type { ExpeditionEvent, PlayerRef } from './events.ts'
+import { emptySnapshots } from '../../contract/empty.ts'
+import type { CrewEntry, Snapshots, StatusSnapshot } from '../../contract/snapshots.ts'
+import type { ExpeditionEvent, PlayerRef } from '../../contract/events.ts'
 
 /**
  * Сведение потока событий в снимки — то, что делает api раз в минуту.

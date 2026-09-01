@@ -4,7 +4,7 @@ import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { EventLog, parseLog } from './store.ts'
-import type { ExpeditionEvent } from './events.ts'
+import type { ExpeditionEvent } from '../../contract/events.ts'
 
 function event(id: string): ExpeditionEvent {
   return {

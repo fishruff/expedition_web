@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { story } from '@/content'
 import { SnapshotsContext } from '@/data/context'
-import { emptySnapshots } from '@/data/empty'
-import type { Snapshots } from '@/data/types'
+import { emptySnapshots } from '@contract/empty'
+import type { Snapshots } from '@contract/snapshots'
 import { Archive } from '@/sections/Archive/Archive'
 
 function found(recordId: string, by = 'Steve', at = '2026-10-17T12:00:00Z') {
