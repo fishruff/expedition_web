@@ -26,10 +26,20 @@
 
 /* ---------- верхняя полоса ---------- */
 
+/*
+  Шапка складывается в две строки на всём, что уже стола.
+
+  Одной строкой она просит 737 точек — при масштабе 2 это вдвое шире телефона,
+  и браузер, вместо честной прокрутки, ужимал страницу целиком: текст, ради
+  которого масштаб и поднимали, снова становился мелким. Поэтому масштаб
+  и мобильная навигация — одна и та же правка, порознь они не работают.
+*/
 .header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: px(8);
+  justify-content: space-between;
+  gap: px(3) px(8);
   padding: px(3) px(6);
   border-bottom: px(1) solid var(--color-panel-hi);
   background-color: color-mix(in srgb, var(--color-panel-lo) 92%, transparent);
@@ -56,14 +66,32 @@
   text-transform: uppercase;
 }
 
+/*
+  Разделы уходят на вторую строку: `order` кладёт их после счётчика, хотя
+  в разметке они стоят между ним и названием. Бургер сюда не просится — шесть
+  коротких слов помещаются в две строки целиком, а спрятать их за кнопку значит
+  сделать один лишний тап ради экономии одной строки.
+*/
 .nav {
   display: flex;
-  gap: px(8);
-  margin-inline: auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: px(2) px(8);
+  order: 1;
+  flex-basis: 100%;
+
+  @include up('lg') {
+    order: 0;
+    flex-basis: auto;
+    margin-inline: auto;
+  }
 }
 
 .navLink {
-  padding-block: px(2);
+  // Полоса нажатия стала 35 точек высотой вместо 21, которые получал телефон.
+  // Это выше двадцати четырёх, которых требует WCAG, хотя ниже сорока четырёх
+  // из рекомендаций Apple: выше — и шапка начинает спорить с содержимым.
+  padding-block: px(4);
   border-bottom: px(2) solid transparent;
   color: var(--color-text-dim);
   font-size: px(5);
@@ -423,10 +451,17 @@
 
 /* ---------- нижняя полоса ---------- */
 
+/*
+  Подвал складывается по той же причине, что и шапка: одной строкой он просит
+  506 точек. Части встают в столбик по центру — адрес, название, связь.
+*/
 .footer {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: px(6);
+  justify-content: center;
+  text-align: center;
+  gap: px(3) px(6);
   padding: px(3) px(6);
   border-top: px(1) solid var(--color-panel-hi);
   background-color: color-mix(in srgb, var(--color-panel-lo) 92%, transparent);
@@ -436,17 +471,30 @@
 }
 
 .footerSide {
-  flex: 1;
   display: flex;
+  justify-content: center;
+  flex-basis: 100%;
   gap: px(6);
+
+  @include up('lg') {
+    flex: 1;
+    flex-basis: auto;
+  }
 }
 
 .footerCenter {
+  flex-basis: 100%;
   text-transform: uppercase;
+
+  @include up('lg') {
+    flex-basis: auto;
+  }
 }
 
 .links {
-  justify-content: flex-end;
+  @include up('lg') {
+    justify-content: flex-end;
+  }
 
   a {
     color: var(--color-gold-dim);

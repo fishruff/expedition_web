@@ -2,19 +2,22 @@ import { describe, it, expect } from 'vitest'
 import { assetScaleFor, scaleFor } from '@/scene/useScale'
 
 describe('scaleFor', () => {
-  it('на узком экране держит минимальный масштаб', () => {
-    expect(scaleFor(320)).toBe(1)
-    expect(scaleFor(639)).toBe(1)
+  // Единицы больше нет ни на одной ширине: при ней основной текст выходил шесть
+  // физических пикселей, а подписи — четыре. Замер на 375: 12px против 6px.
+  it('на узком экране держит двойку, а не единицу', () => {
+    expect(scaleFor(320)).toBe(2)
+    expect(scaleFor(375)).toBe(2)
+    expect(scaleFor(639)).toBe(2)
   })
 
   it('поднимает масштаб ступенями по ширине окна', () => {
-    expect(scaleFor(640)).toBe(1)
+    expect(scaleFor(640)).toBe(2)
     expect(scaleFor(1280)).toBe(2)
     expect(scaleFor(2560)).toBe(4)
   })
 
   // Соседние ступени слишком похожи, чтобы перекладывать сцену на каждые 640 точек.
-  it('пропускает нечётные ступени выше первой', () => {
+  it('пропускает нечётные ступени', () => {
     expect(scaleFor(1920)).toBe(2)
     expect(scaleFor(2559)).toBe(2)
   })
@@ -39,9 +42,9 @@ describe('assetScaleFor', () => {
     expect(assetScaleFor(2560)).toBe(4)
   })
 
-  it('не опускается ниже единицы', () => {
-    expect(assetScaleFor(320)).toBe(1)
-    expect(assetScaleFor(1000)).toBe(1)
+  it('не опускается ниже двойки', () => {
+    expect(assetScaleFor(320)).toBe(2)
+    expect(assetScaleFor(1000)).toBe(2)
   })
 
   it('всегда целый', () => {
