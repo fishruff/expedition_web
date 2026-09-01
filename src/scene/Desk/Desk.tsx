@@ -99,7 +99,6 @@ export function Desk() {
               ))}
           </div>
         </main>
-
       </div>
 
       <footer className={styles.footer}>

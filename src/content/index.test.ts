@@ -39,9 +39,17 @@ describe('parseCrew', () => {
 describe('parseEvents', () => {
   it('отбрасывает ивенты с некорректными или перевёрнутыми датами', () => {
     const result = parseEvents([
-      { title: 'Гонка', startsAt: '2026-08-20T18:00:00+03:00', endsAt: '2026-08-27T23:59:00+03:00' },
+      {
+        title: 'Гонка',
+        startsAt: '2026-08-20T18:00:00+03:00',
+        endsAt: '2026-08-27T23:59:00+03:00',
+      },
       { title: 'Без дат' },
-      { title: 'Конец раньше начала', startsAt: '2026-08-27T00:00:00+03:00', endsAt: '2026-08-20T00:00:00+03:00' },
+      {
+        title: 'Конец раньше начала',
+        startsAt: '2026-08-27T00:00:00+03:00',
+        endsAt: '2026-08-20T00:00:00+03:00',
+      },
     ])
 
     expect(result.map((event) => event.title)).toEqual(['Гонка'])
@@ -54,9 +62,7 @@ describe('parseTitles', () => {
       { id: 'ходок', label: 'Ходок', rule: 'maxDistance', frame: 'silver' },
     ])
 
-    expect(result).toEqual([
-      { id: 'ходок', label: 'Ходок', rule: 'maxDistance', frame: 'silver' },
-    ])
+    expect(result).toEqual([{ id: 'ходок', label: 'Ходок', rule: 'maxDistance', frame: 'silver' }])
   })
 
   it('отбрасывает правила без идентификатора или подписи', () => {
@@ -79,7 +85,15 @@ describe('parseStory', () => {
     const result = parseStory([{ id: 'храм-1', title: 'Первая табличка' }])
 
     expect(result).toEqual([
-      { id: 'храм-1', title: 'Первая табличка', chapter: 0, text: '', opens: [], unlocks: '', icon: '' },
+      {
+        id: 'храм-1',
+        title: 'Первая табличка',
+        chapter: 0,
+        text: '',
+        opens: [],
+        unlocks: '',
+        icon: '',
+      },
     ])
   })
 

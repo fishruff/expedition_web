@@ -111,7 +111,14 @@ describe('рабочий набор журнала', () => {
   it('не трогает находки, записи и артефакты', () => {
     const events: ExpeditionEvent[] = [
       { id: 'f1', v: 1, type: 'record.found', at: at(1), player: PLAYERS[0], recordId: 'з-1' },
-      { id: 'a1', v: 1, type: 'artifact.found', at: at(2), player: PLAYERS[1], artifactId: 'ковчег' },
+      {
+        id: 'a1',
+        v: 1,
+        type: 'artifact.found',
+        at: at(2),
+        player: PLAYERS[1],
+        artifactId: 'ковчег',
+      },
       { id: 'p1', v: 1, type: 'place.revealed', at: at(3), placeId: 'храм', by: 'admin' },
       {
         id: 'n1',
@@ -124,7 +131,11 @@ describe('рабочий набор журнала', () => {
       { id: 'r1', v: 1, type: 'record.read', at: at(5), player: PLAYERS[1], recordId: 'з-1' },
     ] as ExpeditionEvent[]
 
-    expect(compacted(events).map((event) => event.id).sort()).toEqual(['a1', 'f1', 'n1', 'p1', 'r1'])
+    expect(
+      compacted(events)
+        .map((event) => event.id)
+        .sort(),
+    ).toEqual(['a1', 'f1', 'n1', 'p1', 'r1'])
   })
 
   /**

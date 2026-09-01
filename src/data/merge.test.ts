@@ -70,7 +70,10 @@ describe('mergeCrew', () => {
   })
 
   it('игрока из игры, которого нет в авторском списке, добавляет в конец с пометкой', () => {
-    const views = mergeCrew([arsen], snapshot([entry(), entry({ uuid: 'uuid-kira', name: 'Kira' })]))
+    const views = mergeCrew(
+      [arsen],
+      snapshot([entry(), entry({ uuid: 'uuid-kira', name: 'Kira' })]),
+    )
 
     expect(views).toHaveLength(2)
     expect(views[1].nick).toBe('Kira')
@@ -120,7 +123,9 @@ describe('isUnlocked', () => {
   it('раздел открыт, когда ключ появился', () => {
     const unlocks = {
       updatedAt: '',
-      unlocked: { chronometer: { at: '2026-10-17T14:20:00Z', by: { uuid: 'uuid-arsen', name: 'Arsen' } } },
+      unlocked: {
+        chronometer: { at: '2026-10-17T14:20:00Z', by: { uuid: 'uuid-arsen', name: 'Arsen' } },
+      },
       places: [],
     }
 

@@ -4,7 +4,11 @@ import { buildFeed } from '@/data/feed'
 import type { GameEvent, StoryRecord } from '@/content/types'
 
 const EVENTS: GameEvent[] = [
-  { title: 'Гонка за артефактом', startsAt: '2026-10-18T18:00:00Z', endsAt: '2026-10-19T23:59:00Z' },
+  {
+    title: 'Гонка за артефактом',
+    startsAt: '2026-10-18T18:00:00Z',
+    endsAt: '2026-10-19T23:59:00Z',
+  },
 ]
 
 describe('лента событий', () => {
@@ -106,7 +110,15 @@ describe('лента событий', () => {
     ]
 
     const story: StoryRecord[] = [
-      { id: 'храм-1', title: 'Первая табличка', chapter: 1, text: '', opens: [], unlocks: '', icon: '' },
+      {
+        id: 'храм-1',
+        title: 'Первая табличка',
+        chapter: 1,
+        text: '',
+        opens: [],
+        unlocks: '',
+        icon: '',
+      },
     ]
 
     expect(buildFeed(snapshots, [], 20, story)[0].title).toBe('Первая табличка')

@@ -27,10 +27,10 @@ services:
     # Только на петлю: снаружи приёмник не нужен никому, а `curl localhost:4000/health`
     # с машины владельца остаётся рабочим.
     ports:
-      - "127.0.0.1:4000:4000"
+      - '127.0.0.1:4000:4000'
 
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:4000/health"]
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:4000/health']
       interval: 10s
       timeout: 3s
       retries: 5
@@ -43,15 +43,15 @@ services:
     container_name: expedition-server
 
     ports:
-      - "25565:25565"
+      - '25565:25565'
 
     environment:
-      EULA: "TRUE"
+      EULA: 'TRUE'
       TYPE: PAPER
-      VERSION: "1.21"
-      MEMORY: "4G"
-      JAVA_VERSION: "21"
-      ENABLE_SPARK: "false"
+      VERSION: '1.21'
+      MEMORY: '4G'
+      JAVA_VERSION: '21'
+      ENABLE_SPARK: 'false'
       EXPEDITION_KEY: ${EXPEDITION_KEY:?не задан EXPEDITION_KEY — скопируйте .env.example в .env}
 
     volumes:

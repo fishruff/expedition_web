@@ -18,7 +18,10 @@ function renderGate(snapshots: Snapshots) {
 describe('Gate', () => {
   it('показывает содержимое открытого раздела', () => {
     const snapshots = emptySnapshots()
-    snapshots.unlocks.unlocked.map = { at: '2026-10-15T19:00:00Z', by: { uuid: 'uuid-admin', name: 'admin' } }
+    snapshots.unlocks.unlocked.map = {
+      at: '2026-10-15T19:00:00Z',
+      by: { uuid: 'uuid-admin', name: 'admin' },
+    }
 
     renderGate(snapshots)
 

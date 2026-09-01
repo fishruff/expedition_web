@@ -27,13 +27,27 @@ describe('форма события', () => {
       base({ type: 'record.read', player: PLAYER, recordId: 'храм-1' }),
       base({ type: 'artifact.found', player: PLAYER, artifactId: 'chronometer' }),
       base({ type: 'place.revealed', placeId: 'южный-берег', by: 'Arsen' }),
-      base({ type: 'stats.snapshot', player: PLAYER, stats: {
-        playtimeMinutes: 10, distanceCm: 1000, blocksMined: 5,
-        blocksPlaced: 3, mobsKilled: 1, deaths: 0,
-      } }),
-      base({ type: 'note.published', player: PLAYER, note: {
-        title: 'День третий', pages: ['Вышли к обрыву.'], draft: false,
-      } }),
+      base({
+        type: 'stats.snapshot',
+        player: PLAYER,
+        stats: {
+          playtimeMinutes: 10,
+          distanceCm: 1000,
+          blocksMined: 5,
+          blocksPlaced: 3,
+          mobsKilled: 1,
+          deaths: 0,
+        },
+      }),
+      base({
+        type: 'note.published',
+        player: PLAYER,
+        note: {
+          title: 'День третий',
+          pages: ['Вышли к обрыву.'],
+          draft: false,
+        },
+      }),
     ]
 
     for (const event of good) {
@@ -66,7 +80,9 @@ describe('то, чем ломали приёмник', () => {
     expect(ok(base({ type: 'record.read', recordId: 'храм-1' }))).toBe(false)
     expect(ok(base({ type: 'stats.snapshot', stats: {} }))).toBe(false)
     expect(ok(base({ type: 'artifact.found', artifactId: 'map' }))).toBe(false)
-    expect(ok(base({ type: 'note.published', note: { title: 'т', pages: ['с'], draft: false } }))).toBe(false)
+    expect(
+      ok(base({ type: 'note.published', note: { title: 'т', pages: ['с'], draft: false } })),
+    ).toBe(false)
   })
 
   it('игрок без имени — от него сайт умирал белым экраном на всех страницах', () => {
@@ -80,14 +96,21 @@ describe('то, чем портили снимки молча', () => {
   it('__proto__ ключом артефакта', () => {
     // Присваивание по такому имени меняет прототип вместо создания поля:
     // раздел не открывался, и сверка перед сезоном об этом не знала.
-    expect(ok(base({ type: 'artifact.found', player: PLAYER, artifactId: '__proto__' }))).toBe(false)
-    expect(ok(base({ type: 'artifact.found', player: PLAYER, artifactId: 'constructor' }))).toBe(false)
+    expect(ok(base({ type: 'artifact.found', player: PLAYER, artifactId: '__proto__' }))).toBe(
+      false,
+    )
+    expect(ok(base({ type: 'artifact.found', player: PLAYER, artifactId: 'constructor' }))).toBe(
+      false,
+    )
   })
 
   it('заголовок объектом ронял дневник, длинный — растягивал страницу', () => {
-    const note = (title: unknown) => base({
-      type: 'note.published', player: PLAYER, note: { title, pages: ['с'], draft: false },
-    })
+    const note = (title: unknown) =>
+      base({
+        type: 'note.published',
+        player: PLAYER,
+        note: { title, pages: ['с'], draft: false },
+      })
 
     expect(ok(note({ ru: 'x' }))).toBe(false)
     expect(ok(note('т'.repeat(5000)))).toBe(false)
@@ -95,9 +118,12 @@ describe('то, чем портили снимки молча', () => {
   })
 
   it('draft строкой превращал все записи в черновики', () => {
-    const note = (draft: unknown) => base({
-      type: 'note.published', player: PLAYER, note: { title: 'т', pages: ['с'], draft },
-    })
+    const note = (draft: unknown) =>
+      base({
+        type: 'note.published',
+        player: PLAYER,
+        note: { title: 'т', pages: ['с'], draft },
+      })
 
     // «false» строкой истинна — раздел записей молча опустел бы.
     expect(ok(note('false'))).toBe(false)
@@ -106,12 +132,20 @@ describe('то, чем портили снимки молча', () => {
   })
 
   it('мусор в статистике доезжал до карточки участника', () => {
-    const stats = (patch: Record<string, unknown>) => base({
-      type: 'stats.snapshot', player: PLAYER, stats: {
-        playtimeMinutes: 1, distanceCm: 1, blocksMined: 1,
-        blocksPlaced: 1, mobsKilled: 1, deaths: 1, ...patch,
-      },
-    })
+    const stats = (patch: Record<string, unknown>) =>
+      base({
+        type: 'stats.snapshot',
+        player: PLAYER,
+        stats: {
+          playtimeMinutes: 1,
+          distanceCm: 1,
+          blocksMined: 1,
+          blocksPlaced: 1,
+          mobsKilled: 1,
+          deaths: 1,
+          ...patch,
+        },
+      })
 
     expect(ok(stats({ playtimeMinutes: -100 }))).toBe(false)
     expect(ok(stats({ distanceCm: Infinity }))).toBe(false)
@@ -121,17 +155,26 @@ describe('то, чем портили снимки молча', () => {
   })
 
   it('номер места длиной в миллион знаков', () => {
-    expect(ok(base({ type: 'place.revealed', placeId: 'п'.repeat(100000), by: 'Arsen' }))).toBe(false)
+    expect(ok(base({ type: 'place.revealed', placeId: 'п'.repeat(100000), by: 'Arsen' }))).toBe(
+      false,
+    )
   })
 })
 
 describe('время', () => {
   it('дата в прошлом веке крала находку у первооткрывателя', () => {
-    expect(ok({ ...base({ type: 'record.found', player: PLAYER, recordId: 'храм-1' }), at: '1970-01-01T00:00:00Z' })).toBe(false)
+    expect(
+      ok({
+        ...base({ type: 'record.found', player: PLAYER, recordId: 'храм-1' }),
+        at: '1970-01-01T00:00:00Z',
+      }),
+    ).toBe(false)
   })
 
   it('дата в будущем оставляла сервер «в сети» навсегда', () => {
-    expect(ok({ ...base({ type: 'server.heartbeat', online: [] }), at: '3000-01-01T00:00:00Z' })).toBe(false)
+    expect(
+      ok({ ...base({ type: 'server.heartbeat', online: [] }), at: '3000-01-01T00:00:00Z' }),
+    ).toBe(false)
   })
 
   it('сутки вперёд прощаем сбитым часам, двое — нет', () => {

@@ -8,10 +8,7 @@ const src = fileURLToPath(new URL('./src', import.meta.url))
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    babel({ presets: [reactCompilerPreset()] })
-  ],
+  plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
   /**
    * Метка сборки. Ею сбрасывается кеш у картинок из `public/`: они уезжают
    * к посетителю под своим именем, без хеша, поэтому замена файла сама по себе

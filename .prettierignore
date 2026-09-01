@@ -1,0 +1,10 @@
+# Не наше и не исходники.
+node_modules
+dist
+plugin/*/build
+plugin/*/.gradle
+server/data
+public/data
+
+# Тексты владельца и разбор: там ручные переносы по смыслу, а не по ширине.
+*.md

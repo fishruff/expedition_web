@@ -1,181 +1,274 @@
 <!doctype html>
 <html lang="ru">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Expedition — просмотр ассетов</title>
-<style>
-  /*
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Expedition — просмотр ассетов</title>
+    <style>
+      /*
     Служебная страница для приёмки пиксельных ассетов.
     Не часть сайта: сюда смотрят, когда приходит новый файл от художника.
   */
-  @font-face {
-    font-family: 'Monocraft';
-    src: url('/fonts/Monocraft.woff2') format('woff2');
-  }
+      @font-face {
+        font-family: 'Monocraft';
+        src: url('/fonts/Monocraft.woff2') format('woff2');
+      }
 
-  * { box-sizing: border-box; margin: 0; }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
 
-  body {
-    background: #14100c;
-    color: #e8dcc0;
-    font-family: 'Monocraft', ui-monospace, monospace;
-    font-size: 13px;
-    line-height: 1.6;
-    padding: 24px;
-    -webkit-font-smoothing: none;
-  }
+      body {
+        background: #14100c;
+        color: #e8dcc0;
+        font-family: 'Monocraft', ui-monospace, monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        padding: 24px;
+        -webkit-font-smoothing: none;
+      }
 
-  img { image-rendering: pixelated; display: block; }
+      img {
+        image-rendering: pixelated;
+        display: block;
+      }
 
-  h1 { font-size: 20px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 4px; }
-  h2 { font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: #d9a441; margin: 28px 0 10px; }
-  p.note { color: #99866a; max-width: 70ch; }
+      h1 {
+        font-size: 20px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+      h2 {
+        font-size: 15px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #d9a441;
+        margin: 28px 0 10px;
+      }
+      p.note {
+        color: #99866a;
+        max-width: 70ch;
+      }
 
-  .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end; margin-top: 12px; }
+      .row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        margin-top: 12px;
+      }
 
-  .cell { border: 2px solid #4a3a26; background: #1e1811; padding: 10px; }
-  .cell figcaption { color: #99866a; font-size: 11px; letter-spacing: 0.1em; margin-top: 8px; text-align: center; }
+      .cell {
+        border: 2px solid #4a3a26;
+        background: #1e1811;
+        padding: 10px;
+      }
+      .cell figcaption {
+        color: #99866a;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        margin-top: 8px;
+        text-align: center;
+      }
 
-  /* Проверка бесшовности: если тайл кривой, стыки видно сразу. */
-  .tile-test { width: 256px; height: 128px; border: 2px solid #4a3a26; }
+      /* Проверка бесшовности: если тайл кривой, стыки видно сразу. */
+      .tile-test {
+        width: 256px;
+        height: 128px;
+        border: 2px solid #4a3a26;
+      }
 
-  /* Проверка рамки: тянем её под разное содержимое. */
-  .frame-panel {
-    border-style: solid;
-    border-width: 24px;
-    border-image: url('/assets/frame-panel.png') 12 fill repeat;
-    padding: 8px;
-    color: #e8dcc0;
-  }
+      /* Проверка рамки: тянем её под разное содержимое. */
+      .frame-panel {
+        border-style: solid;
+        border-width: 24px;
+        border-image: url('/assets/frame-panel.png') 12 fill repeat;
+        padding: 8px;
+        color: #e8dcc0;
+      }
 
-  .frame-book {
-    border-style: solid;
-    border-width: 48px;
-    border-image: url('/assets/frame-book.png') 24 repeat;
-    background-image: url('/assets/paper-tile.png');
-    background-size: 64px;
-    background-clip: padding-box;
-    color: #3b2a18;
-    padding: 12px;
-  }
+      .frame-book {
+        border-style: solid;
+        border-width: 48px;
+        border-image: url('/assets/frame-book.png') 24 repeat;
+        background-image: url('/assets/paper-tile.png');
+        background-size: 64px;
+        background-clip: padding-box;
+        color: #3b2a18;
+        padding: 12px;
+      }
 
-  .checker {
-    background-image:
-      linear-gradient(45deg, #2a2118 25%, transparent 25%),
-      linear-gradient(-45deg, #2a2118 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, #2a2118 75%),
-      linear-gradient(-45deg, transparent 75%, #2a2118 75%);
-    background-size: 16px 16px;
-    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
-  }
+      .checker {
+        background-image:
+          linear-gradient(45deg, #2a2118 25%, transparent 25%),
+          linear-gradient(-45deg, #2a2118 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, #2a2118 75%),
+          linear-gradient(-45deg, transparent 75%, #2a2118 75%);
+        background-size: 16px 16px;
+        background-position:
+          0 0,
+          0 8px,
+          8px -8px,
+          -8px 0;
+      }
 
-  table { border-collapse: collapse; margin-top: 12px; }
-  td, th { border: 1px solid #4a3a26; padding: 4px 10px; text-align: left; font-weight: 400; }
-  th { color: #99866a; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
-</style>
-</head>
-<body>
+      table {
+        border-collapse: collapse;
+        margin-top: 12px;
+      }
+      td,
+      th {
+        border: 1px solid #4a3a26;
+        padding: 4px 10px;
+        text-align: left;
+        font-weight: 400;
+      }
+      th {
+        color: #99866a;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Просмотр ассетов</h1>
+    <p class="note">
+      Служебная страница для приёмки. Годный ассет остаётся чётким на всех масштабах, не имеет
+      полупрозрачной каймы и читается в мелком размере.
+    </p>
 
-<h1>Просмотр ассетов</h1>
-<p class="note">
-  Служебная страница для приёмки. Годный ассет остаётся чётким на всех масштабах,
-  не имеет полупрозрачной каймы и читается в мелком размере.
-</p>
+    <h2>Предметы на всех масштабах</h2>
+    <p class="note">
+      Слева направо — 1×, 2×, 3×, 4×. Если на каком-то масштабе появилось мыло, ассет хранится не в
+      родном размере.
+    </p>
 
-<h2>Предметы на всех масштабах</h2>
-<p class="note">Слева направо — 1×, 2×, 3×, 4×. Если на каком-то масштабе появилось мыло, ассет хранится не в родном размере.</p>
+    <div class="row" id="props"></div>
 
-<div class="row" id="props"></div>
+    <h2>Нарисованные предметы: проверка единой плотности</h2>
+    <p class="note">
+      Все предметы рядом в масштабе 2×, как на столе. Точка одного должна равняться точке другого,
+      свет — падать с одной стороны, а размеры — соответствовать друг другу по смыслу: сундук больше
+      книги, книга больше часов.
+    </p>
 
-<h2>Нарисованные предметы: проверка единой плотности</h2>
-<p class="note">
-  Все предметы рядом в масштабе 2×, как на столе. Точка одного должна равняться точке другого,
-  свет — падать с одной стороны, а размеры — соответствовать друг другу по смыслу:
-  сундук больше книги, книга больше часов.
-</p>
+    <div class="row">
+      <figure class="cell checker">
+        <img src="/assets/compass.png" style="width: calc(92px * 2)" alt="" />
+        <figcaption>compass · 92×110</figcaption>
+      </figure>
+      <figure class="cell checker">
+        <img src="/assets/watch.png" style="width: calc(112px * 2)" alt="" />
+        <figcaption>watch · 112×103</figcaption>
+      </figure>
+      <figure class="cell checker">
+        <img src="/assets/book.png" style="width: calc(93px * 2)" alt="" />
+        <figcaption>book · 93×108</figcaption>
+      </figure>
+      <figure class="cell checker">
+        <img src="/assets/chest.png" style="width: calc(81px * 2)" alt="" />
+        <figcaption>chest · 81×61</figcaption>
+      </figure>
+      <figure class="cell checker">
+        <img src="/assets/charter.png" style="width: calc(124px * 2)" alt="" />
+        <figcaption>charter · 124×63</figcaption>
+      </figure>
+      <figure class="cell checker">
+        <img src="/assets/lamp.png" style="width: calc(54px * 2)" alt="" />
+        <figcaption>lamp · 54×116</figcaption>
+      </figure>
+    </div>
 
-<div class="row">
-  <figure class="cell checker"><img src="/assets/compass.png" style="width: calc(92px * 2)" alt="" /><figcaption>compass · 92×110</figcaption></figure>
-  <figure class="cell checker"><img src="/assets/watch.png" style="width: calc(112px * 2)" alt="" /><figcaption>watch · 112×103</figcaption></figure>
-  <figure class="cell checker"><img src="/assets/book.png" style="width: calc(93px * 2)" alt="" /><figcaption>book · 93×108</figcaption></figure>
-  <figure class="cell checker"><img src="/assets/chest.png" style="width: calc(81px * 2)" alt="" /><figcaption>chest · 81×61</figcaption></figure>
-  <figure class="cell checker"><img src="/assets/charter.png" style="width: calc(124px * 2)" alt="" /><figcaption>charter · 124×63</figcaption></figure>
-  <figure class="cell checker"><img src="/assets/lamp.png" style="width: calc(54px * 2)" alt="" /><figcaption>lamp · 54×116</figcaption></figure>
-</div>
+    <h2>Тайлы: проверка бесшовности</h2>
+    <p class="note">Тайл повторён много раз. Стыков и сетки быть не должно.</p>
 
-<h2>Тайлы: проверка бесшовности</h2>
-<p class="note">Тайл повторён много раз. Стыков и сетки быть не должно.</p>
+    <div class="row">
+      <figure class="cell">
+        <div
+          class="tile-test"
+          style="
+            background: url('/assets/wood-tile.png') repeat;
+            background-size: 64px;
+            image-rendering: pixelated;
+          "
+        ></div>
+        <figcaption>wood-tile · 512×512</figcaption>
+      </figure>
+      <figure class="cell">
+        <div
+          class="tile-test"
+          style="
+            background: url('/assets/paper-tile.png') repeat;
+            background-size: 64px;
+            image-rendering: pixelated;
+          "
+        ></div>
+        <figcaption>paper-tile · 32×32</figcaption>
+      </figure>
+    </div>
 
-<div class="row">
-  <figure class="cell">
-    <div class="tile-test" style="background: url('/assets/wood-tile.png') repeat; background-size: 64px; image-rendering: pixelated"></div>
-    <figcaption>wood-tile · 512×512</figcaption>
-  </figure>
-  <figure class="cell">
-    <div class="tile-test" style="background: url('/assets/paper-tile.png') repeat; background-size: 64px; image-rendering: pixelated"></div>
-    <figcaption>paper-tile · 32×32</figcaption>
-  </figure>
-</div>
+    <h2>Рамки: проверка растяжения</h2>
+    <p class="note">Одна и та же рамка под разным содержимым. Углы не должны искажаться.</p>
 
-<h2>Рамки: проверка растяжения</h2>
-<p class="note">Одна и та же рамка под разным содержимым. Углы не должны искажаться.</p>
+    <div class="row">
+      <div class="frame-panel" style="width: 200px">Короткая панель</div>
+      <div class="frame-panel" style="width: 320px">
+        Панель подлиннее, в две строки текста, чтобы было видно поведение сторон рамки.
+      </div>
+    </div>
 
-<div class="row">
-  <div class="frame-panel" style="width: 200px">Короткая панель</div>
-  <div class="frame-panel" style="width: 320px">
-    Панель подлиннее, в две строки текста, чтобы было видно поведение сторон рамки.
-  </div>
-</div>
+    <div class="row">
+      <div class="frame-book" style="width: 280px">Книга с коротким текстом.</div>
+      <div class="frame-book" style="width: 420px">
+        Книга с длинным текстом. Рамка тянется, углы целы, бумага внутри повторяется тайлом. Именно
+        поэтому список любой длины помещается без обрезки.
+      </div>
+    </div>
 
-<div class="row">
-  <div class="frame-book" style="width: 280px">Книга с коротким текстом.</div>
-  <div class="frame-book" style="width: 420px">
-    Книга с длинным текстом. Рамка тянется, углы целы, бумага внутри повторяется тайлом.
-    Именно поэтому список любой длины помещается без обрезки.
-  </div>
-</div>
+    <h2>Что где лежит</h2>
+    <table id="table"></table>
 
-<h2>Что где лежит</h2>
-<table id="table"></table>
+    <script>
+      const PROPS = [
+        { file: 'compass.png', w: 92, label: 'compass' },
+        { file: 'watch.png', w: 112, label: 'watch' },
+        { file: 'lamp.png', w: 54, label: 'lamp' },
+        { file: 'book.png', w: 93, label: 'book' },
+        { file: 'book-open.png', w: 119, label: 'book-open' },
+        { file: 'chest.png', w: 81, label: 'chest' },
+        { file: 'charter.png', w: 124, label: 'charter' },
+      ]
 
-<script>
-  const PROPS = [
-    { file: 'compass.png', w: 92, label: 'compass' },
-    { file: 'watch.png', w: 112, label: 'watch' },
-    { file: 'lamp.png', w: 54, label: 'lamp' },
-    { file: 'book.png', w: 93, label: 'book' },
-    { file: 'book-open.png', w: 119, label: 'book-open' },
-    { file: 'chest.png', w: 81, label: 'chest' },
-    { file: 'charter.png', w: 124, label: 'charter' },
-  ]
-
-  document.getElementById('props').innerHTML = PROPS.map((p) => `
+      document.getElementById('props').innerHTML = PROPS.map(
+        (p) => `
     <figure class="cell checker">
       <div style="display:flex; gap:12px; align-items:flex-end">
         ${[1, 2, 3, 4].map((s) => `<img src="/assets/${p.file}" style="width:${p.w * s}px" alt="">`).join('')}
       </div>
       <figcaption>${p.label}</figcaption>
-    </figure>`).join('')
+    </figure>`,
+      ).join('')
 
-  const ROWS = [
-    ['wood-tile.png', 'тайл', '512×512', 'фон стола, собран зеркалами из 128'],
-    ['paper-tile.png', 'тайл', '32×32', 'бумага страниц'],
-    ['frame-panel.png', 'рамка 9 слоёв', '48×48, углы 12', 'панели интерфейса'],
-    ['frame-book.png', 'рамка 9 слоёв', '96×96, углы 24', 'переплёт книги'],
-    ['compass.png', 'предмет', '92×110', 'ведёт на карту'],
-    ['watch.png', 'предмет', '112×103', 'ведёт в хронометр'],
-    ['book.png', 'предмет', '93×108', 'ведёт в дневник'],
-    ['charter.png', 'предмет', '124×63', 'ведёт в устав'],
-    ['chest.png', 'предмет', '81×61', 'ведёт в архив'],
-    ['lamp.png', 'предмет', '54×116', 'декор, источник света'],
-    ['book-open.png', 'предмет', '119×114', 'разворот, пока не на сцене'],
-  ]
+      const ROWS = [
+        ['wood-tile.png', 'тайл', '512×512', 'фон стола, собран зеркалами из 128'],
+        ['paper-tile.png', 'тайл', '32×32', 'бумага страниц'],
+        ['frame-panel.png', 'рамка 9 слоёв', '48×48, углы 12', 'панели интерфейса'],
+        ['frame-book.png', 'рамка 9 слоёв', '96×96, углы 24', 'переплёт книги'],
+        ['compass.png', 'предмет', '92×110', 'ведёт на карту'],
+        ['watch.png', 'предмет', '112×103', 'ведёт в хронометр'],
+        ['book.png', 'предмет', '93×108', 'ведёт в дневник'],
+        ['charter.png', 'предмет', '124×63', 'ведёт в устав'],
+        ['chest.png', 'предмет', '81×61', 'ведёт в архив'],
+        ['lamp.png', 'предмет', '54×116', 'декор, источник света'],
+        ['book-open.png', 'предмет', '119×114', 'разворот, пока не на сцене'],
+      ]
 
-  document.getElementById('table').innerHTML =
-    '<tr><th>файл</th><th>тип</th><th>размер</th><th>назначение</th></tr>' +
-    ROWS.map((r) => '<tr>' + r.map((c) => `<td>${c}</td>`).join('') + '</tr>').join('')
-</script>
-
-</body>
+      document.getElementById('table').innerHTML =
+        '<tr><th>файл</th><th>тип</th><th>размер</th><th>назначение</th></tr>' +
+        ROWS.map((r) => '<tr>' + r.map((c) => `<td>${c}</td>`).join('') + '</tr>').join('')
+    </script>
+  </body>
 </html>

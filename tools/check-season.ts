@@ -39,7 +39,10 @@ const places = authored('places.json', parsePlaces)
 const crew = authored('crew.json', parseCrew)
 
 const records = read('records.json') as { found?: { recordId?: string }[] } | null
-const unlocks = read('unlocks.json') as { unlocked?: Record<string, unknown>; places?: string[] } | null
+const unlocks = read('unlocks.json') as {
+  unlocked?: Record<string, unknown>
+  places?: string[]
+} | null
 const crewSnapshot = read('crew.json') as { players?: { name?: string }[] } | null
 
 if (records === null && unlocks === null) {

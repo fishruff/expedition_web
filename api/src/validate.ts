@@ -93,7 +93,14 @@ function identifier(value: unknown, field: string): string {
 function stats(value: unknown): string {
   if (!isDict(value)) return 'stats должен быть объектом'
 
-  const fields = ['playtimeMinutes', 'distanceCm', 'blocksMined', 'blocksPlaced', 'mobsKilled', 'deaths']
+  const fields = [
+    'playtimeMinutes',
+    'distanceCm',
+    'blocksMined',
+    'blocksPlaced',
+    'mobsKilled',
+    'deaths',
+  ]
   for (const field of fields) {
     const problem = count(value[field], `stats.${field}`)
     if (problem) return problem

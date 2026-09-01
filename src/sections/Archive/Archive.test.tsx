@@ -52,7 +52,10 @@ describe('Архив', () => {
   })
 
   it('открывает последнюю находку, а не первую главу', async () => {
-    show([found(story[0].id, 'Steve', '2026-10-01T10:00:00Z'), found(story[1].id, 'Alex', '2026-10-09T10:00:00Z')])
+    show([
+      found(story[0].id, 'Steve', '2026-10-01T10:00:00Z'),
+      found(story[1].id, 'Alex', '2026-10-09T10:00:00Z'),
+    ])
 
     expect(screen.getByText(story[1].title)).toBeTruthy()
     expect(screen.getByText(plain(story[1].text))).toBeTruthy()

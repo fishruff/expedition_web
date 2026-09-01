@@ -125,7 +125,10 @@ export function handle(request: RequestLike, deps: Deps): ResponseLike {
     if (overDailyLimit(event, deps, inBatch)) {
       return {
         status: 400,
-        body: { ok: false, error: `не больше ${MAX_NOTES_PER_DAY} записей в сутки от одного игрока` },
+        body: {
+          ok: false,
+          error: `не больше ${MAX_NOTES_PER_DAY} записей в сутки от одного игрока`,
+        },
       }
     }
   }
