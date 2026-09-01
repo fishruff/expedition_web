@@ -10,7 +10,12 @@
 иллюстрация, поэтому силуэт важнее деталей.
 """
 import sys
-sys.path.insert(0, 'tools')
+from pathlib import Path
+
+# Скрипт работает из любого каталога: раньше путь добавлялся строкой 'tools',
+# то есть запускать его можно было только из корня репозитория, и нигде это
+# не было написано.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from pixelize import write_png
 
 NONE = (0, 0, 0, 0)

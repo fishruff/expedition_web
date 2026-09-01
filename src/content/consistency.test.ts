@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { places, story } from '@/content'
+import { SECTION_KEYS } from '@/data/unlocks'
 
 /**
  * Согласованность файлов владельца между собой.
@@ -11,12 +12,6 @@ import { places, story } from '@/content'
  *
  * Каждая проверка здесь стоит за случаем, уже случившимся вживую.
  */
-
-/**
- * Ключи, которыми открываются разделы. Держатся в `src/data/unlocks.ts`
- * и приходят из игры полем `artifactId`.
- */
-const SECTION_KEYS = ['map', 'chronometer']
 
 describe('сюжет и карта', () => {
   it('каждое открываемое место есть в places.json', () => {

@@ -41,6 +41,7 @@ export function SnapshotsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let alive = true
+    let id: ReturnType<typeof setInterval> | null = null
 
     const refresh = () => {
       loadAll().then((next) => {
@@ -48,12 +49,34 @@ export function SnapshotsProvider({ children }: { children: ReactNode }) {
       })
     }
 
-    refresh()
-    const id = setInterval(refresh, REFRESH_MS)
+    const stop = () => {
+      if (id !== null) clearInterval(id)
+      id = null
+    }
+
+    /**
+     * В фоне не перечитываем: снимки нужны глазам, а глаз на вкладке нет.
+     * Возвращаясь, читаем сразу — вкладка, пролежавшая час, показала бы
+     * часовой давности состав в сети и «сервер выключен» на живом сервере.
+     */
+    const start = () => {
+      stop()
+      refresh()
+      id = setInterval(refresh, REFRESH_MS)
+    }
+
+    const onVisibility = () => {
+      if (document.hidden) stop()
+      else start()
+    }
+
+    onVisibility()
+    document.addEventListener('visibilitychange', onVisibility)
 
     return () => {
       alive = false
-      clearInterval(id)
+      stop()
+      document.removeEventListener('visibilitychange', onVisibility)
     }
   }, [])
 

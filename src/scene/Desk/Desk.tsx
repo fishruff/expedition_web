@@ -105,7 +105,10 @@ export function Desk() {
         {/* Адрес сервера живёт здесь: в композиции стола он лишний, но игроку,
             пришедшему играть, нужен на каждой странице. */}
         <span className={styles.footerSide}>
-          <button type="button" className={styles.address} onClick={copyAddress}>
+          {/* Текст кнопки подменяется на «Адрес скопирован» — без aria-live
+              для читающего с экрана это молчаливая подмена: он нажал и не узнал,
+              случилось ли что-нибудь. */}
+          <button type="button" className={styles.address} onClick={copyAddress} aria-live="polite">
             {copied ? 'Адрес скопирован' : SERVER_ADDRESS}
           </button>
         </span>

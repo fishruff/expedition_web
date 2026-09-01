@@ -15,12 +15,10 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parsePlaces, parseStory, parseCrew } from '../src/content/index.ts'
+import { isSectionKey } from '../src/data/unlocks.ts'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const dataDir = process.env.DATA_DIR ?? join(root, 'public/data')
-
-/** Ключи, которыми открываются разделы. Живут в `src/data/unlocks.ts`. */
-const SECTION_KEYS = ['map', 'chronometer']
 
 function read(name: string): unknown {
   try {
@@ -73,7 +71,7 @@ for (const id of unlocks?.places ?? []) {
 
 // 3. Ключи, которыми ничего не открывается.
 for (const key of Object.keys(unlocks?.unlocked ?? {})) {
-  if (!SECTION_KEYS.includes(key)) {
+  if (!isSectionKey(key)) {
     problems.push(`ключ «${key}» не открывает ни один раздел — проверьте латиницу и написание`)
   }
 }

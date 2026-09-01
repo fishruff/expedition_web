@@ -121,13 +121,21 @@
   text-transform: uppercase;
 }
 
+/*
+  Значок «в сети». Цвет тут не единственный носитель смысла: живой — залитый
+  квадрат, выключенный — пустой, с рамкой. Две точки одного размера, отличающиеся
+  только зелёным и серым, дальтоник не различает, а подпись рядом читают не все —
+  её и глазами-то замечают не сразу.
+*/
 .dot {
-  width: px(2);
-  height: px(2);
-  background-color: var(--color-panel-hi);
+  width: px(3);
+  height: px(3);
+  border: px(1) solid var(--color-panel-hi);
+  background-color: transparent;
 }
 
 .online[data-live='true'] .dot {
+  border-color: var(--color-green);
   background-color: var(--color-green);
 }
 

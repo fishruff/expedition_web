@@ -1,11 +1,16 @@
-"""Разбор и подготовка пиксельных ассетов без внешних библиотек."""
+"""Разбор и подготовка пиксельных ассетов без внешних библиотек.
+
+Проверки здесь — обычные исключения, а не assert: под `python -O` assert
+исчезает, и битый PNG прошёл бы приёмку молча. Приёмка на то и приёмка.
+"""
 import zlib, struct, sys
 from collections import Counter
 
 
 def read_png(path):
     d = open(path, 'rb').read()
-    assert d[:8] == b'\x89PNG\r\n\x1a\n', 'не PNG'
+    if d[:8] != b'\x89PNG\r\n\x1a\n':
+        raise ValueError('не PNG')
     pos, idat, plte, trns = 8, b'', None, None
     w = h = depth = ctype = None
     while pos < len(d):
@@ -14,7 +19,8 @@ def read_png(path):
         data = d[pos + 8:pos + 8 + ln]
         if tag == b'IHDR':
             w, h, depth, ctype, _, _, interlace = struct.unpack('>IIBBBBB', data)
-            assert interlace == 0, 'интерлейс не поддержан'
+            if interlace != 0:
+                raise ValueError('интерлейс не поддержан')
         elif tag == b'IDAT':
             idat += data
         elif tag == b'PLTE':
@@ -23,7 +29,8 @@ def read_png(path):
             trns = data
         pos += 12 + ln
 
-    assert depth == 8, f'глубина {depth} не поддержана'
+    if depth != 8:
+        raise ValueError(f'глубина {depth} не поддержана')
     ch = {0: 1, 2: 3, 3: 1, 4: 2, 6: 4}[ctype]
     raw = zlib.decompress(idat)
     stride = w * ch
