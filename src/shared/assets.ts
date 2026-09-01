@@ -19,7 +19,7 @@ export interface AssetDef {
 }
 
 export const ASSETS = {
-  compass: { file: 'compass.png', width: 92, height: 110, version: 2 },
+  compass: { file: 'compass.png', width: 82, height: 98, version: 3 },
   watch: { file: 'watch.png', width: 112, height: 103, version: 2 },
   lamp: { file: 'lamp.png', width: 54, height: 116, version: 3 },
   book: { file: 'book.png', width: 93, height: 108 },
@@ -39,11 +39,21 @@ export function assetUrl(def: AssetDef): string {
 }
 
 /**
+ * Версии значков записей. Значок заменяется на месте, под прежним именем, поэтому
+ * без версии вернувшийся игрок увидит из кеша старый — а первые значки были
+ * заглушками, нарисованными кодом. Строка заводится при первой замене файла
+ * и растёт при каждой следующей.
+ */
+const RECORD_ICON_VERSIONS: Record<string, number> = {
+  ship: 2,
+}
+
+/**
  * Значок записи архива. Как и арт участников, вне реестра: файлов столько же,
  * сколько записей в сюжете, и заводить строку под каждую — переписывать реестр
  * при каждой главе.
  */
-export function recordIcon(name: string, version?: number): AssetDef {
+export function recordIcon(name: string, version = RECORD_ICON_VERSIONS[name]): AssetDef {
   return {
     file: `records/${name}.png`,
     width: 24,

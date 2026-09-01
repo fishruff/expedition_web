@@ -3,6 +3,7 @@ import { story } from '@/content'
 import { useSnapshots } from '@/data/useSnapshots'
 import { recordIcon } from '@/shared/assets'
 import { formatDay } from '@/shared/lib/dates'
+import { PlayerHead } from '@/ui/PlayerHead/PlayerHead'
 import { Sprite } from '@/ui/Sprite/Sprite'
 import styles from './Archive.module.scss'
 
@@ -104,7 +105,12 @@ export function Archive() {
           <p className={styles.sheetText}>{current.text}</p>
 
           <p className={styles.sheetFooter}>
-            Первым нашёл {currentFound.foundBy.name} · {formatDay(currentFound.foundAt)}
+            Первым нашёл{' '}
+            <span className={styles.finder}>
+              <PlayerHead uuid={currentFound.foundBy.uuid} />
+              {currentFound.foundBy.name}
+            </span>{' '}
+            · {formatDay(currentFound.foundAt)}
             {currentFound.readBy > 0 && ` · позже прочитали ${currentFound.readBy}`}
           </p>
         </article>
