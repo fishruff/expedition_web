@@ -1,0 +1,62 @@
+# Проверки, которые до сих пор запускались только руками.
+#
+# Между тремя частями проекта натянуто больше инвариантов, чем видно из одной:
+# контракт обмена, ключи разблокировок, форматы дат, размеры ассетов. Тесты их
+# держат, но держат только когда кто-то вспомнил их запустить.
+name: Проверки
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  site:
+    name: Сайт и приёмник
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Ровно та версия, что стоит у разработчика. Ниже 22.22 не собрать:
+      # столько просит jsdom в тестах.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.1'
+          cache: npm
+
+      - run: npm ci
+
+      # Порознь, а не одной командой: по красному шагу сразу видно, что сломалось.
+      - name: Тесты
+        run: npm test
+
+      - name: Типы
+        run: npx tsc -b
+
+      - name: Линтер
+        run: npm run lint
+
+      - name: Форматирование
+        run: npm run format:check
+
+      - name: Сборка
+        run: npm run build
+
+  plugin:
+    name: Плагин
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # 21 — та же цифра, что в toolchain у gradle. Разойдутся — соберётся
+      # не то, что поедет на сервер.
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: temurin
+
+      - name: Сборка и тесты
+        working-directory: plugin/ExpeditionCore
+        run: ./gradlew build --no-daemon
