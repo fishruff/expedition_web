@@ -1,14 +1,13 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { SnapshotsContext } from '@/data/context'
 import { emptySnapshots } from '@/data/empty'
+import { SNAPSHOT_NAMES, putSnapshot } from '@/data/parse'
 import type { Snapshots } from '@/data/types'
-
-const FILES = ['status', 'crew', 'records', 'notes', 'unlocks'] as const
 
 /** Как часто перечитываем снимки. Сервис обновляет их раз в минуту. */
 const REFRESH_MS = 60_000
 
-async function loadOne(name: string): Promise<unknown | null> {
+async function loadOne(name: string): Promise<unknown> {
   try {
     const response = await fetch(`/data/${name}.json`, { cache: 'no-store' })
     if (!response.ok) return null
@@ -21,16 +20,16 @@ async function loadOne(name: string): Promise<unknown | null> {
 }
 
 async function loadAll(): Promise<Snapshots> {
-  const loaded = await Promise.all(FILES.map(loadOne))
+  const loaded = await Promise.all(SNAPSHOT_NAMES.map(loadOne))
   const snapshots = emptySnapshots()
   let any = false
 
-  FILES.forEach((name, index) => {
-    const value = loaded[index]
-    if (!value || typeof value !== 'object') return
-
-    any = true
-    Object.assign(snapshots[name], value)
+  SNAPSHOT_NAMES.forEach((name, index) => {
+    // Разбор, а не Object.assign поверх пустого снимка: файлы пишет другой
+    // процесс в тот же каталог, и прийти может половина файла, файл прежнего
+    // формата или страница ошибки. Игрок без имени валит общий слой сцены,
+    // то есть сайт умирает белым экраном сразу на всех разделах.
+    if (putSnapshot(snapshots, name, loaded[index])) any = true
   })
 
   snapshots.available = any
