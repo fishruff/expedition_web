@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { useSearchParams } from 'react-router'
 import { story } from '@/content'
 import { useSnapshots } from '@/data/useSnapshots'
 import { recordIcon } from '@/shared/assets'
@@ -41,8 +42,23 @@ export function Archive() {
     (a, b) => Date.parse(b.foundAt) - Date.parse(a.foundAt),
   )[0]
 
-  const [openId, setOpenId] = useState<string | null>(null)
-  const currentId = openId ?? latest?.recordId ?? null
+  /*
+    Выбранная запись живёт в адресе, а не в состоянии компонента. Архив — раздел,
+    который показывают ссылкой: «смотри, что нашли». Раньше по такой ссылке
+    открывалась последняя находка, а не та, о которой речь, и обновление страницы
+    сбрасывало выбор.
+
+    `replace` — чтобы кнопка «назад» уводила из архива, а не пролистывала обратно
+    все карточки, которые человек успел открыть.
+  */
+  const [params, setParams] = useSearchParams()
+  const openId = params.get('запись')
+  const setOpenId = (id: string) => setParams({ запись: id }, { replace: true })
+
+  // Открытой считается только та, что есть в сюжете: адрес правят руками,
+  // и по неизвестному номеру честнее показать последнюю находку, чем пустоту.
+  const known = openId && story.some((record) => record.id === openId) ? openId : null
+  const currentId = known ?? latest?.recordId ?? null
 
   const current = story.find((record) => record.id === currentId) ?? null
   const currentFound = currentId ? (found.get(currentId) ?? null) : null

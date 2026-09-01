@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router'
 import { story } from '@/content'
 import { SnapshotsContext } from '@/data/context'
 import { emptySnapshots } from '@/data/empty'
@@ -20,19 +21,45 @@ function plain(value: string): string {
   return value.replace(/\s+/g, ' ').trim()
 }
 
-function show(records: ReturnType<typeof found>[] = []) {
+/** Роутер нужен настоящий: выбранная запись живёт в адресе, а не в состоянии. */
+function show(records: ReturnType<typeof found>[] = [], url = '/archive') {
   const snapshots: Snapshots = emptySnapshots()
   snapshots.available = true
   snapshots.records.found = records
 
   render(
-    <SnapshotsContext value={snapshots}>
-      <Archive />
-    </SnapshotsContext>,
+    <MemoryRouter initialEntries={[url]}>
+      <SnapshotsContext value={snapshots}>
+        <Archive />
+      </SnapshotsContext>
+    </MemoryRouter>,
   )
 }
 
 describe('Архив', () => {
+  /**
+   * Архив показывают ссылкой: «смотри, что нашли». Раньше по такой ссылке
+   * открывалась последняя находка, а не та, о которой речь.
+   */
+  it('открывает запись, названную в адресе', () => {
+    show(
+      [
+        found(story[0].id, 'Steve', '2026-10-01T10:00:00Z'),
+        found(story[1].id, 'Alex', '2026-10-09T10:00:00Z'),
+      ],
+      `/archive?${new URLSearchParams({ запись: story[0].id })}`,
+    )
+
+    expect(screen.getByText(plain(story[0].text))).toBeTruthy()
+  })
+
+  // Адрес правят руками, и по неизвестному номеру честнее показать находку.
+  it('на незнакомый номер в адресе показывает последнюю находку', () => {
+    show([found(story[1].id, 'Alex', '2026-10-09T10:00:00Z')], '/archive?запись=такой-записи-нет')
+
+    expect(screen.getByText(plain(story[1].text))).toBeTruthy()
+  })
+
   it('показывает все записи сюжета, а не только найденные', () => {
     // Запертая карточка — обещание: видно, сколько всего записей и сколько ждёт.
     show()
