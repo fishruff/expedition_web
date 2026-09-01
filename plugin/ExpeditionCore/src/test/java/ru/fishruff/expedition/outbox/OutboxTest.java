@@ -257,4 +257,41 @@ class OutboxTest {
             assertFalse(outbox.lastSuccess().equals("никогда"));
         }
     }
+
+    /**
+     * Единственный тест с настоящим потоком — и он же единственный, который может
+     * поймать эту ошибку. Остальные зовут `pumpOnce` напрямую, поэтому остановка
+     * у них проходила успешно ровно потому, что потока не было.
+     *
+     * `onDisable` кладёт прощальный сигнал в очередь и сразу закрывает её. Раньше
+     * это событие уезжало только при следующем запуске сервера, хотя javadoc
+     * `close()` обещает попытку отправки.
+     */
+    @Test
+    void прощальноеСобытиеУезжаетПриОстановке() {
+        FakeSender sender = new FakeSender();
+
+        Outbox outbox = outbox(sender);
+        outbox.start();
+        outbox.offer(event("прощальный"));
+        outbox.close();
+
+        assertEquals(1, sender.batches.size());
+        assertTrue(sender.batches.get(0).contains("прощальный"));
+    }
+
+    /** Отправка на остановке не удалась — событие обязано остаться на диске. */
+    @Test
+    void неудачнаяОтправкаНаОстановкеОставляетСобытиеВОчереди() throws IOException {
+        FakeSender sender = new FakeSender();
+        sender.failure = new IOException("сети нет");
+
+        Outbox outbox = outbox(sender);
+        outbox.start();
+        outbox.offer(event("прощальный"));
+        outbox.close();
+
+        assertEquals(1, outboxFile().size());
+        assertTrue(outboxFile().get(0).contains("прощальный"));
+    }
 }
