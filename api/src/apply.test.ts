@@ -279,7 +279,7 @@ describe('сведение событий в снимки', () => {
     )
 
     expect(snapshots.unlocks.unlocked).toEqual({
-      хронометр: { at: '2026-10-17T14:20:00Z', by: 'Arsen' },
+      хронометр: { at: '2026-10-17T14:20:00Z', by: ARSEN },
     })
   })
 
@@ -292,7 +292,7 @@ describe('сведение событий в снимки', () => {
       WRITTEN_AT,
     )
 
-    expect(snapshots.unlocks.unlocked['хронометр'].by).toBe('Arsen')
+    expect(snapshots.unlocks.unlocked['хронометр'].by).toEqual(ARSEN)
   })
 
   it('добавляет метку места, открытую вручную', () => {

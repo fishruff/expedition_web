@@ -65,7 +65,12 @@ export interface NotesSnapshot {
 
 export interface UnlocksSnapshot {
   updatedAt: string
-  unlocked: Record<string, { at: string; by: string }>
+  /**
+   * Кто открыл ключ. Тот же PlayerRef, что и у находки: разблокировка приходит
+   * событием `artifact.found`, у которого игрок есть всегда. Раньше здесь лежало
+   * одно имя — и страница участника искала по нему, хотя рядом искала по uuid.
+   */
+  unlocked: Record<string, { at: string; by: PlayerRef }>
   places: string[]
 }
 

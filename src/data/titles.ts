@@ -18,17 +18,23 @@ const METRICS: Record<string, (member: CrewView) => number | null> = {
 }
 
 /**
- * Кто какие звания заслужил. Ключ — uuid участника.
+ * Кто какие звания заслужил. Ключ — сам участник.
+ *
+ * Ключом был uuid, и это была ловушка: у участника, которого владелец описал,
+ * но которого ещё нет в снимке, uuid пустой. Все такие писали в один ключ `''`
+ * и делили звания между собой. Не замечалось только потому, что у всех
+ * шестерых стояло звание руками, а оно важнее автоматического.
+ *
+ * Ключ-объект столкнуться не может в принципе, поэтому проверять тут нечего.
  *
  * Звание достаётся первому по показателю; при ничьей — всем, кто делит вершину:
  * отбирать звание у обоих из-за совпадения несправедливее, чем выдать дважды.
  * Нулевой показатель звания не даёт — «первый по нулю» обесценивает остальные.
  */
-export function awardTitles(
-  members: CrewView[],
-  rules: TitleRule[],
-): Record<string, TitleRule[]> {
-  const awards: Record<string, TitleRule[]> = {}
+export type Awards = Map<CrewView, TitleRule[]>
+
+export function awardTitles(members: CrewView[], rules: TitleRule[]): Awards {
+  const awards: Awards = new Map()
 
   for (const rule of rules) {
     const metric = METRICS[rule.rule]
@@ -46,8 +52,9 @@ export function awardTitles(
     for (const member of members) {
       if (metric(member) !== best) continue
 
-      awards[member.uuid] ??= []
-      awards[member.uuid].push(rule)
+      const earned = awards.get(member)
+      if (earned) earned.push(rule)
+      else awards.set(member, [rule])
     }
   }
 

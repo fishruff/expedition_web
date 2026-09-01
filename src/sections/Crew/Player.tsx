@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router'
 import { ROUTES } from '@/app/routes'
 import { story } from '@/content'
+import { isSameMember } from '@/data/merge'
 import { titleOf, useCrew } from '@/data/useCrew'
 import { useSnapshots } from '@/data/useSnapshots'
 import { crewArt } from '@/shared/assets'
@@ -38,11 +39,14 @@ export function Player() {
   }
 
   const socials = Object.entries(member.socials).filter(([, url]) => url)
-  const found = snapshots.records.found.filter((record) => record.foundBy.uuid === member.uuid)
+  // Находки и артефакты опознают человека одним и тем же правилом. Раньше эти
+  // две строки расходились — записи по uuid, артефакты по нику, — и один блок
+  // мог оказаться пустым при полном соседнем.
+  const found = snapshots.records.found.filter((record) => isSameMember(member, record.foundBy))
 
   // Артефакты приходят разблокировками: у каждого ключа записано, кто его нашёл.
-  const artifacts = Object.entries(snapshots.unlocks.unlocked).filter(
-    ([, unlock]) => unlock.by.toLowerCase() === member.nick.toLowerCase(),
+  const artifacts = Object.entries(snapshots.unlocks.unlocked).filter(([, unlock]) =>
+    isSameMember(member, unlock.by),
   )
 
   const cards = statCards(

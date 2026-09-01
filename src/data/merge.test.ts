@@ -120,7 +120,7 @@ describe('isUnlocked', () => {
   it('раздел открыт, когда ключ появился', () => {
     const unlocks = {
       updatedAt: '',
-      unlocked: { chronometer: { at: '2026-10-17T14:20:00Z', by: 'Arsen' } },
+      unlocked: { chronometer: { at: '2026-10-17T14:20:00Z', by: { uuid: 'uuid-arsen', name: 'Arsen' } } },
       places: [],
     }
 

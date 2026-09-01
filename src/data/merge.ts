@@ -1,5 +1,5 @@
 import type { CrewMember } from '@/content/types'
-import type { CrewEntry, CrewSnapshot, PlayerStats, UnlocksSnapshot } from '@/data/types'
+import type { CrewEntry, CrewSnapshot, PlayerRef, PlayerStats, UnlocksSnapshot } from '@/data/types'
 
 /** Участник таким, каким его видит интерфейс: авторское плюс игровое. */
 export interface CrewView {
@@ -95,6 +95,23 @@ export function snapshotAgeMinutes(updatedAt: string, now: Date): number {
  */
 export function isServerLive(updatedAt: string, serverOnline: boolean, now: Date): boolean {
   return serverOnline && snapshotAgeMinutes(updatedAt, now) <= 3
+}
+
+/**
+ * Тот ли это человек.
+ *
+ * Правило ровно то же, по которому склеивается экипаж: ключ — uuid, потому что
+ * ник в майнкрафте можно сменить, но пока владелец uuid не проставил, приходится
+ * подстраховываться ником без учёта регистра.
+ *
+ * Функция существует, чтобы правило было одно. На странице участника две соседние
+ * строки опознавали человека по-разному — записи по uuid, артефакты по нику, —
+ * и один из двух блоков поэтому мог оказаться пустым при полном другом.
+ */
+export function isSameMember(member: CrewView, ref: PlayerRef): boolean {
+  if (member.uuid && ref.uuid) return member.uuid === ref.uuid
+
+  return member.nick.toLowerCase() === ref.name.toLowerCase()
 }
 
 /** Раздел открыт, только если ключ появился в снимке разблокировок. */

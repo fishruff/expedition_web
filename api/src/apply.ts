@@ -121,7 +121,8 @@ export function applyEvents(
       // решает сайт по story.json: плагин про сюжет не знает.
       case 'artifact.found':
         if (!Object.hasOwn(snapshots.unlocks.unlocked, event.artifactId)) {
-          snapshots.unlocks.unlocked[event.artifactId] = { at: event.at, by: event.player.name }
+          // Целиком игрок, а не одно имя: ключ — uuid, и правило это наше же.
+          snapshots.unlocks.unlocked[event.artifactId] = { at: event.at, by: event.player }
         }
         break
 

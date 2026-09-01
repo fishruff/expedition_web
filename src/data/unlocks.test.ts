@@ -31,7 +31,7 @@ describe('открытость разделов', () => {
 
   it('открывает карту и хронометр только своими ключами', () => {
     const snapshots = emptySnapshots()
-    snapshots.unlocks.unlocked.map = { at: '2026-10-15T19:00:00Z', by: 'admin' }
+    snapshots.unlocks.unlocked.map = { at: '2026-10-15T19:00:00Z', by: { uuid: 'uuid-admin', name: 'admin' } }
 
     expect(isSectionOpen('map', snapshots)).toBe(true)
     expect(isSectionOpen('chronometer', snapshots)).toBe(false)

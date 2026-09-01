@@ -42,31 +42,48 @@ function withStats(nick: string, distanceCm: number, recordsFound = 0): CrewView
 
 describe('звания', () => {
   it('отдаёт звание первому по показателю', () => {
-    const awards = awardTitles([withStats('Steve', 500), withStats('Alex', 900)], RULES)
+    const steve = withStats('Steve', 500)
+    const alex = withStats('Alex', 900)
+    const awards = awardTitles([steve, alex], RULES)
 
-    expect(awards['uuid-Alex']?.map((t) => t.id)).toEqual(['ходок'])
-    expect(awards['uuid-Steve']).toBeUndefined()
+    expect(awards.get(alex)?.map((t) => t.id)).toEqual(['ходок'])
+    expect(awards.get(steve)).toBeUndefined()
+  })
+
+  /**
+   * Ключом был uuid, и участники без него — описанные владельцем, но ещё не
+   * появившиеся в снимке — сваливались в один ключ `''` и делили звания.
+   */
+  it('не смешивает звания участников без uuid', () => {
+    const ходок = { ...withStats('Steve', 900, 1), uuid: '' }
+    const первый = { ...withStats('Alex', 100, 5), uuid: '' }
+    const awards = awardTitles([ходок, первый], RULES)
+
+    expect(awards.get(ходок)?.map((t) => t.id)).toEqual(['ходок'])
+    expect(awards.get(первый)?.map((t) => t.id)).toEqual(['первопроходец'])
   })
 
   // Делить вершину честнее, чем отбирать звание у обоих из-за совпадения.
   it('при ничьей отдаёт звание всем, кто делит вершину', () => {
-    const awards = awardTitles([withStats('Steve', 900), withStats('Alex', 900)], RULES)
+    const steve = withStats('Steve', 900)
+    const alex = withStats('Alex', 900)
+    const awards = awardTitles([steve, alex], RULES)
 
-    expect(awards['uuid-Steve']?.map((t) => t.id)).toEqual(['ходок'])
-    expect(awards['uuid-Alex']?.map((t) => t.id)).toEqual(['ходок'])
+    expect(awards.get(steve)?.map((t) => t.id)).toEqual(['ходок'])
+    expect(awards.get(alex)?.map((t) => t.id)).toEqual(['ходок'])
   })
 
   // Звание за ноль пройденных метров обесценивает все остальные.
   it('не выдаёт звание, когда показатель у всех нулевой', () => {
     const awards = awardTitles([withStats('Steve', 0), withStats('Alex', 0)], RULES)
 
-    expect(awards).toEqual({})
+    expect(awards.size).toBe(0)
   })
 
   it('молчит, пока игровых данных нет вовсе', () => {
     const awards = awardTitles([member('Steve'), member('Alex')], RULES)
 
-    expect(awards).toEqual({})
+    expect(awards.size).toBe(0)
   })
 
   // Файл владельца живёт своей жизнью и может опередить код.
@@ -75,13 +92,15 @@ describe('звания', () => {
       { id: 'загадка', label: 'Загадка', rule: 'maxUnknownThing', frame: '' },
     ]
 
-    expect(awardTitles([withStats('Steve', 900)], rules)).toEqual({})
+    expect(awardTitles([withStats('Steve', 900)], rules).size).toBe(0)
   })
 
   it('считает находки записей таким же показателем', () => {
-    const awards = awardTitles([withStats('Steve', 100, 3), withStats('Alex', 900, 1)], RULES)
+    const steve = withStats('Steve', 100, 3)
+    const alex = withStats('Alex', 900, 1)
+    const awards = awardTitles([steve, alex], RULES)
 
-    expect(awards['uuid-Steve']?.map((t) => t.id)).toEqual(['первопроходец'])
-    expect(awards['uuid-Alex']?.map((t) => t.id)).toEqual(['ходок'])
+    expect(awards.get(steve)?.map((t) => t.id)).toEqual(['первопроходец'])
+    expect(awards.get(alex)?.map((t) => t.id)).toEqual(['ходок'])
   })
 })
