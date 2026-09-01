@@ -30,6 +30,24 @@ class SettingsTest {
         assertTrue(failure.getMessage().contains("латиницы"));
     }
 
+    /**
+     * Правило одно на обе стороны, а проверки две — плагин на Java, приёмник на
+     * TypeScript. Раньше они разъезжались: плагин пропускал пробел, приёмник нет.
+     */
+    @Test
+    void ключСПробеломИлиУправляющимЗнакомНеПропускается() {
+        assertThrows(IllegalArgumentException.class, () -> withKey("ключ с пробелом"));
+        assertThrows(IllegalArgumentException.class, () -> withKey("secret key"));
+        assertThrows(IllegalArgumentException.class, () -> withKey("secret\tkey"));
+        assertThrows(IllegalArgumentException.class, () -> withKey("secret\nkey"));
+    }
+
+    /** Печатные ASCII от `!` до `~` — то же, что принимает приёмник. */
+    @Test
+    void знакиПрепинанияВКлючеРазрешены() {
+        assertEquals("!key-2026_#~", withKey("!key-2026_#~").key());
+    }
+
     @Test
     void пустойКлючНеПропускается() {
         assertThrows(IllegalArgumentException.class, () -> withKey(""));

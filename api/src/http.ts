@@ -1,3 +1,4 @@
+import { createHash, timingSafeEqual } from 'node:crypto'
 import type { ExpeditionEvent } from './events.ts'
 import { BATCH_LIMIT, MAX_NOTES_PER_DAY, eventProblem, isEvent } from './validate.ts'
 
@@ -56,6 +57,25 @@ function overDailyLimit(event: ExpeditionEvent, deps: Deps, inBatch: Map<string,
  * Разбор запроса без единого обращения к сети и диску — поэтому проверяется
  * тестами целиком, а не через поднятый сервер.
  */
+/**
+ * Сравнение ключа за постоянное время.
+ *
+ * Обычное `!==` обрывается на первом несовпавшем знаке, и по времени ответа
+ * ключ подбирается посимвольно. В локальной сети это канал теоретический, но
+ * ключ здесь единственное, что отделяет журнал сезона от кого угодно, и три
+ * абзаца комментариев в `main.ts` объясняют, почему его нет в конфиге. Раз так,
+ * то и сравнивать его надо до конца.
+ *
+ * Сравниваются отпечатки, а не сами строки: `timingSafeEqual` требует равной
+ * длины и падает на разной, а длина отпечатка всегда одна. Заодно по времени
+ * не утекает и длина ключа.
+ */
+function sameKey(given: string | undefined, expected: string): boolean {
+  const digest = (value: string) => createHash('sha256').update(value, 'utf8').digest()
+
+  return timingSafeEqual(digest(given ?? ''), digest(expected))
+}
+
 export function handle(request: RequestLike, deps: Deps): ResponseLike {
   const path = request.url.split('?')[0]
 
@@ -67,7 +87,7 @@ export function handle(request: RequestLike, deps: Deps): ResponseLike {
     return { status: 404, body: { ok: false, error: 'нет такого адреса' } }
   }
 
-  if (request.headers['x-expedition-key'] !== deps.key) {
+  if (!sameKey(request.headers['x-expedition-key'], deps.key)) {
     return { status: 401, body: { ok: false, error: 'неверный ключ' } }
   }
 
