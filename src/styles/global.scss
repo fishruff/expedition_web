@@ -2,16 +2,24 @@
 
 // Monocraft — открытая перерисовка шрифта майнкрафта под лицензией OFL,
 // с полной кириллицей. Файлы лежат у нас, обращений к сторонним CDN нет.
+//
+// woff2 первым, ttf следом: 553 КБ двух начертаний ужимаются до 96, а ttf
+// остаётся исходником и запасным вариантом. Браузер скачивает только первый
+// формат, который понимает, — второй файл к посетителю не едет.
 @font-face {
   font-family: 'Monocraft';
-  src: url('/fonts/Monocraft.ttf') format('truetype');
+  src:
+    url('/fonts/Monocraft.woff2') format('woff2'),
+    url('/fonts/Monocraft.ttf') format('truetype');
   font-weight: 400;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Monocraft';
-  src: url('/fonts/Monocraft-Bold.ttf') format('truetype');
+  src:
+    url('/fonts/Monocraft-Bold.woff2') format('woff2'),
+    url('/fonts/Monocraft-Bold.ttf') format('truetype');
   font-weight: 700;
   font-display: swap;
 }

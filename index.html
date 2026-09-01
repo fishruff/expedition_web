@@ -4,6 +4,19 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      Обычное начертание грузится заранее: до него браузер добирается только
+      разобрав стили, а `font-display: swap` до тех пор рисует текст запасным
+      шрифтом. Жирное не предзагружаем — оно встречается не на каждой странице.
+    -->
+    <link
+      rel="preload"
+      href="/fonts/Monocraft.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <meta name="theme-color" content="#0e1411" />
     <title>Expedition — Minecraft сервер</title>
     <meta
