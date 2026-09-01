@@ -41,6 +41,16 @@ if (!/^[\x21-\x7e]+$/.test(KEY)) {
 const log = new EventLog(LOG_PATH)
 console.log(`журнал: ${LOG_PATH}, событий в нём: ${log.all().length}`)
 
+/**
+ * Потолок на тело запроса. Тело копилось в память целиком до проверки ключа:
+ * запрос на четыреста мегабайт с заведомо неверным ключом раздувал процесс
+ * почти до гигабайта, а рядом живёт игровой сервер с лимитом в четыре.
+ *
+ * Ста событий по контракту хватает с запасом: сто записей по пятьдесят страниц
+ * в тысячу знаков — это меньше шести мегабайт.
+ */
+const MAX_BODY_BYTES = 8 * 1024 * 1024
+
 function writeSnapshots(): void {
   const snapshots = applyEvents(log.all(), new Date(), season)
 
@@ -65,38 +75,84 @@ function writeSnapshots(): void {
 
 const server = createServer((req, res) => {
   const chunks: Buffer[] = []
+  let size = 0
+  let tooBig = false
 
-  req.on('data', (chunk: Buffer) => chunks.push(chunk))
+  req.on('data', (chunk: Buffer) => {
+    size += chunk.length
+    if (size > MAX_BODY_BYTES) {
+      // Больше не копим: смысл потолка в том, чтобы память не росла.
+      tooBig = true
+      chunks.length = 0
+      return
+    }
+    chunks.push(chunk)
+  })
+
   req.on('end', () => {
-    const response = handle(
-      {
-        method: req.method ?? 'GET',
-        url: req.url ?? '/',
-        headers: req.headers as Record<string, string | undefined>,
-        body: Buffer.concat(chunks).toString('utf8'),
-      },
-      {
-        key: KEY,
-        accept: (events) => log.accept(events),
-        notesToday: (uuid, day) =>
-          log
-            .all()
-            .filter(
-              (event) =>
-                event.type === 'note.published' &&
-                event.player.uuid === uuid &&
-                event.at.startsWith(day),
-            ).length,
-      },
-    )
+    if (tooBig) {
+      res.writeHead(413, { 'content-type': 'application/json; charset=utf-8' })
+      res.end(JSON.stringify({ ok: false, error: 'тело больше восьми мегабайт' }))
+      return
+    }
+
+    let response
+    try {
+      response = handle(
+        {
+          method: req.method ?? 'GET',
+          url: req.url ?? '/',
+          headers: req.headers as Record<string, string | undefined>,
+          body: Buffer.concat(chunks).toString('utf8'),
+        },
+        {
+          key: KEY,
+          accept: (events) => log.accept(events),
+          notesToday: (uuid, day) =>
+            log
+              .all()
+              .filter(
+                (event) =>
+                  event.type === 'note.published' &&
+                  event.player.uuid === uuid &&
+                  event.at.startsWith(day),
+              ).length,
+        },
+      )
+    } catch (failure) {
+      // Ни один разбор не обязан быть безупречным. Упавший запрос — это ответ 500,
+      // а не остановка приёма: очередь плагина переживёт что угодно, кроме молчания.
+      console.error('запрос не обработан:', failure)
+      response = { status: 500, body: { ok: false, error: 'внутренняя ошибка' } }
+    }
 
     res.writeHead(response.status, { 'content-type': 'application/json; charset=utf-8' })
     res.end(JSON.stringify(response.body))
   })
 })
 
+/**
+ * Сборка снимков под присмотром.
+ *
+ * Снимки собираются из всего журнала целиком, поэтому одно негодное событие
+ * в нём означало не разовый сбой, а смерть по кругу: процесс падал, поднимался,
+ * читал то же событие и падал снова. Теперь он остаётся жив и продолжает
+ * принимать — на сайте будут вчерашние снимки, но это несравнимо лучше
+ * контейнера в петле, из-за которого не поднимается и игровой сервер.
+ *
+ * Форму событий сторожит разбор на входе. Это второй рубеж — на случай события,
+ * попавшего в журнал до того, как разбор появился.
+ */
+function writeSnapshotsSafely(): void {
+  try {
+    writeSnapshots()
+  } catch (failure) {
+    console.error('снимки не собрались, журнал цел, работаем дальше:', failure)
+  }
+}
+
 server.listen(PORT, () => {
   console.log(`приём событий на порту ${PORT}, снимки в ${DATA_DIR}`)
-  writeSnapshots()
-  setInterval(writeSnapshots, WRITE_EVERY_MS)
+  writeSnapshotsSafely()
+  setInterval(writeSnapshotsSafely, WRITE_EVERY_MS)
 })

@@ -1,4 +1,5 @@
 import type { ExpeditionEvent } from './events.ts'
+import { BATCH_LIMIT, MAX_NOTES_PER_DAY, eventProblem, isEvent } from './validate.ts'
 
 export interface RequestLike {
   method: string
@@ -19,63 +20,36 @@ export interface Deps {
   accept: (events: ExpeditionEvent[]) => string[]
   /** Сколько записей этот игрок опубликовал в эти сутки. Считается по журналу. */
   notesToday: (uuid: string, day: string) => number
-}
-
-/** Ограничение из контракта: пачка не длиннее ста событий. */
-const BATCH_LIMIT = 100
-
-/** Пределы контракта на записи игроков. */
-const MAX_PAGES = 50
-const MAX_CHARS = 1000
-const MAX_NOTES_PER_DAY = 20
-
-/**
- * Событие проверяется только на четыре обязательных поля.
- *
- * Тип намеренно не проверяется: плагин может оказаться новее сайта, и это
- * нормальная ситуация — незнакомое событие принимается и лежит в журнале.
- */
-function looksLikeEvent(value: unknown): value is ExpeditionEvent {
-  if (typeof value !== 'object' || value === null) return false
-
-  const event = value as Record<string, unknown>
-
-  return (
-    typeof event.id === 'string' &&
-    event.id !== '' &&
-    typeof event.v === 'number' &&
-    typeof event.type === 'string' &&
-    typeof event.at === 'string' &&
-    !Number.isNaN(Date.parse(event.at))
-  )
+  /**
+   * Текущее время. Разбор сверяет с ним поле `at`, поэтому в тестах его задают,
+   * а не берут с часов машины: иначе набор проверок стареет вместе с календарём.
+   */
+  now?: Date
 }
 
 /**
- * Пределы на записи игроков. Плагин проверяет их сам и объясняет игроку в чате,
- * но сторож, которого обходят переустановкой плагина, — не сторож: `notes.json`
- * уезжает на сайт как есть, и книга в тысячу страниц сломала бы раздел.
+ * Суточный предел на записи. Форму записи проверяет разбор, а это — счёт по журналу,
+ * которого разбор знать не может.
  *
- * Возвращает текст ошибки или пустую строку.
+ * Плагин считает то же самое сам и объясняет игроку в чате, но сторож, которого
+ * обходят переустановкой плагина, — не сторож: `notes.json` уезжает на сайт как есть.
+ *
+ * Счётчик растёт внутри пачки: без этого сто записей одним запросом проходили целиком,
+ * потому что журнал о них ещё не знал.
  */
-function noteProblem(event: ExpeditionEvent, deps: Deps): string {
-  if (event.type !== 'note.published') return ''
-
-  const { note, player, at } = event
-
-  if (!note || !Array.isArray(note.pages)) return 'записи нужны note.pages'
-  if (note.pages.length > MAX_PAGES) return `не больше ${MAX_PAGES} страниц`
-  if (note.pages.some((page) => typeof page !== 'string' || page.length > MAX_CHARS)) {
-    return `не больше ${MAX_CHARS} знаков на страницу`
-  }
+function overDailyLimit(event: ExpeditionEvent, deps: Deps, inBatch: Map<string, number>): boolean {
+  if (event.type !== 'note.published') return false
 
   // Сутки считаем по UTC, как и всё время в контракте.
-  const day = at.slice(0, 10)
+  const key = `${event.player.uuid}\u0000${event.at.slice(0, 10)}`
+  const already = inBatch.get(key) ?? 0
 
-  if (deps.notesToday(player.uuid, day) >= MAX_NOTES_PER_DAY) {
-    return `не больше ${MAX_NOTES_PER_DAY} записей в сутки от одного игрока`
+  if (deps.notesToday(event.player.uuid, event.at.slice(0, 10)) + already >= MAX_NOTES_PER_DAY) {
+    return true
   }
 
-  return ''
+  inBatch.set(key, already + 1)
+  return false
 }
 
 /**
@@ -110,14 +84,31 @@ export function handle(request: RequestLike, deps: Deps): ResponseLike {
     return { status: 413, body: { ok: false, error: `не больше ${BATCH_LIMIT} событий за раз` } }
   }
 
-  if (!batch.every(looksLikeEvent)) {
-    return { status: 400, body: { ok: false, error: 'событию нужны id, v, type и at' } }
+  // Время разбора берётся одно на всю пачку: иначе события на её границе
+  // проверялись бы разными «сейчас».
+  const now = deps.now ?? new Date()
+
+  const events: ExpeditionEvent[] = []
+
+  for (const candidate of batch) {
+    // Проверка и сужение типа за один проход: `eventProblem` зовётся второй раз
+    // только чтобы назвать причину, то есть на пути, который всё равно обрывается.
+    if (!isEvent(candidate, now)) {
+      return { status: 400, body: { ok: false, error: eventProblem(candidate, now) } }
+    }
+    events.push(candidate)
   }
 
-  for (const event of batch) {
-    const problem = noteProblem(event, deps)
-    if (problem !== '') return { status: 400, body: { ok: false, error: problem } }
+  const inBatch = new Map<string, number>()
+
+  for (const event of events) {
+    if (overDailyLimit(event, deps, inBatch)) {
+      return {
+        status: 400,
+        body: { ok: false, error: `не больше ${MAX_NOTES_PER_DAY} записей в сутки от одного игрока` },
+      }
+    }
   }
 
-  return { status: 200, body: { ok: true, accepted: deps.accept(batch) } }
+  return { status: 200, body: { ok: true, accepted: deps.accept(events) } }
 }
