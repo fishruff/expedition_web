@@ -201,8 +201,9 @@ function unlocks(value: unknown): UnlocksSnapshot | null {
 }
 
 /** Разбор одного снимка по имени файла. Пусто, если пришло не то. */
-export const PARSERS = { status, crew, records, notes, unlocks } as const
+const PARSERS = { status, crew, records, notes, unlocks } as const
 
+/** Публичная: она стоит в сигнатуре `putSnapshot`, и назвать её надо уметь. */
 export type SnapshotName = keyof typeof PARSERS
 
 /** Имена снимков и файлов совпадают: `crew` лежит в `crew.json`. */

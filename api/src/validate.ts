@@ -23,8 +23,8 @@ import type { ExpeditionEvent, PlayerRef } from '../../contract/events.ts'
 export const BATCH_LIMIT = 100
 
 /** Пределы контракта на записи игроков. */
-export const MAX_PAGES = 50
-export const MAX_CHARS = 1000
+const MAX_PAGES = 50
+const MAX_CHARS = 1000
 export const MAX_NOTES_PER_DAY = 20
 
 /**

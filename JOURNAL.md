@@ -703,7 +703,7 @@ class и ругалась на preview-фичу — сообщение увод�
 - Графика — чистый CSS и SVG. Единственная растровая — арты игроков.
 - Контент в JSON-файлах в репозитории, админку отложили.
 
-Полная спецификация: [`docs/superpowers/specs/2026-08-12-diary-site-design.md`](docs/superpowers/specs/2026-08-12-diary-site-design.md).
+Полная спецификация: [`docs/superpowers/specs/archive-2026-08-12-photoreal-diary-design.md`](docs/superpowers/specs/archive-2026-08-12-photoreal-diary-design.md) — эту концепцию отменила пиксельная, файл получил приставку `archive-`, а ссылка на него осталась прежней и вела в пустоту.
 
 ### Дальше
 

@@ -50,7 +50,7 @@ const CHUNK_BYTES = 1024 * 1024
  * посреди многобайтовой буквы, а в журнале кириллица — имена мест и заголовки
  * записей.
  */
-export function readLog(path: string, onEvent: (event: ExpeditionEvent) => void): void {
+function readLog(path: string, onEvent: (event: ExpeditionEvent) => void): void {
   const file = openSync(path, 'r')
   const buffer = Buffer.allocUnsafe(CHUNK_BYTES)
   const decoder = new StringDecoder('utf8')
