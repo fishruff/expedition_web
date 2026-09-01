@@ -17,8 +17,9 @@ commands:
     usage: /note [draft]
     permission: expedition.note
   love:
-    description: love diana
+    description: Привет одному человеку
     usage: /love
+    permission: expedition.love
 
 permissions:
   expedition.admin:
@@ -26,4 +27,10 @@ permissions:
     default: op
   expedition.note:
     description: Публикация записей книгой
+    default: true
+  # Узел объявлен не ради ограничения, а ради возможности его снять: без него
+  # команду нельзя ни выключить, ни отдать кому-то одному — LuckPerms не за что
+  # взяться. Поставьте `op`, если она должна остаться только у своих.
+  expedition.love:
+    description: Личное приветствие
     default: true
