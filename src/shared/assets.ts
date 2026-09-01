@@ -12,10 +12,11 @@ export interface AssetDef {
   width: number
   height: number
   /**
-   * Номер версии. Увеличивается при замене файла — иначе браузер покажет
-   * старую картинку тому, кто уже был на сайте.
+   * Версия. Увеличивается при замене файла — иначе браузер покажет старую
+   * картинку тому, кто уже был на сайте. У артов участников это метка сборки,
+   * поэтому не только число.
    */
-  version?: number
+  version?: number | string
 }
 
 export const ASSETS = {
@@ -65,8 +66,13 @@ export function recordIcon(name: string, version = RECORD_ICON_VERSIONS[name]): 
 /**
  * Арт участника лежит вне реестра: файлов столько же, сколько игроков,
  * и владелец меняет их почти ежедневно.
+ *
+ * Версия по умолчанию — метка сборки. Раньше здесь стояло `version?: number`,
+ * которое ни один из двух вызовов не передавал: владелец менял файл, а люди
+ * продолжали видеть из кеша прежний портрет. Арт лежит в репозитории, значит
+ * едет к посетителю вместе со сборкой, и метка сборки — честная его версия.
  */
-export function crewArt(nick: string, version?: number): AssetDef {
+export function crewArt(nick: string, version: number | string = __BUILD_ID__): AssetDef {
   return {
     file: `crew/${nick.toLowerCase()}.png`,
     width: 144,

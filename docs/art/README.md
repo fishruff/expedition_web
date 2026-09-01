@@ -188,7 +188,7 @@ compass: { file: 'compass.png', width: 112, height: 112, version: 2 },
 
 ## Приёмка
 
-Открой `http://localhost:5173/assets-preview.html` — служебная страница, где ассеты стоят
+Открой `http://localhost:5173/tools/preview/assets-preview.html` — служебная страница, где ассеты стоят
 рядом в одном масштабе. Смотреть надо на три вещи, и все три ловятся только при
 сравнении бок о бок:
 

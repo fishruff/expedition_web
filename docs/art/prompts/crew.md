@@ -72,7 +72,7 @@ python3 tools/pixelize.py sketch.png public/assets/crew/<ник>.png 144
 
 ## Приёмка
 
-Открой два-три арта рядом на `assets-preview.html` и посмотри:
+Открой два-три арта рядом на `tools/preview/assets-preview.html` и посмотри:
 
 1. **Фонарь у всех в одной руке и светит одинаково?** Это ловится первым и сильнее всего
    выдаёт разнобой.
