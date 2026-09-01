@@ -20,6 +20,16 @@ function tempLog(): string {
   return join(mkdtempSync(join(tmpdir(), 'expedition-')), 'events.jsonl')
 }
 
+describe('журнал не принимает повтор дважды', () => {
+  it('пропускает повтор внутри одной пачки', () => {
+    const path = tempLog()
+    const log = new EventLog(path)
+
+    expect(log.accept([event('e1'), event('e1'), event('e2')])).toEqual(['e1', 'e2'])
+    expect(readFileSync(path, 'utf8').trim().split('\n')).toHaveLength(2)
+  })
+})
+
 describe('разбор журнала', () => {
   it('читает по событию на строку', () => {
     const text = `${JSON.stringify(event('e1'))}\n${JSON.stringify(event('e2'))}\n`

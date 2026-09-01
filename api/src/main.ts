@@ -39,7 +39,10 @@ if (!/^[\x21-\x7e]+$/.test(KEY)) {
 }
 
 const log = new EventLog(LOG_PATH)
-console.log(`журнал: ${LOG_PATH}, событий в нём: ${log.all().length}`)
+console.log(
+  `журнал: ${LOG_PATH}, событий в нём: ${log.loaded}, ` +
+    `в памяти держим ${log.all().length} — остальное заведомо перезаписано`,
+)
 
 /**
  * Потолок на тело запроса. Тело копилось в память целиком до проверки ключа:
