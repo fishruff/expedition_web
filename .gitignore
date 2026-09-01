@@ -47,3 +47,9 @@ server/data/
 server/plugins/
 server/plugins-old/
 server/.env
+
+# Кеш питона от tools/*.py — пересоздаётся сам.
+__pycache__/
+
+# Метки NTFS «файл скачан из интернета»: их создаёт windows рядом с картинкой.
+*:Zone.Identifier
