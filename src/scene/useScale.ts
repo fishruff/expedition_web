@@ -18,16 +18,69 @@ const STEP = 640
 const MIN = 2
 const MAX = 4
 
+/** Размер шрифта корня, когда человек ничего не менял в настройках. */
+const BASE_FONT_PX = 16
+
+/**
+ * Сколько точек ширины и высоты нужно на одну ступень масштаба.
+ *
+ * Числа замерены, а не выведены: страница открывалась на каждой ступени, и
+ * проверялось, укладывается ли она в настоящую ширину устройства и сколько строк
+ * записи остаётся видно в книге. По ширине упирается шапка, по высоте — стол,
+ * который на широком экране заперт в один экран целиком.
+ *
+ * Проверено на 375×667, 393×852, 600×900, 640×900, 667×375, 768×1024, 820×1180,
+ * 1024×768, 1180×820, 1366×768, 1440×900, 1920×1080 и 2560×1440.
+ */
+const WIDTH_PER_STEP = 160
+const HEIGHT_PER_STEP = 225
+
+/**
+ * Насколько высоко масштаб можно поднять здесь, не сломав вёрстку.
+ *
+ * Высота важнее, чем кажется: на ноутбуке 1366×768 по ширине помещается и
+ * четвёрка, но книге остаётся десять строк вместо двадцати двух. Потолок берёт
+ * меньшее из двух — иначе крупный шрифт превращает разворот в полоску.
+ */
+function ceilingFor(width: number, height: number): number {
+  const byWidth = Math.floor(width / WIDTH_PER_STEP)
+  const byHeight = Math.floor(height / HEIGHT_PER_STEP)
+
+  return Math.max(MIN, Math.min(byWidth, byHeight))
+}
+
 /**
  * Масштаб интерфейса: рамки, шрифт, отступы.
  *
- * Ступени только чётные: соседние слишком похожи, чтобы оправдать перекладку
- * сцены на каждые 640 точек ширины.
+ * Ступени по ширине только чётные: соседние слишком похожи, чтобы оправдать
+ * перекладку сцены на каждые 640 точек.
+ *
+ * `fontPx` — размер шрифта корня, то есть системная настройка человека. Весь
+ * сайт считается в точках сетки, помноженных на `--s`, и настройку браузера
+ * поэтому не слышал вовсе: увеличивший шрифт до 200% не получал ничего.
+ *
+ * Настройка умеет только поднимать ступень и только там, где для неё есть место.
+ * Отсюда два исключения из правил выше:
+ *
+ * - ступень может стать нечётной. Чётность — соображение вкуса, читаемость важнее;
+ * - на телефоне не изменится ничего, и это честный ответ, а не недоделка: там
+ *   и двойка занимает всю ширину. Сцена растёт целиком, шрифт отдельно от полей
+ *   и рамок не растёт — такова пиксельная сетка. Кому нужен крупнее, тому остаётся
+ *   зум браузера, который увеличивает всё вместе с окном.
  */
-export function scaleFor(width: number): number {
+export function scaleFor(
+  width: number,
+  fontPx: number = BASE_FONT_PX,
+  height: number = Number.POSITIVE_INFINITY,
+): number {
   const raw = Math.max(MIN, Math.min(MAX, Math.floor(width / STEP)))
+  const byWidth = raw - (raw % 2)
 
-  return raw - (raw % 2)
+  if (!Number.isFinite(fontPx) || fontPx <= 0) return byWidth
+
+  const wanted = Math.round((byWidth * fontPx) / BASE_FONT_PX)
+
+  return Math.max(byWidth, Math.min(ceilingFor(width, height), wanted))
 }
 
 /**
@@ -39,8 +92,25 @@ export function scaleFor(width: number): number {
  * арт нарисован под тот же масштаб, что и рамки, и вдвое мельче он выглядел просто
  * потерянным на пустом столе.
  */
-export function assetScaleFor(width: number): number {
-  return scaleFor(width)
+export function assetScaleFor(
+  width: number,
+  fontPx: number = BASE_FONT_PX,
+  height: number = Number.POSITIVE_INFINITY,
+): number {
+  return scaleFor(width, fontPx, height)
+}
+
+/**
+ * Размер шрифта корня — это и есть системная настройка человека.
+ *
+ * Работает, пока `:root` в стилях этот размер не задаёт: заданный перебьёт
+ * настройку, и сайт снова оглохнет. Кегли на сайте задаются от `body` и ниже
+ * именно поэтому.
+ */
+function rootFontPx(): number {
+  const size = parseFloat(getComputedStyle(document.documentElement).fontSize)
+
+  return Number.isFinite(size) && size > 0 ? size : BASE_FONT_PX
 }
 
 /**
@@ -51,8 +121,12 @@ export function useScale(): void {
   useEffect(() => {
     const apply = () => {
       const root = document.documentElement
-      root.style.setProperty('--s', String(scaleFor(window.innerWidth)))
-      root.style.setProperty('--sa', String(assetScaleFor(window.innerWidth)))
+      const font = rootFontPx()
+
+      const { innerWidth: width, innerHeight: height } = window
+
+      root.style.setProperty('--s', String(scaleFor(width, font, height)))
+      root.style.setProperty('--sa', String(assetScaleFor(width, font, height)))
     }
 
     apply()
